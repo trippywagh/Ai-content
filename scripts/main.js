@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 6; // Updated to 6 screens
+        this.totalScreens = 7; // Updated to 7 screens
         this.screenInstances = {};
         this.init();
     }
@@ -331,6 +331,39 @@ class MathAdventureApp {
                         </div>
                     </div>
                 </div>`;
+            case 7:
+                return `
+                <div class="screen active" id="screen7">
+                    <h1>🕌 Tower Cover Problem</h1>
+                    <div class="tower-wrap">
+                        <div class="narration">“You’ve seen the Qutub Minar. Imagine we want to put a cover on this tall tower. What part do you think we need to measure first?”</div>
+                        <div class="tower-scene">
+                            <div class="sky"></div>
+                            <div class="ground"></div>
+                            <img class="qutub-img" src="images/qutub-minar.jpg" alt="Qutub Minar (reference)" onerror="this.style.display='none'">
+                            <div class="tower">
+                                <div class="tower-body"></div>
+                                <div class="tower-top"></div>
+                                <div class="cloth-hint"></div>
+                            </div>
+                        </div>
+                        <div class="yn-row" id="ynRow">
+                            <span>Shall we solve this together?</span>
+                            <button id="ynYes" class="btn-cta">Yes!</button>
+                            <button id="ynNo" class="btn-ghost">Not sure</button>
+                        </div>
+                        <div id="nudger" class="hint-card" style="display:none;">No worries — it’s just the curved surface! We’ll use CSA = 2πrh. Try it once.</div>
+                        <div id="towerQ" style="display:none;">
+                            <div class="q-box"><strong>Question:</strong> The tower is roughly cylindrical. Workers need cloth to cover only the curved surface (ignore the dome). If radius r = 7 m and height h = 72 m, how much cloth area is needed?</div>
+                            <div class="row">
+                                <input id="towerAns" class="input" type="number" step="0.01" placeholder="Area in m²">
+                                <button id="towerSubmit" class="btn-cta">Check</button>
+                            </div>
+                            <div id="towerHint" class="hint-card"><strong>Hint:</strong> Use CSA = 2πrh. Only curved surface — no top or bottom.</div>
+                            <div id="towerFeedback" class="feedback"></div>
+                        </div>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -413,6 +446,11 @@ class MathAdventureApp {
             case 6:
                 if (typeof CylinderAdaptiveCheckScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new CylinderAdaptiveCheckScreen();
+                }
+                break;
+            case 7:
+                if (typeof TowerCSAScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new TowerCSAScreen();
                 }
                 break;
             // Add more cases as we create more screens

@@ -1,0 +1,21 @@
+/* Screen 7: Tower CSA Problem */
+
+.tower-wrap { background: rgba(255,255,255,0.95); border-radius: 16px; padding: 18px; box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+.narration { background: #eef5ff; border: 1px solid #cfe0ff; color: #1e5ab8; padding: 12px 14px; border-radius: 12px; margin-bottom: 12px; }
+
+.tower-scene { position: relative; height: 260px; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #b3e5ff, #eaf7ff); margin-bottom: 12px; }
+.sky { position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, #ffffffcc, transparent 40%); }
+.ground { position: absolute; left: 0; right: 0; bottom: 0; height: 50px; background: #a8e6cf; box-shadow: inset 0 8px 16px rgba(0,0,0,0.08); }
+.qutub-img { position: absolute; right: 10px; bottom: 60px; width: 90px; height: auto; border-radius: 8px; box-shadow: 0 6px 14px rgba(0,0,0,0.25); opacity: 0.9; }
+
+.tower { position: absolute; left: 50%; bottom: 50px; transform: translateX(-50%); width: 70px; height: 180px; }
+.tower-body { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; border-radius: 16px; background: linear-gradient(180deg, #b08968, #7f5539); box-shadow: inset 0 0 20px rgba(255,255,255,0.25); animation: breathe 3s ease-in-out infinite; }
+.tower-top { position: absolute; left: 50%; transform: translateX(-50%); bottom: 160px; width: 80px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.12); }
+
+/* Cloth highlight band */
+.cloth-hint { position: absolute; left: -6px; right: -6px; top: 60px; height: 24px; border: 3px dashed #ff7675; border-radius: 12px; animation: pulseBand 1.5s infinite; }
+
+@keyframes breathe { 0%, 100% { transform: translateZ(0) scale(1); } 50% { transform: translateZ(0) scale(1.01); } }
+@keyframes pulseBand { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+.yn-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
