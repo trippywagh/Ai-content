@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 4; // Updated to 4 screens
+        this.totalScreens = 5; // Updated to 5 screens
         this.screenInstances = {};
         this.init();
     }
@@ -243,6 +243,50 @@ class MathAdventureApp {
                         <button class="small-btn" id="nextAfterConcept" style="display:none;">Next ➜</button>
                     </div>
                 </div>`;
+            case 5:
+                return `
+                <div class="screen active" id="screen5">
+                    <h1>🧪 Play Zone: Explore Cylinders!</h1>
+                    <div class="sim-layout">
+                        <div class="panel controls">
+                            <h3>Controls</h3>
+                            <div class="slider-row">
+                                <label>Radius (r)</label>
+                                <input id="rSlider" type="range" min="1" max="10" step="0.5" value="4">
+                                <div class="value" id="rVal">4.0 cm</div>
+                            </div>
+                            <div class="slider-row">
+                                <label>Height (h)</label>
+                                <input id="hSlider" type="range" min="1" max="20" step="0.5" value="10">
+                                <div class="value" id="hVal">10.0 cm</div>
+                            </div>
+                            <div class="toggles">
+                                <button class="toggle-btn" id="btnLabel">Show Unwrapped Label</button>
+                                <button class="toggle-btn" id="btnFill">Fill with Water</button>
+                                <button class="toggle-btn active" id="btnTopBottom">Show top + bottom</button>
+                            </div>
+                            <div class="hint" id="hint"></div>
+                        </div>
+
+                        <div class="panel results">
+                            <h3>Live Formulas</h3>
+                            <div class="stat"><div class="label">CSA (2πrh)</div><div class="num" id="csa">—</div></div>
+                            <div class="stat"><div class="label">TSA (2πrh + 2πr²)</div><div class="num" id="tsa">—</div></div>
+                            <div class="stat"><div class="label">Volume (πr²h)</div><div class="num" id="volume">—</div></div>
+                            <div class="stat"><div class="label">Capacity</div><div class="num" id="capacity">—</div></div>
+                        </div>
+                    </div>
+
+                    <div class="panel viz">
+                        <div class="cylinder" id="cyl">
+                            <div class="cyl-side" id="cylSide"></div>
+                            <div class="cyl-fill" id="cylFill"></div>
+                            <div class="cyl-top" id="cylTop"></div>
+                            <div class="cyl-bottom" id="cylBottom"></div>
+                        </div>
+                        <div class="unwrapped-label" id="unwrap"></div>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -315,6 +359,11 @@ class MathAdventureApp {
             case 4:
                 if (typeof CylinderConceptScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new CylinderConceptScreen();
+                }
+                break;
+            case 5:
+                if (typeof CylinderSimScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new CylinderSimScreen();
                 }
                 break;
             // Add more cases as we create more screens
