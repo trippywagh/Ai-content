@@ -1,229 +1,400 @@
-// Screen 1: Can Question Screen JavaScript
+// Screen 1: Name Introduction Video Screen JavaScript
 
-class CanQuestionScreen {
+class NameIntroScreen {
     constructor() {
-        this.feedback = null;
-        this.rectangle = null;
-        this.cokeCan3D = null;
-        this.selectedOption = null;
+        this.video = null;
+        this.videoOverlay = null;
+        this.nameInputSection = null;
+        this.micButton = null;
+        this.nameTextInput = null;
+        this.continueBtn = null;
+        this.nameDisplay = null;
+        this.studentName = null;
+        this.loadingSection = null;
+        this.recognition = null;
+        this.studentNameValue = '';
+        
         this.init();
     }
 
     init() {
-        // Create floating particles
-        this.createParticles();
-        
         // Get DOM elements
-        this.feedback = document.getElementById('feedback');
-        this.rectangle = document.getElementById('rectangle');
+        this.video = document.getElementById('introVideo');
+        this.videoOverlay = document.getElementById('videoOverlay');
+        this.nameInputSection = document.getElementById('nameInputSection');
+        this.micButton = document.getElementById('micButton');
+        this.nameTextInput = document.getElementById('nameTextInput');
+        this.continueBtn = document.getElementById('continueBtn');
+        this.nameDisplay = document.getElementById('nameDisplay');
+        this.studentName = document.getElementById('studentName');
+        this.loadingSection = document.getElementById('loadingSection');
         
-        // Initialize 3D Coke can
-        this.init3DCokeCan();
+        // Setup video
+        this.setupVideo();
         
-        // Add event listeners for multiple choice options
+        // Setup voice recognition
+        this.setupVoiceRecognition();
+        
+        // Add event listeners
         this.addEventListeners();
+        
+        // Set video source (you can change this to your video file)
+        this.setVideoSource();
     }
 
-    init3DCokeCan() {
-        // Wait a bit for the DOM to be ready
-        setTimeout(() => {
-            try {
-                // Create 3D container
-                const canContainer = document.querySelector('.can-container');
-                if (canContainer) {
-                    // Clear existing content
-                    canContainer.innerHTML = '<div id="coke-can-3d" style="width: 100%; height: 100%;"></div>';
-                    
-                    // Initialize 3D Coke can
-                    this.cokeCan3D = new CokeCan3D('coke-can-3d');
-                    
-                    // Start with auto-rotation
-                    setTimeout(() => {
-                        if (this.cokeCan3D) {
-                            this.cokeCan3D.startAutoRotation();
-                        }
-                    }, 1000);
-                }
-            } catch (error) {
-                console.error('Error initializing 3D Coke can:', error);
-                // Fallback to CSS can if 3D fails
-                this.createFallbackCan();
+    setVideoSource() {
+        // Option 1: Local video file (place your video in a 'videos' folder)
+        this.video.src = 'videos/intro-video.mp4';
+        
+        // Option 2: Hosted video URL
+        // this.video.src = 'https://your-video-hosting-url.com/intro-video.mp4';
+        
+        // Option 3: YouTube embed (you'll need to modify the HTML for this)
+        // For now, we'll use a placeholder
+        //this.video.src = 'data:video/mp4;base64,PLACEHOLDER';
+        
+        // If you have a video file, uncomment one of the options above
+        // and remove the placeholder line
+    }
+
+    setupVideo() {
+        if (!this.video) {
+            console.error('Video element not found!');
+            return;
+        }
+        
+        console.log('Setting up video with source:', this.video.src);
+        
+        // Video event listeners
+        this.video.addEventListener('loadstart', () => {
+            console.log('Video load started');
+        });
+        
+        this.video.addEventListener('loadeddata', () => {
+            console.log('Video data loaded');
+        });
+        
+        this.video.addEventListener('canplay', () => {
+            console.log('Video can play');
+        });
+        
+        this.video.addEventListener('play', () => {
+            console.log('Video started playing');
+            if (this.videoOverlay) {
+                this.videoOverlay.style.display = 'none';
             }
-        }, 100);
-    }
-
-    createFallbackCan() {
-        const canContainer = document.querySelector('.can-container');
-        if (canContainer) {
-            canContainer.innerHTML = `
-                <div class="can">
-                    <div class="can-top"></div>
-                    <div class="can-bottom"></div>
-                    <div class="can-label">
-                        <div class="coke-logo"></div>
-                        <div class="can-design">
-                            <div class="wave-pattern"></div>
-                        </div>
-                    </div>
-                    <div class="pull-tab"></div>
-                </div>
-            `;
+        });
+        
+        this.video.addEventListener('ended', () => {
+            console.log('Video ended');
+            this.showNameInput();
+        });
+        
+        this.video.addEventListener('pause', () => {
+            console.log('Video paused');
+            if (!this.video.ended && this.videoOverlay) {
+                this.videoOverlay.style.display = 'flex';
+            }
+        });
+        
+        this.video.addEventListener('error', (e) => {
+            console.error('Video error:', e);
+            console.error('Video error details:', this.video.error);
+            this.showFeedback('Video failed to load. Please check the file path.', 'error');
+        });
+        
+        // Video overlay click to play
+        if (this.videoOverlay) {
+            this.videoOverlay.addEventListener('click', () => {
+                console.log('Video overlay clicked, attempting to play video');
+                this.playVideo();
+            });
+        } else {
+            console.error('Video overlay not found!');
         }
     }
 
-    createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        if (!particlesContainer) return;
+    playVideo() {
+        if (!this.video) {
+            console.error('No video element to play');
+            return;
+        }
         
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 3 + 's';
-            particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            particlesContainer.appendChild(particle);
+        console.log('Attempting to play video...');
+        console.log('Video readyState:', this.video.readyState);
+        console.log('Video networkState:', this.video.networkState);
+        
+        // Check if video is ready to play
+        if (this.video.readyState >= 2) { // HAVE_CURRENT_DATA
+            const playPromise = this.video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log('Video playing successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error playing video:', error);
+                        this.showFeedback('Could not play video. Please try again.', 'error');
+                    });
+            }
+        } else {
+            console.log('Video not ready, waiting for data...');
+            this.video.addEventListener('canplay', () => {
+                console.log('Video now ready, attempting to play...');
+                this.video.play().catch(error => {
+                    console.error('Error playing video after ready:', error);
+                });
+            }, { once: true });
+        }
+    }
+
+    setupVoiceRecognition() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+            this.recognition.lang = 'en-US';
+            
+            this.recognition.onstart = () => {
+                this.micButton.classList.add('recording');
+                this.micButton.querySelector('.mic-text').textContent = 'Listening... Speak now!';
+            };
+
+            this.recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                this.handleVoiceInput(transcript);
+            };
+
+            this.recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                this.micButton.classList.remove('recording');
+                this.micButton.querySelector('.mic-text').textContent = 'Click to speak your name';
+                
+                if (event.error === 'no-speech') {
+                    this.showFeedback('No speech detected. Please try again!', 'error');
+                } else if (event.error === 'audio-capture') {
+                    this.showFeedback('Microphone not available. Please type your name instead.', 'error');
+                } else {
+                    this.showFeedback('Voice recognition error. Please try again or type your name.', 'error');
+                }
+            };
+
+            this.recognition.onend = () => {
+                this.micButton.classList.remove('recording');
+                this.micButton.querySelector('.mic-text').textContent = 'Click to speak your name';
+            };
+        } else {
+            // Fallback for browsers without speech recognition
+            this.micButton.style.display = 'none';
+            this.showFeedback('Voice input not supported in your browser. Please type your name.', 'info');
         }
     }
 
     addEventListeners() {
-        // Add click listeners to all options
-        const options = document.querySelectorAll('.option');
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                this.selectOption(option);
+        // Mic button click
+        if (this.micButton) {
+            this.micButton.addEventListener('click', () => {
+                if (this.recognition) {
+                    this.recognition.start();
+                }
             });
-        });
-
-        // Add 3D can interaction hints
-        this.add3DInteractionHints();
-    }
-
-    selectOption(selectedOption) {
-        // Remove previous selection
-        const allOptions = document.querySelectorAll('.option');
-        allOptions.forEach(opt => {
-            opt.classList.remove('selected', 'correct', 'incorrect');
-        });
-
-        // Add selection class
-        selectedOption.classList.add('selected');
+        }
         
-        // Get the answer
-        const answer = selectedOption.getAttribute('data-answer');
-        this.selectedOption = answer;
+        // Text input
+        if (this.nameTextInput) {
+            this.nameTextInput.addEventListener('input', (e) => {
+                this.studentNameValue = e.target.value.trim();
+                this.updateContinueButton();
+            });
+            
+            this.nameTextInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && this.studentNameValue) {
+                    this.handleNameSubmission();
+                }
+            });
+        }
         
-        // Check the answer
-        this.checkAnswer(answer);
-    }
-
-    add3DInteractionHints() {
-        const canContainer = document.querySelector('.can-container');
-        if (canContainer) {
-            // Add interaction instructions
-            const instructions = document.createElement('div');
-            instructions.className = 'interaction-hints';
-            instructions.innerHTML = `
-                <div class="hint-text">
-                    <p>🎮 <strong>3D Controls:</strong></p>
-                    <p>• <strong>Drag</strong> to rotate the dabba</p>
-                    <p>• <strong>Scroll</strong> to zoom in/out</p>
-                    <p>• <strong>Hover</strong> to pause auto-rotation</p>
-                </div>
-            `;
-            canContainer.appendChild(instructions);
+        // Continue button
+        if (this.continueBtn) {
+            this.continueBtn.addEventListener('click', () => {
+                this.handleNameSubmission();
+            });
         }
     }
 
-    checkAnswer(answer) {
-        let message = '';
-        let type = '';
-        let isCorrect = false;
-
-        switch (answer) {
-            case 'rectangle':
-                message = '🎉 Perfect! You got it right! When you peel the sticker off a cylindrical dabba and spread it flat, it becomes a rectangle! 🌟';
-                type = 'correct';
-                isCorrect = true;
-                break;
-            case 'square':
-                message = 'Close! Think about the shape - a cylinder has height and circumference. When flattened, what does that make? 🤔';
-                type = 'incorrect';
-                break;
-            case 'circle':
-                message = 'Good thinking! But remember, we\'re peeling off the sticker (the label) and spreading it flat, not the top or bottom! 🔍';
-                type = 'incorrect';
-                break;
-            case 'something-else':
-                message = 'Interesting choice! But let\'s think about this - when you unroll a cylinder\'s label, what shape do you get? 📐';
-                type = 'incorrect';
-                break;
-            default:
-                message = 'Please select an option! 🎯';
-                type = 'incorrect';
-                break;
+    handleVoiceInput(transcript) {
+        // Clean up the transcript
+        this.studentNameValue = transcript.trim()
+            .replace(/^my name is/i, '')
+            .replace(/^i am/i, '')
+            .replace(/^i'm/i, '')
+            .replace(/^call me/i, '')
+            .trim();
+        
+        // Capitalize first letter
+        if (this.studentNameValue) {
+            this.studentNameValue = this.studentNameValue.charAt(0).toUpperCase() + 
+                                   this.studentNameValue.slice(1).toLowerCase();
         }
+        
+        // Update the text input
+        if (this.nameTextInput) {
+            this.nameTextInput.value = this.studentNameValue;
+        }
+        
+        // Show the name and enable continue
+        this.showStudentName();
+        this.updateContinueButton();
+        
+        // Show success feedback
+        this.showFeedback(`Great! I heard "${this.studentNameValue}"! 🎉`, 'success');
+    }
 
-        // Show feedback
-        this.showFeedback(message, type);
+    handleNameSubmission() {
+        if (!this.studentNameValue) {
+            this.showFeedback('Please enter your name to continue!', 'error');
+            return;
+        }
+        
+        // Store the name (you can use localStorage or pass it to the next screen)
+        localStorage.setItem('studentName', this.studentNameValue);
+        
+        // Show loading
+        this.showLoading();
+        
+        // Simulate loading time (you can remove this in production)
+        setTimeout(() => {
+            this.proceedToNextScreen();
+        }, 2000);
+    }
 
-        // If correct, show the answer and stop auto-rotation
-        if (isCorrect) {
-            // Stop auto-rotation and let user explore the 3D can
-            if (this.cokeCan3D) {
-                this.cokeCan3D.stopAutoRotation();
-            }
+    showNameInput() {
+        if (this.nameInputSection) {
+            this.nameInputSection.style.display = 'block';
             
-            // Mark the correct option
-            const correctOption = document.querySelector('[data-answer="rectangle"]');
-            if (correctOption) {
-                correctOption.classList.add('correct');
-            }
+            // Add entrance animation
+            this.nameInputSection.style.opacity = '0';
+            this.nameInputSection.style.transform = 'translateY(30px)';
             
-            // Show the rectangle answer after a delay
             setTimeout(() => {
-                this.showRectangle();
-            }, 2000);
-        } else {
-            // Mark the selected option as incorrect
-            const selectedOption = document.querySelector('.option.selected');
-            if (selectedOption) {
-                selectedOption.classList.add('incorrect');
+                this.nameInputSection.style.transition = 'all 0.5s ease';
+                this.nameInputSection.style.opacity = '1';
+                this.nameInputSection.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    }
+
+    showStudentName() {
+        if (this.nameDisplay && this.studentName) {
+            this.studentName.textContent = this.studentNameValue;
+            this.nameDisplay.style.display = 'block';
+            
+            // Add entrance animation
+            this.nameDisplay.style.opacity = '0';
+            this.nameDisplay.style.transform = 'scale(0.8)';
+            
+            setTimeout(() => {
+                this.nameDisplay.style.transition = 'all 0.3s ease';
+                this.nameDisplay.style.opacity = '1';
+                this.nameDisplay.style.transform = 'scale(1)';
+            }, 100);
+        }
+    }
+
+    updateContinueButton() {
+        if (this.continueBtn) {
+            if (this.studentNameValue && this.studentNameValue.length > 0) {
+                this.continueBtn.style.display = 'inline-block';
+            } else {
+                this.continueBtn.style.display = 'none';
             }
+        }
+    }
+
+    showLoading() {
+        if (this.loadingSection) {
+            this.loadingSection.style.display = 'block';
+            this.nameInputSection.style.display = 'none';
+        }
+    }
+
+    proceedToNextScreen() {
+        // Navigate to the next screen (dabba question)
+        if (window.app && typeof window.app.loadScreenDirectly === 'function') {
+            window.app.loadScreenDirectly(2);
+        } else {
+            // Fallback: reload the page or show next screen
+            console.log('Proceeding to next screen...');
+            // You can implement your navigation logic here
         }
     }
 
     showFeedback(message, type) {
-        this.feedback.textContent = message;
-        this.feedback.className = `feedback ${type} show`;
+        // Create a temporary feedback element
+        const feedback = document.createElement('div');
+        feedback.className = `feedback-temp ${type}`;
+        feedback.textContent = message;
+        feedback.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#00b894' : type === 'error' ? '#e17055' : '#74b9ff'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            font-weight: bold;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+        `;
         
-        setTimeout(() => {
-            this.feedback.classList.remove('show');
-        }, 5000);
-    }
-
-    showRectangle() {
-        this.rectangle.classList.add('show');
+        document.body.appendChild(feedback);
         
-        // Add some celebration effects
+        // Remove after 3 seconds
         setTimeout(() => {
-            this.rectangle.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            feedback.style.animation = 'slideOut 0.3s ease';
             setTimeout(() => {
-                this.rectangle.style.transform = 'translate(-50%, -50%) scale(1)';
-            }, 200);
-        }, 500);
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 300);
+        }, 3000);
     }
 
     // Method to clean up when leaving screen
     destroy() {
-        // Clean up 3D can
-        if (this.cokeCan3D) {
-            this.cokeCan3D.destroy();
+        if (this.recognition) {
+            this.recognition.abort();
         }
+        
+        // Remove any temporary feedback elements
+        const tempFeedbacks = document.querySelectorAll('.feedback-temp');
+        tempFeedbacks.forEach(feedback => {
+            if (feedback.parentNode) {
+                feedback.parentNode.removeChild(feedback);
+            }
+        });
     }
 }
 
+// Add CSS animations for feedback
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+
 // Export for use in main app
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CanQuestionScreen;
+    module.exports = NameIntroScreen;
 }

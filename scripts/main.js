@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 1; // Will increase as we add more screens
+        this.totalScreens = 2; // Updated to 2 screens
         this.screenInstances = {};
         this.init();
     }
@@ -58,8 +58,8 @@ class MathAdventureApp {
             // Load screen-specific CSS
             this.loadScreenCSS(screenNumber);
             
-            // Load 3D Coke can script first (if needed for this screen)
-            if (screenNumber === 1) {
+            // Load 3D Coke can script for screen 2
+            if (screenNumber === 2) {
                 this.load3DCokeCanScript();
             }
             
@@ -108,6 +108,53 @@ class MathAdventureApp {
             case 1:
                 return `
                 <div class="screen active" id="screen1">
+                    <h1>🎯 Welcome to Math Adventure! 🎯</h1>
+                    
+                    <div class="video-container">
+                        <video id="introVideo" controls preload="auto">
+                            <!-- Video source will be set dynamically -->
+                            <source src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        
+                        <!-- Video overlay with play button -->
+                        <div class="video-overlay" id="videoOverlay">
+                            <div class="play-button">▶️</div>
+                            <p>Click to start your adventure!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="name-input-section" id="nameInputSection" style="display: none;">
+                        <h2>🎤 What's your name, young mathematician?</h2>
+                        <p>Tell me your name so we can begin our journey together!</p>
+                        
+                        <div class="voice-input-container">
+                            <div class="mic-button" id="micButton">
+                                <div class="mic-icon">🎤</div>
+                                <div class="mic-text">Click to speak your name</div>
+                            </div>
+                            
+                            <div class="name-display" id="nameDisplay" style="display: none;">
+                                <span>Hello, </span>
+                                <span class="student-name" id="studentName"></span>
+                                <span>! 👋</span>
+                            </div>
+                            
+                            <div class="input-actions">
+                                <input type="text" id="nameTextInput" placeholder="Or type your name here..." maxlength="30">
+                                <button class="btn btn-primary" id="continueBtn" style="display: none;">Continue to Math Adventure! 🚀</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="loading-section" id="loadingSection" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <p>Preparing your personalized math adventure...</p>
+                    </div>
+                </div>`;
+            case 2:
+                return `
+                <div class="screen active" id="screen2">
                     <h1>🎯 Math Adventure: The Amazing Dabba Mystery! 🎯</h1>
                     
                     <div class="can-container">
@@ -211,8 +258,13 @@ class MathAdventureApp {
         // Initialize new screen based on screen number
         switch (screenNumber) {
             case 1:
-                if (typeof CanQuestionScreen !== 'undefined') {
-                    this.screenInstances[screenNumber] = new CanQuestionScreen();
+                if (typeof NameIntroScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new NameIntroScreen();
+                }
+                break;
+            case 2:
+                if (typeof DabbaQuestionScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new DabbaQuestionScreen();
                 }
                 break;
             // Add more cases as we create more screens
@@ -257,7 +309,7 @@ class MathAdventureApp {
         if (!prevBtn || !nextBtn || !indicator) return;
         
         // Update indicator
-        indicator.textContent = `Screen 1 of ${this.totalScreens}`;
+        indicator.textContent = `Screen ${this.currentScreen} of ${this.totalScreens}`;
         
         // Show/hide navigation buttons
         prevBtn.style.display = this.currentScreen === 1 ? 'none' : 'inline-block';

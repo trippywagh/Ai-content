@@ -1,0 +1,46 @@
+<!-- Screen 1: Name Introduction Video Screen -->
+<div class="screen" id="screen1">
+    <h1>🎯 Welcome to Math Adventure! 🎯</h1>
+    
+    <div class="video-container">
+        <video id="introVideo" controls preload="auto">
+            <!-- Video source will be set dynamically -->
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Video overlay with play button -->
+        <div class="video-overlay" id="videoOverlay">
+            <div class="play-button">▶️</div>
+            <p>Click to start your adventure!</p>
+        </div>
+    </div>
+    
+    <div class="name-input-section" id="nameInputSection" style="display: none;">
+        <h2>🎤 What's your name, young mathematician?</h2>
+        <p>Tell me your name so we can begin our journey together!</p>
+        
+        <div class="voice-input-container">
+            <div class="mic-button" id="micButton">
+                <div class="mic-icon">🎤</div>
+                <div class="mic-text">Click to speak your name</div>
+            </div>
+            
+            <div class="name-display" id="nameDisplay" style="display: none;">
+                <span>Hello, </span>
+                <span class="student-name" id="studentName"></span>
+                <span>! 👋</span>
+            </div>
+            
+            <div class="input-actions">
+                <input type="text" id="nameTextInput" placeholder="Or type your name here..." maxlength="30">
+                <button class="btn btn-primary" id="continueBtn" style="display: none;">Continue to Math Adventure! 🚀</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loading-section" id="loadingSection" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Preparing your personalized math adventure...</p>
+    </div>
+</div>
