@@ -8,12 +8,34 @@
 
 body {
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Math-themed night board with grid */
+    background-color: #0b132b;
+    background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.08), transparent 40%),
+        radial-gradient(ellipse at 80% 0%, rgba(255, 255, 255, 0.06), transparent 40%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 40px);
+    background-size: cover, cover, 40px 40px, 40px 40px;
+    background-position: center, center, center, center;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Subtle cylinder net watermark */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: 85% 80%;
+    background-size: 380px auto;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400' fill='none'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ffffff' stop-opacity='0.8'/><stop offset='1' stop-color='%23ffffff' stop-opacity='0.4'/></linearGradient></defs><rect x='150' y='120' width='380' height='160' rx='12' ry='12' stroke='url(%23g)' stroke-width='3' fill='none'/><circle cx='150' cy='200' r='60' stroke='%23ffffff' stroke-opacity='0.5' stroke-width='3' fill='none'/><circle cx='530' cy='200' r='60' stroke='%23ffffff' stroke-opacity='0.5' stroke-width='3' fill='none'/><text x='160' y='205' font-size='22' fill='%23ffffff' fill-opacity='0.5'>r</text><text x='335' y='115' font-size='22' fill='%23ffffff' fill-opacity='0.5'>h</text><path d='M150 60 C250 60 250 340 150 340' stroke='%23ffffff' stroke-opacity='0.25' stroke-dasharray='6 8' stroke-width='2' fill='none'/><path d='M530 60 C430 60 430 340 530 340' stroke='%23ffffff' stroke-opacity='0.25' stroke-dasharray='6 8' stroke-width='2' fill='none'/></svg>");
 }
 
 .container {
@@ -102,11 +124,12 @@ h1 {
 
 .particle {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #fdcb6e;
-    border-radius: 50%;
-    animation: float 3s ease-in-out infinite;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #ffd166, #f4a261);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
+    animation: float 4s ease-in-out infinite;
 }
 
 @keyframes float {

@@ -178,7 +178,16 @@ class DabbaQuestionScreen {
     showFeedback(message, type) {
         this.feedback.textContent = message;
         this.feedback.className = `feedback ${type} show`;
-        
+
+        // Ensure feedback is visible on small screens
+        try {
+            this.feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (e) {
+            // Older browsers fallback
+            const rect = this.feedback.getBoundingClientRect();
+            window.scrollTo({ top: window.scrollY + rect.top - 80, behavior: 'smooth' });
+        }
+
         setTimeout(() => {
             this.feedback.classList.remove('show');
         }, 5000);

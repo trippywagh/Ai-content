@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 2; // Updated to 2 screens
+        this.totalScreens = 3; // Updated to 3 screens
         this.screenInstances = {};
         this.init();
     }
@@ -203,6 +203,26 @@ class MathAdventureApp {
                         </div>
                     </div>
                 </div>`;
+            case 3:
+                return `
+                <div class="screen active" id="screen3">
+                    <h1>🎥 Let’s Understand The Dabba Mystery!</h1>
+                    <div class="video-container">
+                        <video id="explainerVideo" controls preload="auto">
+                            <source src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-overlay" id="explainerOverlay">
+                            <div class="play-button">▶️</div>
+                            <p>Tap to play the explainer</p>
+                        </div>
+                    </div>
+                    <div class="caption">We’ll see why peeling the label gives a rectangle and how its size is 2πr × h.</div>
+                    <div class="controls-row">
+                        <button class="small-btn" id="replayExplainerBtn">Replay</button>
+                        <button class="small-btn" id="nextAfterExplainer" style="display:none;">Next ➜</button>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -265,6 +285,11 @@ class MathAdventureApp {
             case 2:
                 if (typeof DabbaQuestionScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new DabbaQuestionScreen();
+                }
+                break;
+            case 3:
+                if (typeof DabbaExplainerScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new DabbaExplainerScreen();
                 }
                 break;
             // Add more cases as we create more screens
