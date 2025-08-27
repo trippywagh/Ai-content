@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 3; // Updated to 3 screens
+        this.totalScreens = 4; // Updated to 4 screens
         this.screenInstances = {};
         this.init();
     }
@@ -223,6 +223,26 @@ class MathAdventureApp {
                         <button class="small-btn" id="nextAfterExplainer" style="display:none;">Next ➜</button>
                     </div>
                 </div>`;
+            case 4:
+                return `
+                <div class="screen active" id="screen4">
+                    <h1>📐 Right Circular Cylinder — The Big Idea</h1>
+                    <div class="video-container">
+                        <video id="conceptVideo" controls preload="auto">
+                            <source src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-overlay" id="conceptOverlay">
+                            <div class="play-button">▶️</div>
+                            <p>Tap to play the concept explainer</p>
+                        </div>
+                    </div>
+                    <div class="caption">Understand cylinders: curved surface unrolls to rectangle (2πr × h), plus two circles of radius r.</div>
+                    <div class="controls-row">
+                        <button class="small-btn" id="replayConceptBtn">Replay</button>
+                        <button class="small-btn" id="nextAfterConcept" style="display:none;">Next ➜</button>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -290,6 +310,11 @@ class MathAdventureApp {
             case 3:
                 if (typeof DabbaExplainerScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new DabbaExplainerScreen();
+                }
+                break;
+            case 4:
+                if (typeof CylinderConceptScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new CylinderConceptScreen();
                 }
                 break;
             // Add more cases as we create more screens
