@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 5; // Updated to 5 screens
+        this.totalScreens = 6; // Updated to 6 screens
         this.screenInstances = {};
         this.init();
     }
@@ -287,6 +287,50 @@ class MathAdventureApp {
                         <div class="unwrapped-label" id="unwrap"></div>
                     </div>
                 </div>`;
+            case 6:
+                return `
+                <div class="screen active" id="screen6">
+                    <h1>✅ Instant Check</h1>
+                    <div class="quiz">
+                        <div class="card">
+                            <div class="card-head"><div class="badge">1</div><h3>Curved Surface Area Calculation</h3></div>
+                            <div class="q-box"><strong>Question:</strong> If a cylinder has radius = 7 cm and height = 10 cm, what is its Curved Surface Area (CSA)?<br/><small>Round your answer to 2 decimal places.</small></div>
+                            <div class="row">
+                                <input class="input" id="q1Input" type="number" step="0.01" placeholder="Enter CSA in cm²">
+                                <button class="btn-cta" id="q1Submit">Check Answer</button>
+                            </div>
+                            <div class="notice" id="q1Notice">⚠️ Not quite right. Let me give you a hint!</div>
+                            <div class="hint-card" id="q1Hint"><strong>Hint:</strong> CSA = 2πrh. Remember π ≈ 3.14159 and CSA is the curved surface only, not including top and bottom (that would be TSA).<div style="margin-top:10px;"><button class="btn-ghost" id="q1TryAgain">Try Again</button></div></div>
+                            <div class="feedback" id="q1Feedback"></div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-head"><div class="badge alt">2</div><h3>Total Surface Area Concept</h3></div>
+                            <div class="q-box"><strong>Question:</strong> The Total Surface Area (TSA) of a cylinder includes which surfaces?</div>
+                            <div class="options">
+                                <label><input type="radio" name="q2" value="side-only"> Side (curved surface) only</label>
+                                <label><input type="radio" name="q2" value="top-bottom-only"> Top and bottom circles only</label>
+                                <label><input type="radio" name="q2" value="side-top-bottom"> Side + top + bottom (all surfaces)</label>
+                            </div>
+                            <button class="btn-cta" id="q2Submit">Submit</button>
+                            <div class="feedback" id="q2Feedback"></div>
+                            <div class="alert-box" id="q2Alert">❌ Not quite! Let me show you visually.</div>
+                            <div class="viz-help" id="q2Viz">
+                                <div class="mini-cylinder">
+                                    <div class="mini-top"></div>
+                                    <div class="mini-bottom"></div>
+                                    <div class="mini-outline"></div>
+                                </div>
+                                <div class="viz-caption">TSA = All highlighted surfaces</div>
+                                <div class="q2-try"><button class="btn-ghost" id="q2TryAgain">Try Again</button></div>
+                            </div>
+                            <div class="actions" id="ctaRow">
+                                <button class="btn-ghost" id="goDeeper">Go Deeper</button>
+                                <button class="btn-cta" id="moveAhead">Move Ahead</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -364,6 +408,11 @@ class MathAdventureApp {
             case 5:
                 if (typeof CylinderSimScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new CylinderSimScreen();
+                }
+                break;
+            case 6:
+                if (typeof CylinderAdaptiveCheckScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new CylinderAdaptiveCheckScreen();
                 }
                 break;
             // Add more cases as we create more screens

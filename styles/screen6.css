@@ -1,0 +1,117 @@
+/* Screen 6: Adaptive Check Styles */
+
+.quiz { display: grid; gap: 20px; }
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 24px rgba(11, 19, 43, 0.18);
+    border: 1px solid #eef2f7;
+}
+
+.card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.badge {
+    width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 800; color: #fff; background: #4c6fff;
+}
+.badge.alt { background: #a16dd1; }
+
+.q-box {
+    background: #f6f8fb;
+    border: 1px solid #e8edf5;
+    border-radius: 12px;
+    padding: 14px;
+    color: #2d3436;
+    margin-bottom: 10px;
+}
+
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.input { padding: 12px 14px; border: 2px solid #e1e5ea; border-radius: 12px; font-size: 1rem; min-width: 220px; background: #f9fbff; }
+.btn-cta { padding: 10px 16px; border-radius: 12px; border: none; background: #4c6fff; color: #fff; cursor: pointer; box-shadow: 0 6px 16px rgba(76,111,255,0.25); }
+.btn-cta:disabled { background: #c6d0ff; cursor: not-allowed; box-shadow: none; }
+.btn-ghost { padding: 10px 16px; border-radius: 12px; border: 2px solid #74b9ff; background: #e3f2fd; color: #0984e3; cursor: pointer; }
+
+.notice {
+    display: none;
+    margin-top: 10px;
+    background: #fff6e6; border: 1px solid #ffe1ac; color: #b97310;
+    padding: 12px 14px; border-radius: 12px; font-weight: 700;
+}
+
+.hint-card {
+    display: none;
+    margin-top: 10px;
+    background: #eef5ff; border: 1px solid #cfe0ff; color: #1e5ab8;
+    padding: 14px; border-radius: 12px;
+}
+
+.feedback { margin-top: 10px; font-weight: 800; }
+.feedback.good { color: #00b894; }
+.feedback.bad { color: #d63031; }
+
+.options { display: grid; gap: 8px; margin: 10px 0; }
+.options label { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f6f8fb; border: 1px solid #e8edf5; border-radius: 12px; cursor: pointer; }
+/* Normalize radios so only one clean indicator appears */
+.options input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #9db0c9;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    background: #fff;
+}
+.options input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 10px;
+    height: 10px;
+    background: #4c6fff;
+    border-radius: 50%;
+}
+
+.surfaces { display: flex; gap: 8px; margin-top: 12px; }
+.surface { padding: 6px 8px; border-radius: 10px; border: 2px dashed #b2bec3; color: #636e72; }
+.surface.highlight { border-color: #fdcb6e; background: #fff8e1; color: #e17055; }
+
+.actions { display: none; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+/* Q2 visual help */
+.alert-box {
+    display: none;
+    margin-top: 12px;
+    background: #ffefef;
+    border: 1px solid #ffc9c9;
+    color: #c0392b;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.viz-help {
+    display: none;
+    margin-top: 12px;
+    background: linear-gradient(180deg, #f7f9ff, #fbf9ff);
+    border: 1px solid #eef2fb;
+    border-radius: 12px;
+    padding: 18px;
+}
+.mini-cylinder {
+    width: 70px; height: 140px; margin: 0 auto; position: relative;
+    background: linear-gradient(180deg, #5fa8ff, #2d6cdf);
+    border-radius: 16px;
+}
+.mini-top, .mini-bottom {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 16px; border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+}
+.mini-top { top: -8px; }
+.mini-bottom { bottom: -8px; }
+.mini-outline { position: absolute; inset: -6px; border-radius: 18px; border: 3px dashed #ff8686; }
+.viz-caption { text-align: center; color: #e74c3c; font-weight: 800; margin-top: 10px; }
+.q2-try { margin-top: 12px; }
