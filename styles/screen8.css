@@ -356,6 +356,110 @@
     border-color: #ff6b6b;
 }
 
+/* Popup Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    color: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    animation: slideIn 0.3s ease-out;
+}
+
+.popup-header h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.8em;
+    color: #fff;
+}
+
+.audio-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.9);
+    animation: pulse 2s infinite;
+}
+
+.audio-icon {
+    font-size: 1.1em;
+}
+
+.audio-text {
+    font-weight: 500;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.popup-body p {
+    margin: 15px 0;
+    font-size: 1.2em;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.popup-footer {
+    margin-top: 25px;
+}
+
+.popup-btn {
+    background: linear-gradient(45deg, #00ff88, #00cc6a);
+    color: #333;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,255,136,0.3);
+}
+
+.popup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,255,136,0.4);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 @media (max-width: 768px) {
     .beaker-container {
         grid-template-columns: 1fr;

@@ -25,6 +25,70 @@ class BeakerSimScreen {
         }
     }
 
+    showPopup() {
+        // Show the popup overlay
+        this.popupOverlay.style.display = 'flex';
+        // Hide simulation controls for wrong answers
+        this.simControls.style.display = 'none';
+        // Play audio for the popup message
+        this.speakPopupMessage();
+    }
+
+    hidePopup() {
+        // Hide the popup overlay
+        this.popupOverlay.style.display = 'none';
+        // Stop any ongoing speech
+        this.stopSpeech();
+    }
+
+    speakPopupMessage() {
+        // Get the audio element
+        const audioElement = document.getElementById('popupAudio');
+        
+        if (audioElement) {
+            // Show audio indicator
+            this.audioIndicator.style.display = 'flex';
+            
+            // Set up audio event listeners
+            audioElement.onended = () => {
+                this.hideAudioIndicator();
+            };
+            
+            audioElement.onerror = () => {
+                this.hideAudioIndicator();
+                console.log('Audio file not found or error occurred');
+            };
+            
+            // Play the audio
+            audioElement.currentTime = 0; // Reset to beginning
+            audioElement.play().catch(error => {
+                console.log('Audio playback failed:', error);
+                this.hideAudioIndicator();
+            });
+            
+            // Store reference to stop it later if needed
+            this.currentAudio = audioElement;
+        } else {
+            // Hide audio indicator if audio element not found
+            this.hideAudioIndicator();
+        }
+    }
+
+    stopSpeech() {
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio.currentTime = 0;
+            this.currentAudio = null;
+        }
+        this.hideAudioIndicator();
+    }
+
+    hideAudioIndicator() {
+        if (this.audioIndicator) {
+            this.audioIndicator.style.display = 'none';
+        }
+    }
+
     getDOMElements() {
         // Selection buttons
         this.selectABtn = document.getElementById('selectA');
@@ -49,6 +113,11 @@ class BeakerSimScreen {
         
         // Explanation
         this.explanation = document.getElementById('explanation');
+        
+        // Popup elements
+        this.popupOverlay = document.getElementById('popupOverlay');
+        this.popupCloseBtn = document.getElementById('popupCloseBtn');
+        this.audioIndicator = document.getElementById('audioIndicator');
     }
 
     wireEvents() {
@@ -59,6 +128,9 @@ class BeakerSimScreen {
         
         // Fill button
         this.fillBtn.addEventListener('click', () => this.startWaterFill());
+        
+        // Popup close button
+        this.popupCloseBtn.addEventListener('click', () => this.hidePopup());
     }
 
     selectBeaker(choice) {
@@ -74,19 +146,22 @@ class BeakerSimScreen {
             this.selectABtn.classList.add('selected');
             this.beakerAElement.classList.add('selected');
             this.selectedBeaker = 'A';
+            // Show popup for wrong answer
+            this.showPopup();
         } else if (choice === 'B') {
             this.selectBBtn.classList.add('selected');
             this.beakerBElement.classList.add('selected');
             this.selectedBeaker = 'B';
+            // Show popup for wrong answer
+            this.showPopup();
         } else if (choice === 'equal') {
             this.selectEqualBtn.classList.add('selected');
             this.selectedBeaker = 'equal';
+            // Correct answer - show simulation controls
+            this.simControls.style.display = 'block';
+            this.fillBtn.disabled = false;
+            this.fillBtn.textContent = '🧪 Start Water Fill Simulation';
         }
-        
-        // Show simulation controls
-        this.simControls.style.display = 'block';
-        this.fillBtn.disabled = false;
-        this.fillBtn.textContent = '🧪 Start Water Fill Simulation';
     }
 
     calculateVolumes() {

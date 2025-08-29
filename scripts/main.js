@@ -512,6 +512,33 @@ class MathAdventureApp {
                         <div class="explanation" id="explanation" style="display: none;">
                             <!-- Explanation will be populated by JS -->
                         </div>
+                        
+                        <!-- Popup for wrong answers -->
+                        <div class="popup-overlay" id="popupOverlay" style="display: none;">
+                            <div class="popup-content">
+                                <div class=8popup-header">
+                                    <h3>🤔 Let's Think About This!</h3>
+                                    <div class="audio-indicator" id="audioIndicator">
+                                        <span class="audio-icon">🔊</span>
+                                        <span class="audio-text">Audio Playing...</span>
+                                    </div>
+                                </div>
+                                <div class="popup-body">
+                                    <p>This is wrong! Let's try it by doing it yourself.</p>
+                                    <p>Click the simulation button to see what actually happens!</p>
+                                </div>
+                                <div class="popup-footer">
+                                    <button class="popup-btn" id="popupCloseBtn">Got it!</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Audio element for popup message -->
+                        <audio id="popupAudio" preload="auto">
+                            <source src="audio/popup-message.mp3" type="audio/mpeg">
+                            <source src="audio/popup-message.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
                     </div>
                 </div>`;
             // Add more cases as we create more screens
