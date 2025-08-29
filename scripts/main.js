@@ -155,7 +155,7 @@ class MathAdventureApp {
             case 2:
                 return `
                 <div class="screen active" id="screen2">
-                    <h1>🎯 Math Adventure: The Amazing Dabba Mystery! 🎯</h1>
+                    <h1>🎯 Math Adventure: The Amazing Coke Can Mystery! 🎯</h1>
                     
                     <div class="can-container">
                         <div class="can">
@@ -173,7 +173,7 @@ class MathAdventureApp {
                     
                     <div class="question">
                         <h2>🤔 Intriguing Question!</h2>
-                        <p>If I take the sticker on this dabba and peel it off, what shape will it become when spread flat?</p>
+                        <p>If you cut the Coke can open from top to bottom and spread it out, what shape will it be?</p>
                     </div>
                     
                     <div class="options-section">
