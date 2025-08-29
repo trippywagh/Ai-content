@@ -206,7 +206,7 @@ class MathAdventureApp {
             case 3:
                 return `
                 <div class="screen active" id="screen3">
-                    <h1>🎥 Let’s Understand The Dabba Mystery!</h1>
+                    <h1>🎥 Let’s Understand The Coke Can Mystery!</h1>
                     <div class="video-container">
                         <video id="explainerVideo" controls preload="auto">
                             <source src="" type="video/mp4">
@@ -278,11 +278,42 @@ class MathAdventureApp {
                     </div>
 
                     <div class="panel viz">
-                        <div class="cylinder" id="cyl">
-                            <div class="cyl-side" id="cylSide"></div>
-                            <div class="cyl-fill" id="cylFill"></div>
-                            <div class="cyl-top" id="cylTop"></div>
-                            <div class="cyl-bottom" id="cylBottom"></div>
+                        <div class="cylinder-container" id="cyl">
+                            <svg id="cylinderSVG" width="400" height="300" viewBox="0 0 400 300">
+                                <!-- Water gradient definition -->
+                                <defs>
+                                    <linearGradient id="waterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.8"/>
+                                        <stop offset="100%" style="stop-color:#0099cc;stop-opacity:0.6"/>
+                                    </linearGradient>
+                                    
+                                    <!-- Clip path for cylinder water fill -->
+                                    <clipPath id="cylinderClip">
+                                        <path d="M 140 80 Q 200 60 260 80 L 260 220 Q 200 240 140 220 Z"/>
+                                    </clipPath>
+                                </defs>
+                                
+                                <!-- Cylinder outline (hollow) -->
+                                <ellipse id="cylTop" cx="200" cy="80" rx="60" ry="20" fill="none" stroke="#333" stroke-width="2" opacity="0.8"/>
+                                <ellipse id="cylBottom" cx="200" cy="220" rx="60" ry="20" fill="none" stroke="#333" stroke-width="2" opacity="0.8"/>
+                                
+                                <!-- Cylinder side lines -->
+                                <line id="cylSideLeft" x1="140" y1="80" x2="140" y2="220" stroke="#333" stroke-width="2" opacity="0.8"/>
+                                <line id="cylSideRight" x1="260" y1="80" x2="260" y2="220" stroke="#333" stroke-width="2" opacity="0.8"/>
+                                
+                                <!-- Water fill with gradient and clip path (initially empty) -->
+                                <rect id="cylFill" x="140" y="220" width="120" height="0" fill="url(#waterGradient)" clip-path="url(#cylinderClip)"/>
+                                
+                                <!-- Water surface at top (initially hidden) -->
+                                <ellipse id="waterSurface" cx="200" cy="80" rx="60" ry="20" fill="url(#waterGradient)" opacity="0.9" style="display: none;"/>
+                                
+                                <!-- Dimensions labels -->
+                                <text id="radiusLabel" x="270" y="150" font-size="12" fill="#666">r</text>
+                                <line id="radiusLine" x1="260" y1="150" x2="290" y2="150" stroke="#666" stroke-width="1" stroke-dasharray="3,3"/>
+                                
+                                <text id="heightLabel" x="210" y="240" font-size="12" fill="#666">h</text>
+                                <line id="heightLine" x1="210" y1="220" x2="210" y2="240" stroke="#666" stroke-width="1" stroke-dasharray="3,3"/>
+                            </svg>
                         </div>
                         <div class="unwrapped-label" id="unwrap"></div>
                     </div>
@@ -709,7 +740,7 @@ class MathAdventureApp {
         const link = document.createElement('link');
         link.id = 'screen-css';
         link.rel = 'stylesheet';
-        link.href = `styles/screen${screenNumber}.css`;
+        link.href = `styles/screen${screenNumber}.css?v=${Date.now()}`;
         document.head.appendChild(link);
     }
 
@@ -723,7 +754,7 @@ class MathAdventureApp {
         // Add new screen script
         const script = document.createElement('script');
         script.id = 'screen-script';
-        script.src = `scripts/screen${screenNumber}.js`;
+        script.src = `scripts/screen${screenNumber}.js?v=${Date.now()}`;
         
         // Initialize screen instance after script loads
         script.onload = () => {
