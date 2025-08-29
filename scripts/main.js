@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 7; // Updated to 7 screens
+        this.totalScreens = 8; // Updated to 8 screens
         this.screenInstances = {};
         this.init();
     }
@@ -364,6 +364,156 @@ class MathAdventureApp {
                         </div>
                     </div>
                 </div>`;
+            case 8:
+                return `
+                <div class="screen active" id="screen8">
+                    <div class="beaker-sim">
+                        <div class="scene-intro">
+                            <h2>🧪 Beaker Volume Mystery</h2>
+                            <p>Look at these two laboratory beakers. They have very different shapes but might hold the same amount of water!</p>
+                        </div>
+                        
+                        <div class="beaker-container">
+                            <div class="beaker" id="beakerA">
+                                <div class="beaker-label">Beaker A</div>
+                                <div class="beaker-visual">
+                                    <div class="beaker-svg-container">
+                                        <svg width="60" height="200" viewBox="0 0 60 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <!-- Main beaker body - tall and slim -->
+                                            <rect x="10" y="20" width="40" height="160" fill="none" stroke="#000000" stroke-width="2" rx="5"/>
+                                            
+                                            <!-- Beaker rim with slight flare -->
+                                            <path d="M 8 20 L 52 20 L 50 15 L 10 15 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                            
+                                            <!-- Pouring spout on left side -->
+                                            <path d="M 8 20 L 5 25 L 8 30 L 10 25 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                            
+                                            <!-- Graduation marks -->
+                                            <line x1="45" y1="30" x2="50" y2="30" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="50" x2="50" y2="50" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="70" x2="50" y2="70" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="90" x2="50" y2="90" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="110" x2="50" y2="110" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="130" x2="50" y2="130" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="150" x2="50" y2="150" stroke="#000000" stroke-width="1"/>
+                                            <line x1="45" y1="170" x2="50" y2="170" stroke="#000000" stroke-width="1"/>
+                                            
+                                            <!-- Water fill area - matches beaker shape exactly -->
+                                            <defs>
+                                                <clipPath id="beakerAClip">
+                                                    <rect x="10" y="20" width="40" height="160" rx="5"/>
+                                                </clipPath>
+                                            </defs>
+                                            
+                                            <!-- Water fill container - starts empty (height=0) -->
+                                            <rect x="10" y="180" width="40" height="0" fill="url(#waterGradient)" rx="5" clip-path="url(#beakerAClip)" class="water-fill" id="waterFillA"/>
+                                            
+                                            <!-- Water gradient definition -->
+                                            <defs>
+                                                <linearGradient id="waterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                                                    <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.8"/>
+                                                    <stop offset="100%" style="stop-color:#0099cc;stop-opacity:0.6"/>
+                                                </linearGradient>
+                                            </defs>
+                                            
+                                            <!-- Base support -->
+                                            <rect x="20" y="195" width="20" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+                                        </svg>
+                                    </div>
+                                    <div class="volume-counter" id="counterA"></div>
+                                </div>
+                                <div class="beaker-params">
+                                    <div class="param-row">
+                                        <span>Radius:</span>
+                                        <span class="param-value">3 cm</span>
+                                    </div>
+                                    <div class="param-row">
+                                        <span>Height:</span>
+                                        <span class="param-value">100 cm</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="beaker" id="beakerB">
+                                <div class="beaker-label">Beaker B</div>
+                                <div class="beaker-visual">
+                                    <div class="beaker-svg-container">
+                                        <svg width="300" height="80" viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <!-- Main beaker body - short and wide -->
+                                            <rect x="20" y="10" width="260" height="60" fill="none" stroke="#000000" stroke-width="2" rx="5"/>
+                                            
+                                            <!-- Beaker rim with slight flare -->
+                                            <path d="M 15 10 L 285 10 L 280 5 L 20 5 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                            
+                                            <!-- Pouring spout on left side -->
+                                            <path d="M 15 10 L 10 15 L 15 20 L 20 15 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                            
+                                            <!-- Graduation marks -->
+                                            <line x1="30" y1="15" x2="30" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="60" y1="15" x2="60" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="90" y1="15" x2="90" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="120" y1="15" x2="120" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="150" y1="15" x2="150" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="180" y1="15" x2="180" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="210" y1="15" x2="210" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="240" y1="15" x2="240" y2="25" stroke="#000000" stroke-width="1"/>
+                                            <line x1="270" y1="15" x2="270" y2="25" stroke="#000000" stroke-width="1"/>
+                                            
+                                            <!-- Water fill area - matches beaker shape exactly -->
+                                            <defs>
+                                                <clipPath id="beakerBClip">
+                                                    <rect x="20" y="10" width="260" height="60" rx="5"/>
+                                                </clipPath>
+                                            </defs>
+                                            
+                                            <!-- Water fill container - starts empty (height=0) -->
+                                            <rect x="20" y="70" width="260" height="0" fill="url(#waterGradient)" rx="5" clip-path="url(#beakerBClip)" class="water-fill" id="waterFillB"/>
+                                            
+                                            <!-- Water gradient definition -->
+                                            <defs>
+                                                <linearGradient id="waterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                                                    <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.6"/>
+                                                    <stop offset="100%" style="stop-color:#0099cc;stop-opacity:0.8"/>
+                                                </linearGradient>
+                                            </defs>
+                                            
+                                            <!-- Base support -->
+                                            <rect x="30" y="75" width="240" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+                                        </svg>
+                                    </div>
+                                    <div class="volume-counter" id="counterB"></div>
+                                </div>
+                                <div class="beaker-params">
+                                    <div class="param-row">
+                                        <span>Radius:</span>
+                                        <span class="param-value">15 cm</span>
+                                    </div>
+                                    <div class="param-row">
+                                        <span>Height:</span>
+                                        <span class="param-value">4 cm</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="selection-section">
+                            <h3>🤔 Which beaker holds more water?</h3>
+                            <div class="selection-options">
+                                                            <button class="selection-btn" id="selectA">Beaker A (Tall & Slim)</button>
+                            <button class="selection-btn" id="selectB">Beaker B (Short & Wide)</button>
+                                <button class="selection-btn" id="selectEqual">They're Equal! 🎯</button>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-controls" id="simControls" style="display: none;">
+                            <button class="fill-btn" id="fillBtn">🧪 Start Water Fill Simulation</button>
+                        </div>
+                        
+                        <div class="explanation" id="explanation" style="display: none;">
+                            <!-- Explanation will be populated by JS -->
+                        </div>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -452,6 +602,11 @@ class MathAdventureApp {
                 if (typeof TowerCSAScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new TowerCSAScreen();
                 }
+                break;
+            case 8:
+                        if (typeof BeakerSimScreen !== 'undefined') {
+            this.screenInstances[screenNumber] = new BeakerSimScreen();
+        }
                 break;
             // Add more cases as we create more screens
             default:

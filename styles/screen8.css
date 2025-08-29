@@ -1,0 +1,363 @@
+/* Screen 8: Beaker Volume Simulation - Modern & Lively */
+
+.beaker-sim {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    color: white;
+    overflow: hidden;
+    position: relative;
+}
+
+.beaker-sim::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+
+.scene-intro {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.scene-intro h2 {
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.3); }
+    to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.6); }
+}
+
+.scene-intro p {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.beaker-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin: 30px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.beaker {
+    background: transparent;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    border: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+}
+
+.beaker:hover {
+    transform: none;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.beaker.selected {
+    border-color: transparent;
+    box-shadow: none;
+    animation: none;
+}
+
+@keyframes selectedPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.beaker-label {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.beaker-visual {
+    margin: 0 auto 20px;
+    position: relative;
+    perspective: 800px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.beaker-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.beaker-img:hover {
+    transform: scale(1.05);
+}
+
+/* Beaker A: Tall and slim (r=3, h=100) - 60:200 aspect ratio */
+#beakerA .beaker-visual {
+    width: 60px;
+    height: 200px;
+}
+
+/* Beaker B: Short and wide (r=15, h=4) - 300:80 aspect ratio */
+#beakerB .beaker-visual {
+    width: 300px;
+    height: 80px;
+}
+
+/* SVG container styling */
+.beaker-svg-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.beaker-svg-container svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Force bottom alignment for both beakers */
+#beakerA .beaker-visual,
+#beakerB .beaker-visual {
+    align-items: flex-end;
+}
+
+/* SVG-based water fill - controlled by JavaScript */
+.water-fill {
+    transition: all 2s ease-in-out;
+}
+
+/* Hide the old CSS water fill */
+.water-fill-old {
+    display: none;
+}
+
+.volume-counter {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: #00ff88;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.volume-counter.show {
+    opacity: 1;
+}
+
+.beaker-params {
+    background: rgba(255,255,255,0.15);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.param-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 15px;
+    margin: 8px 0;
+    font-size: 1.1em;
+    align-items: center;
+}
+
+.param-row span:first-child {
+    text-align: left;
+    color: rgba(255,255,255,0.9);
+}
+
+.param-value {
+    color: #00ff88;
+    font-weight: bold;
+    text-align: left;
+}
+
+.selection-section {
+    text-align: center;
+    margin: 30px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.selection-section h3 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.selection-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.selection-btn {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.selection-btn:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-3px);
+}
+
+.selection-btn.selected {
+    background: #00ff88;
+    color: #333;
+    border-color: #00ff88;
+    box-shadow: 0 0 20px rgba(0,255,136,0.4);
+}
+
+.simulation-controls {
+    text-align: center;
+    margin: 30px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.fill-btn {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    color: white;
+    padding: 18px 40px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,212,255,0.3);
+}
+
+.fill-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,212,255,0.4);
+}
+
+.fill-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.explanation {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.explanation.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.explanation h3 {
+    color: #00ff88;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.explanation p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.volume-comparison {
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #00ff88;
+}
+
+.volume-comparison p {
+    margin: 8px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.explanation ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.explanation li {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.explanation.correct {
+    border-color: #00ff88;
+}
+
+.explanation.different {
+    border-color: #ff6b6b;
+}
+
+@media (max-width: 768px) {
+    .beaker-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .selection-options {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .selection-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
