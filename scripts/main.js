@@ -506,7 +506,30 @@ class MathAdventureApp {
                         </div>
                         
                         <div class="simulation-controls" id="simControls" style="display: none;">
-                            <button class="fill-btn" id="fillBtn">🧪 Start Water Fill Simulation</button>
+                            <div class="tap-controls">
+                                <div class="tap-container">
+                                    <div class="tap-label">Tap A</div>
+                                    <div class="tap" id="tapA">
+                                        <div class="tap-handle" id="tapHandleA">🔧</div>
+                                        <div class="tap-spout"></div>
+                                    </div>
+                                    <div class="tap-status" id="tapStatusA">OFF</div>
+                                </div>
+                                
+                                <div class="tap-container">
+                                    <div class="tap-label">Tap B</div>
+                                    <div class="tap" id="tapB">
+                                        <div class="tap-handle" id="tapHandleB">🔧</div>
+                                        <div class="tap-spout"></div>
+                                    </div>
+                                    <div class="tap-status" id="tapStatusB">OFF</div>
+                                </div>
+                            </div>
+                            
+                            <div class="simulation-instructions">
+                                <p>💡 Turn the taps on/off to fill the beakers with water!</p>
+                                <p>Click the tap handles to control water flow.</p>
+                            </div>
                         </div>
                         
                         <div class="explanation" id="explanation" style="display: none;">
@@ -516,9 +539,9 @@ class MathAdventureApp {
                         <!-- Popup for wrong answers -->
                         <div class="popup-overlay" id="popupOverlay" style="display: none;">
                             <div class="popup-content">
-                                <div class=8popup-header">
+                                <div class="popup-header">
                                     <h3>🤔 Let's Think About This!</h3>
-                                    <div class="audio-indicator" id="audioIndicator">
+                                    <div class="audio-indicator" id="audioIndicator" style="display: none;">
                                         <span class="audio-icon">🔊</span>
                                         <span class="audio-text">Audio Playing...</span>
                                     </div>
@@ -539,6 +562,150 @@ class MathAdventureApp {
                             <source src="audio/popup-message.wav" type="audio/wav">
                             Your browser does not support the audio element.
                         </audio>
+                        
+                        <!-- Second popup for beaker simulation -->
+                        <div class="simulation-popup-overlay" id="simulationPopupOverlay" style="display: none;">
+                            <div class="simulation-popup-content">
+                                <div class="simulation-popup-header">
+                                    <div class="popup-close-btn" id="simulationPopupCloseBtn">×</div>
+                                    <h3>🧪 Let's Experiment with the Beakers!</h3>
+                                    <p>Use the taps above each beaker to control water flow</p>
+                                </div>
+                                
+                                <div class="simulation-popup-body">
+                                    <div class="popup-beaker-container">
+                                        <div class="popup-beaker" id="popupBeakerA">
+                                            <div class="popup-tap" id="popupTapA">
+                                                <div class="popup-tap-handle" id="popupTapHandleA">🔧</div>
+                                                <div class="popup-tap-spout"></div>
+                                                <div class="water-drops" id="waterDropsA"></div>
+                                            </div>
+                                            <div class="popup-beaker-visual">
+                                                <svg width="60" height="200" viewBox="0 0 60 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <!-- Main beaker body - tall and slim -->
+                                                    <rect x="10" y="20" width="40" height="160" fill="none" stroke="#000000" stroke-width="2" rx="5"/>
+                                                    
+                                                    <!-- Beaker rim with slight flare -->
+                                                    <path d="M 8 20 L 52 20 L 50 15 L 10 15 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                                    
+                                                    <!-- Pouring spout on left side -->
+                                                    <path d="M 8 20 L 5 25 L 8 30 L 10 25 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                                    
+                                                    <!-- Graduation marks -->
+                                                    <line x1="45" y1="30" x2="50" y2="30" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="50" x2="50" y2="50" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="70" x2="50" y2="70" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="90" x2="50" y2="90" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="110" x2="50" y2="110" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="130" x2="50" y2="130" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="150" x2="50" y2="150" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="45" y1="170" x2="50" y2="170" stroke="#000000" stroke-width="1"/>
+                                                    
+                                                    <!-- Water fill area - matches beaker shape exactly -->
+                                                    <defs>
+                                                        <clipPath id="popupBeakerAClip">
+                                                            <rect x="10" y="20" width="40" height="160" rx="5"/>
+                                                        </clipPath>
+                                                    </defs>
+                                                    
+                                                    <!-- Water fill container - starts empty (height=0) -->
+                                                    <rect x="10" y="20" width="40" height="0" fill="url(#popupWaterGradient)" rx="5" clip-path="url(#popupBeakerAClip)" class="popup-water-fill" id="popupWaterFillA"/>
+                                                    
+                                                    <!-- Water gradient definition -->
+                                                    <defs>
+                                                        <linearGradient id="popupWaterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                                                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.8"/>
+                                                            <stop offset="100%" style="stop-color:#0099cc;stop-opacity:0.6"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    
+                                                    <!-- Base support -->
+                                                    <rect x="20" y="195" width="20" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+                                                </svg>
+                                            </div>
+                                            <div class="popup-beaker-label">Beaker A</div>
+                                            <div class="popup-beaker-params">
+                                                <div class="param-row">
+                                                    <span>Radius:</span>
+                                                    <span class="param-value">3 cm</span>
+                                                </div>
+                                                <div class="param-row">
+                                                    <span>Height:</span>
+                                                    <span class="param-value">100 cm</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="popup-beaker" id="popupBeakerB">
+                                            <div class="popup-tap" id="popupTapB">
+                                                <div class="popup-tap-handle" id="popupTapHandleB">🔧</div>
+                                                <div class="popup-tap-spout"></div>
+                                                <div class="water-drops" id="waterDropsB"></div>
+                                            </div>
+                                            <div class="popup-beaker-visual">
+                                                <svg width="300" height="80" viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <!-- Main beaker body - short and wide -->
+                                                    <rect x="20" y="10" width="260" height="60" fill="none" stroke="#000000" stroke-width="2" rx="5"/>
+                                                    
+                                                    <!-- Beaker rim with slight flare -->
+                                                    <path d="M 15 10 L 285 10 L 280 5 L 20 5 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                                    
+                                                    <!-- Pouring spout on left side -->
+                                                    <path d="M 15 10 L 10 15 L 15 20 L 20 15 Z" fill="none" stroke="#000000" stroke-width="2"/>
+                                                    
+                                                    <!-- Graduation marks -->
+                                                    <line x1="30" y1="15" x2="30" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="60" y1="15" x2="60" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="90" y1="15" x2="90" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="120" y1="15" x2="120" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="150" y1="15" x2="150" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="180" y1="15" x2="180" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="210" y1="15" x2="210" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="240" y1="15" x2="240" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    <line x1="270" y1="15" x2="270" y2="25" stroke="#000000" stroke-width="1"/>
+                                                    
+                                                    <!-- Water fill area - matches beaker shape exactly -->
+                                                    <defs>
+                                                        <clipPath id="popupBeakerBClip">
+                                                            <rect x="20" y="10" width="260" height="60" rx="5"/>
+                                                        </clipPath>
+                                                    </defs>
+                                                    
+                                                    <!-- Water fill container - starts empty (height=0) -->
+                                                    <rect x="20" y="10" width="260" height="0" fill="url(#popupWaterGradient)" rx="5" clip-path="url(#popupBeakerBClip)" class="popup-water-fill" id="popupWaterFillB"/>
+                                                    
+                                                    <!-- Water gradient definition -->
+                                                    <defs>
+                                                        <linearGradient id="popupWaterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                                                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.6"/>
+                                                            <stop offset="100%" style="stop-color:#0099cc;stop-opacity:0.8"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    
+                                                    <!-- Base support -->
+                                                    <rect x="30" y="75" width="240" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+                                                </svg>
+                                            </div>
+                                            <div class="popup-beaker-label">Beaker B</div>
+                                            <div class="popup-beaker-params">
+                                                <div class="param-row">
+                                                    <span>Radius:</span>
+                                                    <span class="param-value">15 cm</span>
+                                                </div>
+                                                <div class="param-row">
+                                                    <span>Height:</span>
+                                                    <span class="param-value">4 cm</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="simulation-popup-footer">
+                                    <p class="popup-instruction">💡 Tap the handles above each beaker to control water flow!</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>`;
             // Add more cases as we create more screens

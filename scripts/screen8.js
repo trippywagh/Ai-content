@@ -52,11 +52,19 @@ class BeakerSimScreen {
             // Set up audio event listeners
             audioElement.onended = () => {
                 this.hideAudioIndicator();
+                // Show second popup after audio finishes
+                setTimeout(() => {
+                    this.showSimulationPopup();
+                }, 500);
             };
             
             audioElement.onerror = () => {
                 this.hideAudioIndicator();
                 console.log('Audio file not found or error occurred');
+                // Show second popup even if audio fails
+                setTimeout(() => {
+                    this.showSimulationPopup();
+                }, 500);
             };
             
             // Play the audio
@@ -89,6 +97,20 @@ class BeakerSimScreen {
         }
     }
 
+    showSimulationPopup() {
+        // Hide first popup
+        this.hidePopup();
+        // Show second popup
+        this.simulationPopupOverlay.style.display = 'flex';
+    }
+
+    hideSimulationPopup() {
+        // Hide second popup
+        this.simulationPopupOverlay.style.display = 'none';
+        // Show main simulation controls
+        this.simControls.style.display = 'block';
+    }
+
     getDOMElements() {
         // Selection buttons
         this.selectABtn = document.getElementById('selectA');
@@ -118,6 +140,36 @@ class BeakerSimScreen {
         this.popupOverlay = document.getElementById('popupOverlay');
         this.popupCloseBtn = document.getElementById('popupCloseBtn');
         this.audioIndicator = document.getElementById('audioIndicator');
+        
+        // Second popup elements
+        this.simulationPopupOverlay = document.getElementById('simulationPopupOverlay');
+        this.simulationPopupCloseBtn = document.getElementById('simulationPopupCloseBtn');
+        
+        // Popup tap elements
+        this.popupTapHandleA = document.getElementById('popupTapHandleA');
+        this.popupTapHandleB = document.getElementById('popupTapHandleB');
+        this.popupWaterA = document.getElementById('popupWaterFillA');
+        this.popupWaterB = document.getElementById('popupWaterFillB');
+        this.popupWaterDropsA = document.getElementById('waterDropsA');
+        this.popupWaterDropsB = document.getElementById('waterDropsB');
+        
+        // Main tap elements
+        this.tapA = document.getElementById('tapA');
+        this.tapB = document.getElementById('tapB');
+        this.tapHandleA = document.getElementById('tapHandleA');
+        this.tapHandleB = document.getElementById('tapHandleB');
+        this.tapStatusA = document.getElementById('tapStatusA');
+        this.tapStatusB = document.getElementById('tapStatusB');
+        
+        // Debug logging
+        console.log('Popup 2 elements found:', {
+            simulationPopupOverlay: this.simulationPopupOverlay,
+            simulationPopupCloseBtn: this.simulationPopupCloseBtn,
+            popupTapHandleA: this.popupTapHandleA,
+            popupTapHandleB: this.popupTapHandleB,
+            popupWaterA: this.popupWaterA,
+            popupWaterB: this.popupWaterB
+        });
     }
 
     wireEvents() {
@@ -126,11 +178,19 @@ class BeakerSimScreen {
         this.selectBBtn.addEventListener('click', () => this.selectBeaker('B'));
         this.selectEqualBtn.addEventListener('click', () => this.selectBeaker('equal'));
         
-        // Fill button
-        this.fillBtn.addEventListener('click', () => this.startWaterFill());
-        
         // Popup close button
         this.popupCloseBtn.addEventListener('click', () => this.hidePopup());
+        
+        // Simulation popup close button
+        this.simulationPopupCloseBtn.addEventListener('click', () => this.hideSimulationPopup());
+        
+        // Popup tap interactions
+        this.popupTapHandleA.addEventListener('click', () => this.togglePopupTap('A'));
+        this.popupTapHandleB.addEventListener('click', () => this.togglePopupTap('B'));
+        
+        // Main tap interactions
+        this.tapHandleA.addEventListener('click', () => this.toggleTap('A'));
+        this.tapHandleB.addEventListener('click', () => this.toggleTap('B'));
     }
 
     selectBeaker(choice) {
@@ -159,8 +219,6 @@ class BeakerSimScreen {
             this.selectedBeaker = 'equal';
             // Correct answer - show simulation controls
             this.simControls.style.display = 'block';
-            this.fillBtn.disabled = false;
-            this.fillBtn.textContent = '🧪 Start Water Fill Simulation';
         }
     }
 
@@ -175,29 +233,70 @@ class BeakerSimScreen {
         return { volumeA, volumeB };
     }
 
-    startWaterFill() {
-        if (!this.selectedBeaker) return;
+    toggleTap(tapId) {
+        const tapHandle = tapId === 'A' ? this.tapHandleA : this.tapHandleB;
+        const tapStatus = tapId === 'A' ? this.tapStatusA : this.tapStatusB;
+        const isActive = tapHandle.classList.contains('active');
         
-        const { volumeA, volumeB } = this.calculateVolumes();
-        const isEqual = Math.abs(volumeA - volumeB) < 0.01;
+        if (isActive) {
+            // Turn tap off
+            tapHandle.classList.remove('active');
+            tapStatus.textContent = 'OFF';
+            tapStatus.classList.remove('active');
+            this.stopWaterFlow(tapId);
+        } else {
+            // Turn tap on
+            tapHandle.classList.add('active');
+            tapStatus.textContent = 'ON';
+            tapStatus.classList.add('active');
+            this.startWaterFlow(tapId);
+        }
+    }
+
+    startWaterFlow(tapId) {
+        const waterElement = tapId === 'A' ? this.waterA : this.waterB;
+        const counter = tapId === 'A' ? this.counterA : this.counterB;
+        const volume = tapId === 'A' ? 
+            Math.PI * this.beakerA.radius ** 2 * this.beakerA.height :
+            Math.PI * this.beakerB.radius ** 2 * this.beakerB.height;
         
-        // Reset water levels for SVG elements
-        this.waterA.setAttribute('height', '0');
-        this.waterA.setAttribute('y', '180'); // Reset to bottom of beaker A
-        this.waterB.setAttribute('height', '0');
-        this.waterB.setAttribute('y', '70'); // Reset to bottom of beaker B
+        // Show volume counter
+        counter.style.opacity = '1';
+        counter.classList.add('show');
         
-        this.counterA.style.opacity = '0';
-        this.counterB.style.opacity = '0';
+        // Start water filling animation
+        this.animateWaterFill(waterElement, volume, counter, tapId);
+    }
+
+    stopWaterFlow(tapId) {
+        const waterElement = tapId === 'A' ? this.waterA : this.waterB;
+        const counter = tapId === 'A' ? this.counterA : this.counterB;
         
-        // Start filling animation
-        this.animateWaterFill(this.waterA, volumeA, this.counterA, 'A');
-        this.animateWaterFill(this.waterB, volumeB, this.counterB, 'B');
+        // Hide volume counter
+        counter.style.opacity = '0';
+        counter.classList.remove('show');
         
-        // Show explanation after animation
-        setTimeout(() => {
-            this.showExplanation(volumeA, volumeB, isEqual);
-        }, 2500);
+        // Stop water animation (keep current level)
+        // Water level stays where it is when tap is turned off
+    }
+
+    checkBeakersFull() {
+        // Check if both beakers are full
+        const waterAHeight = parseFloat(this.waterA.getAttribute('height'));
+        const waterBHeight = parseFloat(this.waterB.getAttribute('height'));
+        
+        const maxHeightA = 160; // Beaker A max height
+        const maxHeightB = 60;  // Beaker B max height
+        
+        if (waterAHeight >= maxHeightA && waterBHeight >= maxHeightB) {
+            // Both beakers are full, show explanation
+            const { volumeA, volumeB } = this.calculateVolumes();
+            const isEqual = Math.abs(volumeA - volumeB) < 0.01;
+            
+            setTimeout(() => {
+                this.showExplanation(volumeA, volumeB, isEqual);
+            }, 1000);
+        }
     }
 
     animateWaterFill(waterElement, volume, counter, beakerId) {
@@ -246,6 +345,11 @@ class BeakerSimScreen {
             
             updateCounter();
         }, 100);
+        
+        // Check if beakers are full after animation
+        setTimeout(() => {
+            this.checkBeakersFull();
+        }, 2500);
     }
 
     showExplanation(volumeA, volumeB, isEqual) {
@@ -293,6 +397,202 @@ class BeakerSimScreen {
         
         // Scroll to explanation
         this.explanation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    togglePopupTap(tapId) {
+        const tapHandle = tapId === 'A' ? this.popupTapHandleA : this.popupTapHandleB;
+        const waterElement = tapId === 'A' ? this.popupWaterA : this.popupWaterB;
+        
+        // Toggle tap state
+        if (tapHandle.classList.contains('active')) {
+            // Turn off tap
+            tapHandle.classList.remove('active');
+            this.stopPopupWaterFlow(tapId);
+        } else {
+            // Turn on tap
+            tapHandle.classList.add('active');
+            this.startPopupWaterFlow(tapId);
+        }
+    }
+
+    startPopupWaterFlow(tapId) {
+        const waterElement = tapId === 'A' ? this.popupWaterA : this.popupWaterB;
+        
+        // Start water drops animation
+        this.startWaterDrops(tapId);
+        
+        // Start water fill animation
+        this.animatePopupWaterFill(tapId, waterElement);
+    }
+
+    stopPopupWaterFlow(tapId) {
+        // Stop water drops animation
+        this.stopWaterDrops(tapId);
+        
+        // Water level stays where it is
+        console.log(`Popup tap ${tapId} turned off`);
+    }
+
+    startWaterDrops(tapId) {
+        const dropsContainer = tapId === 'A' ? this.popupWaterDropsA : this.popupWaterDropsB;
+        if (!dropsContainer) return;
+        
+        // Clear existing drops
+        dropsContainer.innerHTML = '';
+        
+        // Create multiple water drops with staggered timing
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                if (this.isPopupTapActive(tapId)) {
+                    this.createWaterDrop(dropsContainer, i);
+                }
+            }, i * 200); // Stagger drops by 200ms
+        }
+        
+        // Continue creating drops while tap is active
+        this.waterDropInterval = setInterval(() => {
+            if (this.isPopupTapActive(tapId)) {
+                this.createWaterDrop(dropsContainer, Math.random() * 5);
+            } else {
+                clearInterval(this.waterDropInterval);
+            }
+        }, 300);
+    }
+
+    stopWaterDrops(tapId) {
+        if (this.waterDropInterval) {
+            clearInterval(this.waterDropInterval);
+        }
+        
+        const dropsContainer = tapId === 'A' ? this.popupWaterDropsA : this.popupWaterDropsB;
+        if (dropsContainer) {
+            // Fade out existing drops
+            const drops = dropsContainer.querySelectorAll('.water-drop');
+            drops.forEach(drop => {
+                drop.style.animation = 'none';
+                drop.style.opacity = '0';
+                drop.style.transition = 'opacity 0.5s ease';
+            });
+            
+            // Remove drops after fade
+            setTimeout(() => {
+                dropsContainer.innerHTML = '';
+            }, 500);
+        }
+    }
+
+    createWaterDrop(container, index) {
+        const drop = document.createElement('div');
+        drop.className = 'water-drop';
+        drop.style.animationDelay = `${index * 0.1}s`;
+        container.appendChild(drop);
+        
+        // Remove drop after animation
+        setTimeout(() => {
+            if (drop.parentNode) {
+                drop.remove();
+            }
+        }, 1000);
+    }
+
+    animatePopupWaterFill(tapId, waterElement) {
+        if (!waterElement) return;
+        
+        // Get current water height
+        let currentHeight = parseFloat(waterElement.getAttribute('height') || 0);
+        const maxHeight = tapId === 'A' ? 160 : 60; // Height values from SVG
+        const increment = maxHeight / 100; // 100 steps for smooth animation
+        
+        const animate = () => {
+            if (currentHeight < maxHeight && this.isPopupTapActive(tapId)) {
+                currentHeight += increment;
+                
+                if (tapId === 'A') {
+                    // For tall beaker A - water fills from bottom up
+                    waterElement.setAttribute('height', currentHeight);
+                    waterElement.setAttribute('y', 180 - currentHeight); // Start from bottom (y=180) and grow up
+                } else {
+                    // For wide beaker B - water fills from bottom up
+                    waterElement.setAttribute('height', currentHeight);
+                    waterElement.setAttribute('y', 70 - currentHeight); // Start from bottom (y=70) and grow up
+                }
+                
+                // Update volume counter
+                this.updatePopupVolumeCounter(tapId, currentHeight, maxHeight);
+                
+                requestAnimationFrame(animate);
+            } else if (currentHeight >= maxHeight) {
+                // Beaker is full
+                this.showPopupVolumeComplete(tapId);
+            }
+        };
+        
+        animate();
+    }
+
+    updatePopupVolumeCounter(tapId, currentHeight, maxHeight) {
+        const beaker = tapId === 'A' ? this.beakerA : this.beakerB;
+        const volume = this.calculateBeakerVolume(beaker.radius, currentHeight);
+        
+        // Find or create volume counter
+        let counter = document.querySelector(`#popupBeaker${tapId} .popup-volume-counter`);
+        if (!counter) {
+            counter = document.createElement('div');
+            counter.className = 'popup-volume-counter';
+            counter.style.cssText = `
+                position: absolute;
+                top: ${tapId === 'A' ? '10px' : '10px'};
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 15px;
+                font-size: 12px;
+                    font-weight: bold;
+                z-index: 10;
+            `;
+            document.querySelector(`#popupBeaker${tapId}`).appendChild(counter);
+        }
+        
+        counter.textContent = `Volume: ${volume.toFixed(1)} cm³`;
+        counter.style.opacity = '1';
+    }
+
+    showPopupVolumeComplete(tapId) {
+        const beaker = tapId === 'A' ? this.beakerA : this.beakerB;
+        const totalVolume = this.calculateBeakerVolume(beaker.radius, beaker.height);
+        
+        let counter = document.querySelector(`#popupBeaker${tapId} .popup-volume-counter`);
+        if (counter) {
+            counter.textContent = `FULL! ${totalVolume.toFixed(1)} cm³`;
+            // Keep black background as per original design
+            counter.style.background = 'rgba(0, 0, 0, 0.8)';
+        }
+        
+        // Automatically turn off the tap when beaker is full
+        this.autoStopTap(tapId);
+    }
+
+    autoStopTap(tapId) {
+        const tapHandle = tapId === 'A' ? this.popupTapHandleA : this.popupTapHandleB;
+        
+        // Remove active state
+        tapHandle.classList.remove('active');
+        
+        // Stop water drops
+        this.stopWaterDrops(tapId);
+        
+        console.log(`Tap ${tapId} automatically stopped - beaker is full!`);
+    }
+
+    calculateBeakerVolume(radius, height) {
+        return Math.PI * radius * radius * height;
+    }
+
+    isPopupTapActive(tapId) {
+        const tapHandle = tapId === 'A' ? this.popupTapHandleA : this.popupTapHandleB;
+        return tapHandle.classList.contains('active');
     }
 
     destroy() {
