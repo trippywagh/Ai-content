@@ -370,7 +370,7 @@ class MathAdventureApp {
                     <div class="beaker-sim">
                         <div class="scene-intro">
                             <h2>🧪 Beaker Volume Mystery</h2>
-                            <p>Look at these two laboratory beakers. They have very different shapes but might hold the same amount of water!</p>
+                            <p>Look at these two laboratory beakers. Which one can hold more water?</p>
                         </div>
                         
                         <div class="beaker-container">
@@ -505,35 +505,19 @@ class MathAdventureApp {
                             </div>
                         </div>
                         
-                        <div class="simulation-controls" id="simControls" style="display: none;">
-                            <div class="tap-controls">
-                                <div class="tap-container">
-                                    <div class="tap-label">Tap A</div>
-                                    <div class="tap" id="tapA">
-                                        <div class="tap-handle" id="tapHandleA">🔧</div>
-                                        <div class="tap-spout"></div>
-                                    </div>
-                                    <div class="tap-status" id="tapStatusA">OFF</div>
-                                </div>
-                                
-                                <div class="tap-container">
-                                    <div class="tap-label">Tap B</div>
-                                    <div class="tap" id="tapB">
-                                        <div class="tap-handle" id="tapHandleB">🔧</div>
-                                        <div class="tap-spout"></div>
-                                    </div>
-                                    <div class="tap-status" id="tapStatusB">OFF</div>
-                                </div>
-                            </div>
-                            
-                            <div class="simulation-instructions">
-                                <p>💡 Turn the taps on/off to fill the beakers with water!</p>
-                                <p>Click the tap handles to control water flow.</p>
-                            </div>
-                        </div>
+
                         
                         <div class="explanation" id="explanation" style="display: none;">
                             <!-- Explanation will be populated by JS -->
+                        </div>
+                        
+                        <!-- Success banner for correct answer -->
+                        <div class="success-banner" id="successBanner" style="display: none;">
+                            <div class="success-content">
+                                <h3>🎉 Excellent! You're absolutely correct!</h3>
+                                <p>Both beakers hold exactly the same amount of water!</p>
+                                <button class="simulation-btn" id="openSimulationBtn">🧪 Try the Simulation!</button>
+                            </div>
                         </div>
                         
                         <!-- Popup for wrong answers -->

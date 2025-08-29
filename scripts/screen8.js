@@ -28,8 +28,6 @@ class BeakerSimScreen {
     showPopup() {
         // Show the popup overlay
         this.popupOverlay.style.display = 'flex';
-        // Hide simulation controls for wrong answers
-        this.simControls.style.display = 'none';
         // Play audio for the popup message
         this.speakPopupMessage();
     }
@@ -97,18 +95,33 @@ class BeakerSimScreen {
         }
     }
 
-    showSimulationPopup() {
-        // Hide first popup
+    showSuccessBanner() {
+        // Hide any existing popups
         this.hidePopup();
+        // Show success banner
+        this.successBanner.style.display = 'block';
+        // Scroll to banner
+        this.successBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    showSimulationPopup() {
+        console.log('showSimulationPopup called');
+        // Hide first popup if it exists
+        this.hidePopup();
+        // Hide success banner if it exists
+        if (this.successBanner) {
+            console.log('Hiding success banner');
+            this.successBanner.style.display = 'none';
+        }
         // Show second popup
+        console.log('Showing simulation popup');
         this.simulationPopupOverlay.style.display = 'flex';
     }
 
     hideSimulationPopup() {
         // Hide second popup
         this.simulationPopupOverlay.style.display = 'none';
-        // Show main simulation controls
-        this.simControls.style.display = 'block';
+        // Return to main screen (no simulation controls to show)
     }
 
     getDOMElements() {
@@ -118,7 +131,6 @@ class BeakerSimScreen {
         this.selectEqualBtn = document.getElementById('selectEqual');
         
         // Simulation controls
-        this.simControls = document.getElementById('simControls');
         this.fillBtn = document.getElementById('fillBtn');
         
         // Beaker elements
@@ -135,6 +147,16 @@ class BeakerSimScreen {
         
         // Explanation
         this.explanation = document.getElementById('explanation');
+        
+        // Success banner
+        this.successBanner = document.getElementById('successBanner');
+        this.openSimulationBtn = document.getElementById('openSimulationBtn');
+        
+        // Debug logging for success banner elements
+        console.log('Success banner elements found:', {
+            successBanner: this.successBanner,
+            openSimulationBtn: this.openSimulationBtn
+        });
         
         // Popup elements
         this.popupOverlay = document.getElementById('popupOverlay');
@@ -153,13 +175,7 @@ class BeakerSimScreen {
         this.popupWaterDropsA = document.getElementById('waterDropsA');
         this.popupWaterDropsB = document.getElementById('waterDropsB');
         
-        // Main tap elements
-        this.tapA = document.getElementById('tapA');
-        this.tapB = document.getElementById('tapB');
-        this.tapHandleA = document.getElementById('tapHandleA');
-        this.tapHandleB = document.getElementById('tapHandleB');
-        this.tapStatusA = document.getElementById('tapStatusA');
-        this.tapStatusB = document.getElementById('tapStatusB');
+
         
         // Debug logging
         console.log('Popup 2 elements found:', {
@@ -184,13 +200,17 @@ class BeakerSimScreen {
         // Simulation popup close button
         this.simulationPopupCloseBtn.addEventListener('click', () => this.hideSimulationPopup());
         
+        // Success banner simulation button
+        this.openSimulationBtn.addEventListener('click', () => {
+            console.log('Simulation button clicked!');
+            this.showSimulationPopup();
+        });
+        
         // Popup tap interactions
         this.popupTapHandleA.addEventListener('click', () => this.togglePopupTap('A'));
         this.popupTapHandleB.addEventListener('click', () => this.togglePopupTap('B'));
         
-        // Main tap interactions
-        this.tapHandleA.addEventListener('click', () => this.toggleTap('A'));
-        this.tapHandleB.addEventListener('click', () => this.toggleTap('B'));
+
     }
 
     selectBeaker(choice) {
@@ -217,8 +237,8 @@ class BeakerSimScreen {
         } else if (choice === 'equal') {
             this.selectEqualBtn.classList.add('selected');
             this.selectedBeaker = 'equal';
-            // Correct answer - show simulation controls
-            this.simControls.style.display = 'block';
+            // Correct answer - show success banner
+            this.showSuccessBanner();
         }
     }
 
