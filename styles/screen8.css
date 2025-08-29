@@ -161,9 +161,6 @@
 
 .volume-counter {
     position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
     background: rgba(0,0,0,0.8);
     color: #00ff88;
     padding: 8px 12px;
@@ -172,6 +169,20 @@
     font-weight: bold;
     opacity: 0;
     transition: opacity 0.3s ease;
+}
+
+/* Position volume counter for Beaker A (tall) - on the left side */
+#beakerA .volume-counter {
+    top: 50%;
+    left: -120px;
+    transform: translateY(-50%);
+}
+
+/* Position volume counter for Beaker B (wide) - between label and image */
+#beakerB .volume-counter {
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .volume-counter.show {
