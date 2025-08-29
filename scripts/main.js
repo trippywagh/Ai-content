@@ -871,7 +871,6 @@ class MathAdventureApp {
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new MathAdventureApp();
+    // Make app globally accessible for navigation buttons
+    window.app = app;
 });
-
-// Make app globally accessible for navigation buttons
-window.app = app;

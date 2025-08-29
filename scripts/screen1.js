@@ -266,7 +266,7 @@ class NameIntroScreen {
         // Simulate loading time (you can remove this in production)
         setTimeout(() => {
             this.proceedToNextScreen();
-        }, 2000);
+        }, 1500);
     }
 
     showNameInput() {
@@ -320,13 +320,52 @@ class NameIntroScreen {
     }
 
     proceedToNextScreen() {
+        console.log('proceedToNextScreen called');
+        console.log('window.app:', window.app);
+        console.log('typeof window.app.loadScreenDirectly:', typeof window.app?.loadScreenDirectly);
+        
         // Navigate to the next screen (dabba question)
         if (window.app && typeof window.app.loadScreenDirectly === 'function') {
-            window.app.loadScreenDirectly(2);
+            console.log('App found, scheduling navigation to Screen 2 in 1.5 seconds...');
+            // Show loading for 1.5 seconds as requested
+            setTimeout(() => {
+                console.log('Timeout completed, calling loadScreenDirectly(2)...');
+                try {
+                    window.app.loadScreenDirectly(2);
+                    console.log('loadScreenDirectly(2) called successfully');
+                } catch (error) {
+                    console.error('Error calling loadScreenDirectly:', error);
+                }
+            }, 1500);
         } else {
-            // Fallback: reload the page or show next screen
-            console.log('Proceeding to next screen...');
-            // You can implement your navigation logic here
+            console.error('App not found or loadScreenDirectly method not available');
+            console.log('Waiting for app to be available...');
+            
+            // Wait for app to be available
+            const waitForApp = setInterval(() => {
+                if (window.app && typeof window.app.loadScreenDirectly === 'function') {
+                    console.log('App now available, proceeding with navigation...');
+                    clearInterval(waitForApp);
+                    
+                    // Show loading for 1.5 seconds as requested
+                    setTimeout(() => {
+                        console.log('Timeout completed, calling loadScreenDirectly(2)...');
+                        try {
+                            window.app.loadScreenDirectly(2);
+                            console.log('loadScreenDirectly(2) called successfully');
+                        } catch (error) {
+                            console.error('Error calling loadScreenDirectly:', error);
+                        }
+                    }, 1500);
+                }
+            }, 100);
+            
+            // Fallback: if app doesn't become available within 10 seconds, show error
+            setTimeout(() => {
+                clearInterval(waitForApp);
+                console.error('App not available after 10 seconds, showing error');
+                this.showFeedback('Navigation failed. Please use the Next button.', 'error');
+            }, 10000);
         }
     }
 
