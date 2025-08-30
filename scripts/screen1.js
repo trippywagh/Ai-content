@@ -316,6 +316,12 @@ class NameIntroScreen {
         if (this.loadingSection) {
             this.loadingSection.style.display = 'block';
             this.nameInputSection.style.display = 'none';
+            
+            // Activate the overlay when loading section becomes visible
+            const overlay = document.getElementById('botOverlay');
+            if (overlay) {
+                overlay.classList.add('active');
+            }
         }
     }
 
@@ -423,7 +429,11 @@ class NameIntroScreen {
     
     startBotTransition() {
         const bot = document.getElementById('aiCompanion');
-        if (!bot) return;
+        const overlay = document.getElementById('botOverlay');
+        if (!bot || !overlay) return;
+        
+        // Remove the overlay when bot starts moving
+        overlay.classList.remove('active');
         
         // Step 3: Move to final position with snap to exact coordinates
         gsap.to(bot, {
