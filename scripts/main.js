@@ -3,7 +3,7 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 8; // Updated to 8 screens
+        this.totalScreens = 14; // 8 learning screens + 1 quiz intro + 5 quiz questions + 1 results screen
         this.screenInstances = {};
         this.init();
     }
@@ -101,6 +101,15 @@ class MathAdventureApp {
         // Define screen HTML content directly
         const screenContent = this.getScreenHTML(screenNumber);
         container.innerHTML = screenContent;
+        
+        // Initialize quiz if it's a quiz screen
+        if (screenNumber >= 9 && screenNumber <= 15) {
+            setTimeout(() => {
+                if (window.initializeQuizForScreen) {
+                    window.initializeQuizForScreen(`screen${screenNumber}`);
+                }
+            }, 100);
+        }
     }
 
     getScreenHTML(screenNumber) {
@@ -792,6 +801,241 @@ class MathAdventureApp {
                         </div>
                     </div>
                 </div>`;
+            case 9:
+                // Quiz Introduction Screen
+                return `
+                <div class="screen active" id="screen9">
+                    <div class="quiz-intro">
+                        <div class="quiz-intro-content">
+                            <h1>🎯 Quiz Time!</h1>
+                            <p>Great job learning about right circular cylinders!</p>
+                            <p>Now let's test your knowledge with 5 questions.</p>
+                            
+                            <div class="countdown-timer">
+                                <div class="timer-circle">
+                                    <svg width="120" height="120" viewBox="0 0 120 120">
+                                        <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                                        <circle cx="60" cy="60" r="54" fill="none" stroke="#4CAF50" stroke-width="8" 
+                                                stroke-dasharray="339.292" stroke-dashoffset="339.292" id="timerProgress"/>
+                                    </svg>
+                                    <div class="timer-text">
+                                        <span id="timerCount">5</span>
+                                    </div>
+                                </div>
+                                <p class="timer-label">Quiz starts in...</p>
+                            </div>
+                            
+                            <div class="quiz-rules">
+                                <h3>📋 Quiz Rules:</h3>
+                                <ul>
+                                    <li>5 questions total</li>
+                                    <li>One question per screen</li>
+                                    <li>No answer reveal until the end</li>
+                                    <li>Take your time to think!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            case 10:
+                // Quiz Question 1
+                return `
+                <div class="screen active" id="screen10">
+                    <div class="quiz-question">
+                        <div class="question-header">
+                            <span class="question-number">Question 1 of 5</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 20%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-content">
+                            <h2>🧮 Cylinder in a Cube</h2>
+                            <div class="question-text">
+                                <p>A cylindrical pole perfectly fits inside a cube so that it touches all faces of the cube.</p>
+                                <p>If the cube's side is 10 cm, what's the volume of the cylinder?</p>
+                            </div>
+                            
+                            <div class="answer-options">
+                                <button class="answer-btn" data-answer="A">a) 1000 cm³</button>
+                                <button class="answer-btn" data-answer="B">b) 500 π cm³</button>
+                                <button class="answer-btn" data-answer="C">c) 250 π cm³</button>
+                                <button class="answer-btn" data-answer="D">d) 750 π cm³</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-navigation">
+                            <!-- Navigation handled automatically -->
+                        </div>
+                    </div>
+                </div>`;
+            case 11:
+                // Quiz Question 2
+                return `
+                <div class="screen active" id="screen11">
+                    <div class="quiz-question">
+                        <div class="question-header">
+                            <span class="question-number">Question 2 of 5</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-content">
+                            <h2>💧 Water Tank Transfer</h2>
+                            <div class="question-text">
+                                <p>A water tank is shaped like a cylinder and is completely full.</p>
+                                <p>If you pour all the water into another tank of the same radius but twice the height, what will happen?</p>
+                            </div>
+                            
+                            <div class="answer-options">
+                                <button class="answer-btn" data-answer="A">a) The second tank will still be full</button>
+                                <button class="answer-btn" data-answer="B">b) The water will fill exactly half the second tank</button>
+                                <button class="answer-btn" data-answer="C">c) The water will fill exactly one-fourth of the second tank</button>
+                                <button class="answer-btn" data-answer="D">d) The second tank will overflow</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-navigation">
+                            <!-- Navigation handled automatically -->
+                        </div>
+                    </div>
+                </div>`;
+            case 12:
+                // Quiz Question 3
+                return `
+                <div class="screen active" id="screen12">
+                    <div class="quiz-question">
+                        <div class="question-header">
+                            <span class="question-number">Question 3 of 5</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-content">
+                            <h2>🔍 Surface Area Components</h2>
+                            <div class="question-text">
+                                <p>Which of these is not part of the surface area of a closed cylinder?</p>
+                            </div>
+                            
+                            <div class="answer-options">
+                                <button class="answer-btn" data-answer="A">a) Top circle</button>
+                                <button class="answer-btn" data-answer="B">b) Bottom circle</button>
+                                <button class="answer-btn" data-answer="C">c) Curved surface</button>
+                                <button class="answer-btn" data-answer="D">d) Diagonal face</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-navigation">
+                            <!-- Navigation handled automatically -->
+                        </div>
+                    </div>
+                </div>`;
+            case 13:
+                // Quiz Question 4
+                return `
+                <div class="screen active" id="screen13">
+                    <div class="quiz-question">
+                        <div class="question-header">
+                            <span class="question-number">Question 4 of 5</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-content">
+                            <h2>📏 Curved Surface Area Calculation</h2>
+                            <div class="question-text">
+                                <p>A cylinder has a radius of 7 cm and a height of 10 cm.</p>
+                                <p>What is its curved surface area? (Use π = 3.14)</p>
+                            </div>
+                            
+                            <div class="input-answer-section">
+                                <input type="number" id="question4Input" class="answer-input" placeholder="Enter your answer" step="0.1" min="0">
+                                <span class="unit-label">cm²</span>
+                                <button class="submit-answer-btn" data-question="4">Submit Answer</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-navigation">
+                            <!-- Navigation handled automatically -->
+                        </div>
+                    </div>
+                </div>`;
+            case 14:
+                // Quiz Question 5
+                return `
+                <div class="screen active" id="screen14">
+                    <div class="quiz-question">
+                        <div class="question-header">
+                            <span class="question-number">Question 5 of 5</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-content">
+                            <h2>🥫 Tin Can Surface Area</h2>
+                            <div class="question-text">
+                                <p>A tin can has radius 3.5 cm and height 14 cm.</p>
+                                <p>Find its total surface area. (Use π = 3.14)</p>
+                            </div>
+                            
+                            <div class="input-answer-section">
+                                <input type="number" id="question5Input" class="answer-input" placeholder="Enter your answer" step="0.1" min="0">
+                                <span class="unit-label">cm²</span>
+                                <button class="submit-answer-btn" data-question="5">Submit Answer</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-navigation">
+                            <!-- Navigation handled automatically -->
+                        </div>
+                    </div>
+                </div>`;
+            case 15:
+                // Quiz Results Screen
+                return `
+                <div class="screen active" id="screen15">
+                    <div class="quiz-results">
+                        <div class="results-header">
+                            <h1>🎉 Quiz Complete!</h1>
+                            <p>Great job completing the quiz!</p>
+                        </div>
+                        
+                        <div class="results-summary">
+                            <div class="score-display">
+                                <div class="score-circle">
+                                    <span id="finalScore">0</span>
+                                    <span class="score-label">/5</span>
+                                </div>
+                                <h3 id="scoreMessage">Loading...</h3>
+                            </div>
+                            
+                            <div class="performance-breakdown">
+                                <h4>📊 Performance Breakdown:</h4>
+                                <div id="questionResults"></div>
+                            </div>
+                            
+                            <div class="strength-areas">
+                                <h4>💪 Your Strengths:</h4>
+                                <div id="strengthAreas"></div>
+                            </div>
+                            
+                            <div class="improvement-areas">
+                                <h4>📚 Areas to Improve:</h4>
+                                <div id="improvementAreas"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-actions">
+                            <button class="btn btn-primary" id="reviewAnswersBtn">Review Answers</button>
+                            <button class="btn btn-secondary" id="retakeQuizBtn">Retake Quiz</button>
+                            <button class="btn btn-success" id="continueLearningBtn">Continue Learning</button>
+                        </div>
+                    </div>
+                </div>`;
             // Add more cases as we create more screens
             default:
                 return '<div class="screen"><h1>Screen not implemented yet</h1></div>';
@@ -809,7 +1053,14 @@ class MathAdventureApp {
         const link = document.createElement('link');
         link.id = 'screen-css';
         link.rel = 'stylesheet';
-        link.href = `styles/screen${screenNumber}.css?v=${Date.now()}`;
+        
+        // Quiz screens use quiz.css
+        if (screenNumber >= 9 && screenNumber <= 15) {
+            link.href = `styles/quiz.css?v=${Date.now()}`;
+        } else {
+            link.href = `styles/screen${screenNumber}.css?v=${Date.now()}`;
+        }
+        
         document.head.appendChild(link);
     }
 
@@ -823,16 +1074,34 @@ class MathAdventureApp {
         // Add new screen script
         const script = document.createElement('script');
         script.id = 'screen-script';
-        script.src = `scripts/screen${screenNumber}.js?v=${Date.now()}`;
+        
+        // Quiz screens use quiz.js
+        if (screenNumber >= 9 && screenNumber <= 15) {
+            script.src = `scripts/quiz.js?v=${Date.now()}`;
+        } else {
+            script.src = `scripts/screen${screenNumber}.js?v=${Date.now()}`;
+        }
         
         // Initialize screen instance after script loads
         script.onload = () => {
             this.initializeScreen(screenNumber);
+            // Initialize quiz for quiz screens
+            if (screenNumber >= 9 && screenNumber <= 15 && window.initializeQuizForScreen) {
+                setTimeout(() => {
+                    window.initializeQuizForScreen(screenNumber);
+                }, 100);
+            }
         };
         
         script.onerror = () => {
             console.error('Failed to load screen JavaScript');
             this.initializeScreen(screenNumber);
+            // Initialize quiz for quiz screens even on error
+            if (screenNumber >= 9 && screenNumber <= 15 && window.initializeQuizForScreen) {
+                setTimeout(() => {
+                    window.initializeQuizForScreen(screenNumber);
+                }, 100);
+            }
         };
         
         document.head.appendChild(script);
@@ -882,9 +1151,30 @@ class MathAdventureApp {
                 }
                 break;
             case 8:
-                        if (typeof BeakerSimScreen !== 'undefined') {
-            this.screenInstances[screenNumber] = new BeakerSimScreen();
-        }
+                if (typeof BeakerSimScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new BeakerSimScreen();
+                }
+                break;
+            case 9:
+                // Quiz Introduction Screen - no special initialization needed
+                break;
+            case 10:
+                // Quiz Question 1 - no special initialization needed
+                break;
+            case 11:
+                // Quiz Question 2 - no special initialization needed
+                break;
+            case 12:
+                // Quiz Question 3 - no special initialization needed
+                break;
+            case 13:
+                // Quiz Question 4 - no special initialization needed
+                break;
+            case 14:
+                // Quiz Question 5 - no special initialization needed
+                break;
+            case 15:
+                // Quiz Results Screen - no special initialization needed
                 break;
             // Add more cases as we create more screens
             default:
