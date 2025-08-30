@@ -202,8 +202,8 @@ h1 {
 .ai-companion {
     position: fixed;
     bottom: 30px;
-    right: 30px;
-    z-index: 999;
+    right: 135px;
+    z-index: 998;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -212,10 +212,16 @@ h1 {
 }
 
 .bot-avatar {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.bot-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
 }
 
 .bot-avatar:hover {
@@ -261,7 +267,7 @@ h1 {
 @keyframes flyToCenter {
     0% {
         bottom: 30px;
-        right: 30px;
+        right: 135px;
         transform: scale(1);
     }
     
@@ -291,7 +297,7 @@ h1 {
 @keyframes flyToHint {
     0% {
         bottom: 30px;
-        right: 30px;
+        right: 135px;
         transform: scale(1);
     }
     
@@ -321,7 +327,7 @@ h1 {
     
     100% {
         bottom: 30px;
-        right: 30px;
+        right: 135px;
         transform: scale(1);
     }
 }
