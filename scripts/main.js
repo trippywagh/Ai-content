@@ -361,6 +361,33 @@ class MathAdventureApp {
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Popup for solving together -->
+                    <div class="solve-together-popup" id="solveTogetherPopup" style="display: none;">
+                        <div class="popup-content">
+                            <!-- AI Companion Bot in popup -->
+                            <div class="ai-companion in-popup" id="popupBot">
+                                <div class="bot-avatar">
+                                    <img src="images/bot-design.png" alt="AI Companion Bot" width="60" height="60">
+                                </div>
+                            </div>
+                            
+                            <div class="popup-header">
+                                <h3>🤝 Let's Solve This Together!</h3>
+                                <button class="popup-close-btn" id="solvePopupCloseBtn">×</button>
+                            </div>
+                            <div class="popup-body">
+                                <p>Don't worry! Sometimes math can be tricky. Let me help you understand this step by step.</p>
+                                <div class="popup-placeholder">
+                                    <p><em>Content coming soon...</em></p>
+                                    <p>This popup will contain the step-by-step solution and explanation.</p>
+                                </div>
+                            </div>
+                            <div class="popup-footer">
+                                <button class="btn-cta" id="continueAfterSolve">Continue</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>`;
             case 7:
                 return `

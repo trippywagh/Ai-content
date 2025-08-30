@@ -36,6 +36,11 @@ class CylinderAdaptiveCheckScreen {
         this.deeperBtn = document.getElementById('goDeeper');
         this.aheadBtn = document.getElementById('moveAhead');
 
+        // Popup elements
+        this.solveTogetherPopup = document.getElementById('solveTogetherPopup');
+        this.solvePopupCloseBtn = document.getElementById('solvePopupCloseBtn');
+        this.continueAfterSolve = document.getElementById('continueAfterSolve');
+
         // Wire
         if (this.q1Submit) this.q1Submit.addEventListener('click', () => this.handleQ1());
         if (this.q1TryAgain) this.q1TryAgain.addEventListener('click', () => {
@@ -45,6 +50,10 @@ class CylinderAdaptiveCheckScreen {
         if (this.q2TryAgain) this.q2TryAgain.addEventListener('click', () => this.resetQ2Help());
         if (this.deeperBtn) this.deeperBtn.addEventListener('click', () => this.goDeeper());
         if (this.aheadBtn) this.aheadBtn.addEventListener('click', () => this.moveAhead());
+        
+        // Popup event handlers
+        if (this.solvePopupCloseBtn) this.solvePopupCloseBtn.addEventListener('click', () => this.hideSolveTogetherPopup());
+        if (this.continueAfterSolve) this.continueAfterSolve.addEventListener('click', () => this.hideSolveTogetherPopup());
     }
 
     handleQ1() {
@@ -66,33 +75,16 @@ class CylinderAdaptiveCheckScreen {
 
         this.state.q1Attempts += 1;
         if (this.state.q1Attempts === 1) {
-            // First wrong: offer hint but do not reveal answer
+            // First wrong: bot flies to hint container, speaks, then returns
             this.setQ1Feedback('', 'bad');
             this.q1Notice.style.display = 'block';
             this.q1Hint.style.display = 'block';
+            this.showBotHintInteraction();
         } else if (this.state.q1Attempts === 2) {
-            // Second wrong: give worked step and easier retry
-            const worked = 'Worked out: CSA = 2 × π × 7 × 10 ≈ 439.8 cm².';
+            // Second wrong: show popup to solve together
             this.q1Notice.style.display = 'none';
             this.q1Hint.style.display = 'none';
-            this.setQ1Feedback(worked + ' Try an easier one: r = 5 cm, h = 4 cm. What is CSA?', 'bad');
-            // Change the check to easier set
-            this.handleQ1 = () => {
-                const correctEasy = 2 * Math.PI * 5 * 4; // ≈ 125.66
-                const val2 = parseFloat(this.q1Input.value);
-                if (Number.isNaN(val2)) {
-                    this.setQ1Feedback('Please enter a number (in cm²).', 'bad');
-                    return;
-                }
-                if (Math.abs(val2 - correctEasy) < 0.5) {
-                    this.setQ1Feedback('Well done! You got it ✅', 'good');
-                    this.state.q1Done = true;
-                    this.offerNextOrDeeper();
-                } else {
-                    this.setQ1Feedback('Almost there! Remember CSA = 2πrh. Try once more.', 'bad');
-                    this.logWeakSpot('cylinder_csa');
-                }
-            };
+            this.showSolveTogetherPopup();
         } else {
             // Multiple wrongs
             this.setQ1Feedback('We will revisit this later. Moving on for now.', 'bad');
@@ -176,6 +168,106 @@ class CylinderAdaptiveCheckScreen {
         if (!this.state.weakSpots.includes(key)) {
             this.state.weakSpots.push(key);
             localStorage.setItem('weakSpots', JSON.stringify(this.state.weakSpots));
+        }
+    }
+    
+    showBotHintInteraction() {
+        // Get the AI companion bot
+        const aiCompanion = document.getElementById('aiCompanion');
+        
+        if (!aiCompanion) {
+            console.error('AI companion not found');
+            return;
+        }
+        
+        // Step 1: Bot flies to hint container area
+        aiCompanion.classList.add('flying-to-hint');
+        aiCompanion.querySelector('.bot-status').textContent = "Let me give you a hint! 🤖";
+        
+        // Step 2: Play hint audio
+        this.playHintAudio();
+        
+        // Step 3: After speaking, bot flies back to original position
+        setTimeout(() => {
+            aiCompanion.classList.remove('flying-to-hint');
+            aiCompanion.classList.add('returning-to-position');
+            
+            setTimeout(() => {
+                aiCompanion.classList.remove('returning-to-position');
+                aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
+            }, 1000); // Return animation duration
+        }, 2000); // Wait for hint audio to finish
+    }
+    
+    showSolveTogetherPopup() {
+        // Get the AI companion bot
+        const aiCompanion = document.getElementById('aiCompanion');
+        const popupBot = document.getElementById('popupBot');
+        
+        if (!aiCompanion) {
+            console.error('AI companion not found');
+            return;
+        }
+        
+        // Step 1: Bot flies to center of screen
+        aiCompanion.classList.add('flying');
+        aiCompanion.querySelector('.bot-status').textContent = "Let me help here! 🤖";
+        
+        // Step 2: Play audio (placeholder for now)
+        this.playBotAudio();
+        
+        // Step 3: After flying animation, show popup with bot
+        setTimeout(() => {
+            // Hide the flying bot
+            aiCompanion.style.display = 'none';
+            
+            // Show popup with bot inside
+            if (this.solveTogetherPopup) {
+                this.solveTogetherPopup.style.display = 'flex';
+                console.log('Showing solve together popup with AI companion');
+            }
+        }, 2000); // Wait for 2-second simple flying animation
+    }
+    
+    playHintAudio() {
+        // Placeholder for audio - you can add actual audio file later
+        console.log('Playing bot hint audio: "Hey there, let me give you a hint."');
+        
+        // For now, we'll use speech synthesis as a fallback
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance("Hey there, let me give you a hint.");
+            utterance.rate = 0.8;
+            utterance.pitch = 1.1;
+            speechSynthesis.speak(utterance);
+        }
+    }
+    
+    playBotAudio() {
+        // Placeholder for audio - you can add actual audio file later
+        console.log('Playing bot audio: "Let me help here!"');
+        
+        // For now, we'll use speech synthesis as a fallback
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance("Let me help here!");
+            utterance.rate = 0.8;
+            utterance.pitch = 1.1;
+            speechSynthesis.speak(utterance);
+        }
+    }
+    
+    hideSolveTogetherPopup() {
+        // Hide the popup overlay
+        if (this.solveTogetherPopup) {
+            this.solveTogetherPopup.style.display = 'none';
+            console.log('Hiding solve together popup');
+        }
+        
+        // Restore the AI companion bot to its original position
+        const aiCompanion = document.getElementById('aiCompanion');
+        if (aiCompanion) {
+            aiCompanion.style.display = 'flex';
+            aiCompanion.classList.remove('flying');
+            aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
         }
     }
 

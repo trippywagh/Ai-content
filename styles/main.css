@@ -197,3 +197,170 @@ h1 {
         font-size: 0.9em;
     }
 }
+
+/* AI Companion Bot Styles */
+.ai-companion {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.5s ease;
+}
+
+.bot-avatar {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bot-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+.bot-status {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #2d3436;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.ai-companion:hover .bot-status {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Bot flying animation states */
+.ai-companion.flying {
+    animation: flyToCenter 2s ease-out forwards;
+    z-index: 1001;
+}
+
+.ai-companion.flying .bot-avatar {
+    transform: scale(1.2);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.ai-companion.flying .bot-status {
+    display: none; /* Hide status text during flight */
+}
+
+/* Simple flying animation to center */
+@keyframes flyToCenter {
+    0% {
+        bottom: 30px;
+        right: 30px;
+        transform: scale(1);
+    }
+    
+    50% {
+        bottom: 45%;
+        right: 55%;
+        transform: scale(1.1);
+    }
+    
+    100% {
+        bottom: 50%;
+        right: 50%;
+        transform: scale(1.2);
+    }
+}
+
+/* Flying to hint container animation */
+.ai-companion.flying-to-hint {
+    animation: flyToHint 1.5s ease-out forwards;
+    z-index: 1001;
+}
+
+.ai-companion.flying-to-hint .bot-status {
+    display: none; /* Hide status text during flight */
+}
+
+@keyframes flyToHint {
+    0% {
+        bottom: 30px;
+        right: 30px;
+        transform: scale(1);
+    }
+    
+    100% {
+        bottom: 55%;
+        right: 55%;
+        transform: scale(1.1);
+    }
+}
+
+/* Returning to original position animation */
+.ai-companion.returning-to-position {
+    animation: returnToPosition 1s ease-in forwards;
+    z-index: 1001;
+}
+
+.ai-companion.returning-to-position .bot-status {
+    display: none; /* Hide status text during return */
+}
+
+@keyframes returnToPosition {
+    0% {
+        bottom: 55%;
+        right: 55%;
+        transform: scale(1.1);
+    }
+    
+    100% {
+        bottom: 30px;
+        right: 30px;
+        transform: scale(1);
+    }
+}
+
+/* Simple glow effect during flight */
+.ai-companion.flying::before,
+.ai-companion.flying-to-hint::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 180, 219, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: simpleGlow 1.5s ease-out;
+}
+
+@keyframes simpleGlow {
+    0% { opacity: 0; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* Bot in popup */
+.ai-companion.in-popup {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    bottom: auto;
+    right: auto;
+    transform: none;
+    z-index: 1002;
+}
+
+.ai-companion.in-popup .bot-avatar {
+    width: 60px;
+    height: 60px;
+    transform: scale(1);
+}
+
+.ai-companion.in-popup .bot-status {
+    display: none;
+}
