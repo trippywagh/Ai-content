@@ -183,22 +183,17 @@ class CylinderAdaptiveCheckScreen {
             return;
         }
         
-        // Step 1: Bot flies to hint container area
-        aiCompanion.classList.add('flying-to-hint');
-        aiCompanion.querySelector('.bot-status').textContent = "Let me give you a hint! 🤖";
+        // Step 1: Bot focuses (increases size by 25%) and shows text
+        aiCompanion.classList.add('focusing');
+        aiCompanion.querySelector('.bot-status').textContent = "Hey, check the hint given there. 🤖";
         
         // Step 2: Play hint audio
         this.playHintAudio();
         
-        // Step 3: After speaking, bot flies back to original position
+        // Step 3: After audio finishes, bot returns to original size
         setTimeout(() => {
-            aiCompanion.classList.remove('flying-to-hint');
-            aiCompanion.classList.add('returning-to-position');
-            
-            setTimeout(() => {
-                aiCompanion.classList.remove('returning-to-position');
-                aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
-            }, 1000); // Return animation duration
+            aiCompanion.classList.remove('focusing');
+            aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
         }, 2000); // Wait for hint audio to finish
     }
     
@@ -239,11 +234,11 @@ class CylinderAdaptiveCheckScreen {
     
     playHintAudio() {
         // Placeholder for audio - you can add actual audio file later
-        console.log('Playing bot hint audio: "Hey there, let me give you a hint."');
+        console.log('Playing bot hint audio: "Hey, check the hint given there."');
         
         // For now, we'll use speech synthesis as a fallback
         if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance("Hey there, let me give you a hint.");
+            const utterance = new SpeechSynthesisUtterance("Hey, check the hint given there.");
             utterance.rate = 0.8;
             utterance.pitch = 1.1;
             speechSynthesis.speak(utterance);

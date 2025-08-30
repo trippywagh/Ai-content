@@ -287,8 +287,42 @@ h1 {
     opacity: 1;
 }
 
+/* Bot flying animations for Screen 6 interactions */
+@keyframes focusOnBot {
+    0% {
+        transform: scale(1);
+    }
+    
+    100% {
+        transform: scale(1.25);
+    }
+}
+
+
+
+@keyframes flyToCenter {
+    0% {
+        bottom: 30px;
+        right: 135px;
+        transform: scale(1);
+    }
+    
+    50% {
+        bottom: 45%;
+        right: 55%;
+        transform: scale(1.1);
+    }
+    
+    100% {
+        bottom: 50%;
+        right: 50%;
+        transform: scale(1.2);
+    }
+}
+
 /* Bot flying states */
 .ai-companion.flying {
+    animation: flyToCenter 2s ease-out forwards;
     z-index: 1001;
 }
 
@@ -301,21 +335,21 @@ h1 {
     display: none;
 }
 
-.ai-companion.flying-to-hint {
+.ai-companion.focusing {
+    animation: focusOnBot 0.5s ease-out forwards;
     z-index: 1001;
 }
 
-.ai-companion.flying-to-hint .bot-status {
-    display: none;
+.ai-companion.focusing .bot-status {
+    opacity: 1;
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.98);
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.ai-companion.returning-to-position {
-    z-index: 1001;
-}
 
-.ai-companion.returning-to-position .bot-status {
-    display: none;
-}
 
 /* Bot in popup */
 .ai-companion.in-popup {
