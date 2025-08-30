@@ -324,48 +324,173 @@ class NameIntroScreen {
         console.log('window.app:', window.app);
         console.log('typeof window.app.loadScreenDirectly:', typeof window.app?.loadScreenDirectly);
         
-        // Navigate to the next screen (dabba question)
-        if (window.app && typeof window.app.loadScreenDirectly === 'function') {
-            console.log('App found, scheduling navigation to Screen 2 in 1.5 seconds...');
-            // Show loading for 1.5 seconds as requested
+        // Start bot introduction sequence
+        this.startBotIntroduction();
+        
+        // Navigation is now handled dynamically when bot introduction completes
+        // No need for fixed timeout - the bot will trigger navigation when done
+    }
+
+    startBotIntroduction() {
+        const bot = document.getElementById('aiCompanion');
+        if (!bot) return;
+        
+        // Show bot and add introduction class
+        bot.style.opacity = '1';
+        bot.classList.add('introducing');
+        
+        // Update bot message with student's name
+        const studentName = localStorage.getItem('studentName') || 'there';
+        const botStatus = bot.querySelector('.bot-status');
+        if (botStatus) {
+            botStatus.textContent = `Hey ${studentName}, I will be your personal companion throughout this learning journey! 🤖`;
+        }
+        
+        // Sure-shot animation sequence with exact positioning
+        // Step 1: Position at center and appear
+        gsap.set(bot, {
+            bottom: '50%',
+            right: '50%',
+            transform: 'translate(50%, 50%)',
+            scale: 0,
+            opacity: 0
+        });
+        
+        // Step 2: Scale up at center
+        gsap.to(bot, {
+            duration: 0.8,
+            scale: 1.3,
+            opacity: 1,
+            ease: "back.out(1.7)",
+            onComplete: () => {
+                // Bot is now visible at center - start reading the message
+                this.readBotMessage(studentName);
+            }
+        });
+    }
+    
+    readBotMessage(studentName) {
+        const message = `Hey ${studentName}, I will be your personal companion throughout this learning journey!`;
+        
+        // Try to play custom audio file first (if available)
+        const customAudio = new Audio('audio/bot-introduction.mp3'); // Placeholder path
+        
+        customAudio.addEventListener('canplaythrough', () => {
+            // Custom audio is available - play it
+            customAudio.play();
+            
+            // Start transition when audio ends
+            customAudio.addEventListener('ended', () => {
+                this.startBotTransition();
+            });
+            
+            // Fallback: if audio fails, use text-to-speech
+            customAudio.addEventListener('error', () => {
+                console.log('Custom audio failed, using text-to-speech fallback');
+                this.useTextToSpeechFallback(message);
+            });
+        });
+        
+        customAudio.addEventListener('error', () => {
+            // Custom audio not available - use text-to-speech fallback
+            console.log('Custom audio not found, using text-to-speech fallback');
+            this.useTextToSpeechFallback(message);
+        });
+    }
+    
+    useTextToSpeechFallback(message) {
+        // Fallback: Use browser's text-to-speech
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
+            utterance.volume = 0.8;
+            
+            // Start transition when speech ends
+            utterance.onend = () => {
+                this.startBotTransition();
+            };
+            
+            speechSynthesis.speak(utterance);
+        } else {
+            // No text-to-speech available - wait 3 seconds then transition
+            console.log('No text-to-speech available, waiting 3 seconds');
             setTimeout(() => {
-                console.log('Timeout completed, calling loadScreenDirectly(2)...');
-                try {
-                    window.app.loadScreenDirectly(2);
-                    console.log('loadScreenDirectly(2) called successfully');
-                } catch (error) {
-                    console.error('Error calling loadScreenDirectly:', error);
+                this.startBotTransition();
+            }, 3000);
+        }
+    }
+    
+    startBotTransition() {
+        const bot = document.getElementById('aiCompanion');
+        if (!bot) return;
+        
+        // Step 3: Move to final position with snap to exact coordinates
+        gsap.to(bot, {
+            duration: 2.5,
+            bottom: '30px',
+            right: '135px',
+            scale: 1,
+            ease: "power2.inOut",
+            snap: {
+                bottom: 1,  // Snap to exact pixel values
+                right: 1
+            },
+            onComplete: () => {
+                // Final cleanup
+                bot.classList.remove('introducing');
+                const botStatus = bot.querySelector('.bot-status');
+                if (botStatus) {
+                    botStatus.textContent = 'Ready to help! 🤖';
                 }
-            }, 1500);
+                
+                // Force exact final position - no rounding errors
+                bot.style.position = 'fixed';
+                bot.style.bottom = '30px';
+                bot.style.right = '135px';
+                bot.style.opacity = '1';
+                bot.style.transform = 'none';
+                bot.style.transition = 'opacity 0.3s ease';
+                
+                // Double-check position with getBoundingClientRect
+                const rect = bot.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                const actualRight = windowWidth - rect.right;
+                
+                console.log('Bot final position check:');
+                console.log('Target right:', 135);
+                console.log('Actual right:', Math.round(actualRight));
+                console.log('Target bottom:', 30);
+                console.log('Actual bottom:', Math.round(rect.bottom));
+                
+                // If still off, force it one more time
+                if (Math.abs(actualRight - 135) > 1 || Math.abs(rect.bottom - 30) > 1) {
+                    console.log('Position correction needed, forcing exact position...');
+                    bot.style.right = '135px';
+                    bot.style.bottom = '30px';
+                }
+                
+                // Bot introduction complete - wait 1 second then navigate to next screen
+                setTimeout(() => {
+                    this.navigateToNextScreen();
+                }, 1000);
+            }
+        });
+    }
+    
+    navigateToNextScreen() {
+        console.log('Bot introduction complete, navigating to Screen 2...');
+        if (window.app && typeof window.app.loadScreenDirectly === 'function') {
+            try {
+                window.app.loadScreenDirectly(2);
+                console.log('loadScreenDirectly(2) called successfully');
+            } catch (error) {
+                console.error('Error calling loadScreenDirectly:', error);
+            }
         } else {
             console.error('App not found or loadScreenDirectly method not available');
-            console.log('Waiting for app to be available...');
-            
-            // Wait for app to be available
-            const waitForApp = setInterval(() => {
-                if (window.app && typeof window.app.loadScreenDirectly === 'function') {
-                    console.log('App now available, proceeding with navigation...');
-                    clearInterval(waitForApp);
-                    
-                    // Show loading for 1.5 seconds as requested
-                    setTimeout(() => {
-                        console.log('Timeout completed, calling loadScreenDirectly(2)...');
-                        try {
-                            window.app.loadScreenDirectly(2);
-                            console.log('loadScreenDirectly(2) called successfully');
-                        } catch (error) {
-                            console.error('Error calling loadScreenDirectly:', error);
-                        }
-                    }, 1500);
-                }
-            }, 100);
-            
-            // Fallback: if app doesn't become available within 10 seconds, show error
-            setTimeout(() => {
-                clearInterval(waitForApp);
-                console.error('App not available after 10 seconds, showing error');
-                this.showFeedback('Navigation failed. Please use the Next button.', 'error');
-            }, 10000);
+            // Fallback: show error message
+            this.showFeedback('Navigation failed. Please use the Next button.', 'error');
         }
     }
 
