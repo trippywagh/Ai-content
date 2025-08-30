@@ -377,10 +377,52 @@ class MathAdventureApp {
                                 <button class="popup-close-btn" id="solvePopupCloseBtn">×</button>
                             </div>
                             <div class="popup-body">
-                                <p>Don't worry! Sometimes math can be tricky. Let me help you understand this step by step.</p>
-                                <div class="popup-placeholder">
-                                    <p><em>Content coming soon...</em></p>
-                                    <p>This popup will contain the step-by-step solution and explanation.</p>
+                                <div class="interactive-playbook">
+                                    <!-- Left Side - 3D Cylinder -->
+                                    <div class="cylinder-section">
+                                        <h4>🥤 3D Cylinder</h4>
+                                        <div id="cylinder3dContainer" class="cylinder-3d-container"></div>
+                                        <div class="parameter-controls">
+                                            <div class="param-group">
+                                                <label>Radius (r): <span id="radiusValue">3</span> cm</label>
+                                                <input type="range" id="radiusSlider" min="1" max="10" value="3" step="0.5">
+                                            </div>
+                                            <div class="param-group">
+                                                <label>Height (h): <span id="heightValue">8</span> cm</label>
+                                                <input type="range" id="heightSlider" min="1" max="20" value="8" step="0.5">
+                                            </div>
+                                        </div>
+                                        <div class="cut-controls">
+                                            <button id="cutButton" class="cut-btn">🔪 Cut Open</button>
+                                            <button id="resetButton" class="reset-btn" disabled>🔄 Reset</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Right Side - Unrolled Rectangle -->
+                                    <div class="rectangle-section">
+                                        <h4>📏 Unrolled Surface</h4>
+                                        <div id="rectangleContainer" class="rectangle-container">
+                                            <div id="unrolledRectangle" class="unrolled-rectangle">
+                                                <div class="rectangle-placeholder">
+                                                    <p>Drag the cut button to see the transformation!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="measurements">
+                                            <div class="measurement">
+                                                <span class="label">Length:</span>
+                                                <span class="value" id="lengthValue">2πr = 18.85 cm</span>
+                                            </div>
+                                            <div class="measurement">
+                                                <span class="label">Height:</span>
+                                                <span class="value" id="rectHeightValue">h = 8 cm</span>
+                                            </div>
+                                            <div class="measurement">
+                                                <span class="label">Area:</span>
+                                                <span class="value" id="areaValue">CSA = 150.8 cm²</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="popup-footer">
