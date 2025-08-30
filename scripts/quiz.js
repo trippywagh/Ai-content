@@ -335,7 +335,7 @@ class QuizManager {
             }
             
             const status = isCorrect ? '✅' : '❌';
-            const color = isCorrect ? '#4CAF50' : '#f44336';
+            const color = isCorrect ? '#2E7D32' : '#E65100'; // Dark green for correct, dark orange for wrong
             
             html += `
                 <div style="margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
@@ -343,10 +343,10 @@ class QuizManager {
                         <strong style="color: #FFD700;">Question ${i}: ${this.questionTexts[i]}</strong>
                         <span style="font-size: 1.5rem;">${status}</span>
                     </div>
-                    <div style="color: #e0e0e0; font-size: 0.9rem;">
-                        <div>Your answer: <span style="color: ${color};">${userAnswer}</span></div>
-                        <div>Correct answer: <span style="color: #4CAF50;">${correctAnswer}</span></div>
-                    </div>
+                                         <div style="color: #e0e0e0; font-size: 0.9rem;">
+                         <div>Your answer: <span style="color: ${color}; font-size: 1.3rem; font-weight: 600;">${userAnswer}</span></div>
+                         <div>Correct answer: <span style="color: #000000; font-size: 1.3rem; font-weight: 600;">${correctAnswer}</span></div>
+                     </div>
                 </div>
             `;
         }
