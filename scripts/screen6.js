@@ -159,7 +159,9 @@ class CylinderAdaptiveCheckScreen {
 
     moveAhead() {
         if (window.app && typeof window.app.loadScreenDirectly === 'function') {
-            window.app.loadScreenDirectly(7); // placeholder next
+            // Use config to get next screen (should be Screen 9 - Quiz)
+            const nextScreen = window.getNextScreen ? window.getNextScreen(6) : 9;
+            window.app.loadScreenDirectly(nextScreen);
         }
     }
 

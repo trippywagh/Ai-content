@@ -102,6 +102,9 @@ class BeakerSimScreen {
         this.successBanner.style.display = 'block';
         // Scroll to banner
         this.successBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Add continue button to navigate to next screen
+        this.addContinueButton();
     }
 
     showSimulationPopup() {
@@ -613,6 +616,48 @@ class BeakerSimScreen {
     isPopupTapActive(tapId) {
         const tapHandle = tapId === 'A' ? this.popupTapHandleA : this.popupTapHandleB;
         return tapHandle.classList.contains('active');
+    }
+
+    addContinueButton() {
+        // Check if continue button already exists
+        let continueBtn = this.successBanner.querySelector('.continue-btn');
+        if (!continueBtn) {
+            // Create continue button
+            continueBtn = document.createElement('button');
+            continueBtn.className = 'continue-btn';
+            continueBtn.textContent = 'Continue to Next Screen →';
+            continueBtn.style.cssText = `
+                background: #4CAF50;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 15px;
+                transition: background 0.3s;
+            `;
+            
+            // Add hover effect
+            continueBtn.addEventListener('mouseenter', () => {
+                continueBtn.style.background = '#45a049';
+            });
+            continueBtn.addEventListener('mouseleave', () => {
+                continueBtn.style.background = '#4CAF50';
+            });
+            
+            // Add click event to navigate to next screen
+            continueBtn.addEventListener('click', () => {
+                // Use config to get next screen (should be Screen 6)
+                const nextScreen = window.getNextScreen ? window.getNextScreen(8) : 6;
+                if (window.app && typeof window.app.loadScreenDirectly === 'function') {
+                    window.app.loadScreenDirectly(nextScreen);
+                }
+            });
+            
+            // Add button to success banner
+            this.successBanner.appendChild(continueBtn);
+        }
     }
 
     destroy() {

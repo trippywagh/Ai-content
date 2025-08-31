@@ -3,7 +3,8 @@
 class MathAdventureApp {
     constructor() {
         this.currentScreen = 1;
-        this.totalScreens = 14; // 8 learning screens + 1 quiz intro + 5 quiz questions + 1 results screen
+        // Use config to determine total screens dynamically
+        this.totalScreens = window.getTotalVisibleScreens ? window.getTotalVisibleScreens() : 15;
         this.screenInstances = {};
         this.init();
     }
@@ -1161,14 +1162,21 @@ class MathAdventureApp {
     }
 
     previousScreen() {
-        if (this.currentScreen > 1) {
-            this.loadScreenDirectly(this.currentScreen - 1);
+        // Find the previous visible screen
+        let prevScreen = this.currentScreen - 1;
+        while (prevScreen >= 1 && window.isScreenVisible && !window.isScreenVisible(prevScreen)) {
+            prevScreen--;
+        }
+        if (prevScreen >= 1) {
+            this.loadScreenDirectly(prevScreen);
         }
     }
 
     nextScreen() {
-        if (this.currentScreen < this.totalScreens) {
-            this.loadScreenDirectly(this.currentScreen + 1);
+        // Use config to get the next visible screen
+        const nextScreen = window.getNextScreen ? window.getNextScreen(this.currentScreen) : this.currentScreen + 1;
+        if (nextScreen && nextScreen <= this.totalScreens) {
+            this.loadScreenDirectly(nextScreen);
         }
     }
 

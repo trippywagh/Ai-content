@@ -45,7 +45,9 @@ class CylinderConceptScreen {
 
     goNext() {
         if (window.app && typeof window.app.loadScreenDirectly === 'function') {
-            window.app.loadScreenDirectly(5); // placeholder for next screen
+            // Use config to get next screen (should be Screen 8)
+            const nextScreen = window.getNextScreen ? window.getNextScreen(4) : 8;
+            window.app.loadScreenDirectly(nextScreen);
         }
     }
 
