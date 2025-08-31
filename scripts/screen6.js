@@ -245,29 +245,45 @@ class CylinderAdaptiveCheckScreen {
     }
     
     playHintAudio() {
-        // Placeholder for audio - you can add actual audio file later
-        console.log('Playing bot hint audio: "Hey, check the hint given there."');
+        // Try to play custom audio file first (if available)
+        const customAudio = new Audio('audio/bot-hint-first-wrong.mp3'); // Placeholder path
         
-        // For now, we'll use speech synthesis as a fallback
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance("Hey, check the hint given there.");
-            utterance.rate = 0.8;
-            utterance.pitch = 1.1;
-            speechSynthesis.speak(utterance);
-        }
+        customAudio.addEventListener('canplaythrough', () => {
+            // Custom audio is available - play it
+            customAudio.play();
+        });
+        
+        customAudio.addEventListener('error', () => {
+            // Custom audio not available - use text-to-speech fallback
+            console.log('Custom audio failed, using text-to-speech fallback');
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance("Hey, check the hint given there.");
+                utterance.rate = 0.8;
+                utterance.pitch = 1.1;
+                speechSynthesis.speak(utterance);
+            }
+        });
     }
     
     playBotAudio() {
-        // Placeholder for audio - you can add actual audio file later
-        console.log('Playing bot audio: "Let\'s solve this together!"');
+        // Try to play custom audio file first (if available)
+        const customAudio = new Audio('audio/bot-solve-together.mp3'); // Placeholder path
         
-        // For now, we'll use speech synthesis as a fallback
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance("Let's solve this together!");
-            utterance.rate = 0.8;
-            utterance.pitch = 1.1;
-            speechSynthesis.speak(utterance);
+        customAudio.addEventListener('canplaythrough', () => {
+            // Custom audio is available - play it
+            customAudio.play();
+        });
+        
+        customAudio.addEventListener('error', () => {
+            // Custom audio not available - use text-to-speech fallback
+            console.log('Custom audio failed, using text-to-speech fallback');
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance("Let's solve this together!");
+                utterance.rate = 0.8;
+                utterance.pitch = 1.1;
+                speechSynthesis.speak(utterance);
         }
+        });
     }
     
     hideSolveTogetherPopup() {
