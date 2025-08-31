@@ -573,7 +573,7 @@ class MathAdventureApp {
                                 </div>
                                 <div class="popup-body">
                                     <p>This is wrong! Let's try it by doing it yourself.</p>
-                                    <p>Click the simulation button to see what actually happens!</p>
+                                    <p>We will go through it together in the simulation.</p>
                                 </div>
                                 <div class="popup-footer">
                                     <button class="popup-btn" id="popupCloseBtn">Got it!</button>

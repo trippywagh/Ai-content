@@ -183,7 +183,8 @@ class CylinderAdaptiveCheckScreen {
         
         // Step 1: Bot focuses (increases size by 25%) and shows text
         aiCompanion.classList.add('focusing');
-        aiCompanion.querySelector('.bot-status').textContent = "Hey, check the hint given there. 🤖";
+        aiCompanion.classList.add('hint-mode'); // Add hint mode for styling
+        aiCompanion.querySelector('.bot-status').textContent = "Hey, check the hint given there";
         
         // Step 2: Play hint audio
         this.playHintAudio();
@@ -191,7 +192,8 @@ class CylinderAdaptiveCheckScreen {
         // Step 3: After audio finishes, bot returns to original size
         setTimeout(() => {
             aiCompanion.classList.remove('focusing');
-            aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
+            aiCompanion.classList.remove('hint-mode'); // Remove hint mode styling
+            aiCompanion.querySelector('.bot-status').textContent = "Ready to help!";
         }, 2000); // Wait for hint audio to finish
     }
     

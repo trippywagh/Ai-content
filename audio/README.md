@@ -15,7 +15,7 @@ The system looks for these exact filenames:
 
 ## Audio Content
 The audio should say:
-> "This is wrong! Let's try it by doing it yourself. Click the simulation button to see what actually happens!"
+> "This is wrong! Let's try it by doing it yourself. We will go through it together in the simulation."
 
 ## Recommended Specifications
 - **Duration**: 5-8 seconds

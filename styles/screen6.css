@@ -1,5 +1,17 @@
 /* Screen 6: Adaptive Check Styles */
 
+/* Bot Hint Mode Styles - Only for Screen 6 hint text */
+.ai-companion.hint-mode .bot-status {
+    background: #1e3a8a !important; /* Dark blue background */
+    color: #ffffff !important; /* White text */
+    border: 2px solid #3b82f6 !important; /* Blue accent border */
+    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3) !important; /* Subtle shadow */
+    border-radius: 15px !important; /* Rounded corners */
+    padding: 15px 20px !important; /* Comfortable padding */
+    font-weight: 600 !important; /* Slightly bolder text */
+    transition: all 0.3s ease !important; /* Smooth transition */
+}
+
 .quiz { display: grid; gap: 20px; }
 .card {
     background: #ffffff;
