@@ -36,13 +36,11 @@ class CylinderAdaptiveCheckScreen {
         this.deeperBtn = document.getElementById('goDeeper');
         this.aheadBtn = document.getElementById('moveAhead');
 
-        // Popup elements
-        this.solveTogetherPopup = document.getElementById('solveTogetherPopup');
-        this.solvePopupCloseBtn = document.getElementById('solvePopupCloseBtn');
-        this.continueAfterSolve = document.getElementById('continueAfterSolve');
-        
         // Interactive playbook
         this.interactivePlaybook = null;
+        
+        // Popup manager
+        this.popupManager = null;
 
         // Wire
         if (this.q1Submit) this.q1Submit.addEventListener('click', () => this.handleQ1());
@@ -54,9 +52,7 @@ class CylinderAdaptiveCheckScreen {
         if (this.deeperBtn) this.deeperBtn.addEventListener('click', () => this.goDeeper());
         if (this.aheadBtn) this.aheadBtn.addEventListener('click', () => this.moveAhead());
         
-        // Popup event handlers
-        if (this.solvePopupCloseBtn) this.solvePopupCloseBtn.addEventListener('click', () => this.hideSolveTogetherPopup());
-        if (this.continueAfterSolve) this.continueAfterSolve.addEventListener('click', () => this.hideSolveTogetherPopup());
+
     }
 
     handleQ1() {
@@ -200,36 +196,52 @@ class CylinderAdaptiveCheckScreen {
     showSolveTogetherPopup() {
         // Get the AI companion bot
         const aiCompanion = document.getElementById('aiCompanion');
-        const popupBot = document.getElementById('popupBot');
         
         if (!aiCompanion) {
             console.error('AI companion not found');
             return;
         }
         
-        // Step 1: Bot flies to center of screen
+        // Step 1: Bot flies to center with zoom in
         aiCompanion.classList.add('flying');
-        aiCompanion.querySelector('.bot-status').textContent = "Let me help here! 🤖";
+        aiCompanion.querySelector('.bot-status').textContent = "Let's solve this together! 🤖";
         
-        // Step 2: Play audio (placeholder for now)
+        // Step 2: Play audio
         this.playBotAudio();
         
-        // Step 3: After flying animation, show popup with bot
+        // Step 3: After flying animation, bot moves to final position and shows popup
         setTimeout(() => {
-            // Hide the flying bot
-            aiCompanion.style.display = 'none';
+            // Bot moves to final position (beside popup) and STAYS there
+            aiCompanion.classList.remove('flying');
+            aiCompanion.classList.add('beside-popup');
+            aiCompanion.querySelector('.bot-status').textContent = "";
             
-            // Show popup with bot inside
-            if (this.solveTogetherPopup) {
-                this.solveTogetherPopup.style.display = 'flex';
-                console.log('Showing solve together popup with AI companion');
-                
-                // Initialize interactive playbook after popup is shown
-                setTimeout(() => {
-                    this.initializeInteractivePlaybook();
-                }, 100);
+            // Show popup
+            if (!this.popupManager) {
+                this.popupManager = new SolveTogetherPopup(() => {
+                    // This callback is called when popup is closed
+                    this.handlePopupClosed();
+                });
             }
-        }, 2000); // Wait for 2-second simple flying animation
+            this.popupManager.show();
+            
+            console.log('Showing solve together popup with AI companion');
+        }, 2000); // Wait for 2-second flying animation
+    }
+    
+    handlePopupClosed() {
+        // Bot flies back to original position
+        const aiCompanion = document.getElementById('aiCompanion');
+        if (aiCompanion) {
+            aiCompanion.classList.remove('beside-popup');
+            aiCompanion.classList.add('returning-to-position');
+            
+            // After return animation, restore to normal state
+            setTimeout(() => {
+                aiCompanion.classList.remove('returning-to-position');
+                aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
+            }, 1000); // Return animation duration
+        }
     }
     
     playHintAudio() {
@@ -247,11 +259,11 @@ class CylinderAdaptiveCheckScreen {
     
     playBotAudio() {
         // Placeholder for audio - you can add actual audio file later
-        console.log('Playing bot audio: "Let me help here!"');
+        console.log('Playing bot audio: "Let\'s solve this together!"');
         
         // For now, we'll use speech synthesis as a fallback
         if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance("Let me help here!");
+            const utterance = new SpeechSynthesisUtterance("Let's solve this together!");
             utterance.rate = 0.8;
             utterance.pitch = 1.1;
             speechSynthesis.speak(utterance);
@@ -259,36 +271,14 @@ class CylinderAdaptiveCheckScreen {
     }
     
     hideSolveTogetherPopup() {
-        // Hide the popup overlay
-        if (this.solveTogetherPopup) {
-            this.solveTogetherPopup.style.display = 'none';
+        // Hide the popup (this will trigger the callback to return bot)
+        if (this.popupManager) {
+            this.popupManager.hide();
             console.log('Hiding solve together popup');
-        }
-        
-        // Clean up interactive playbook
-        if (this.interactivePlaybook) {
-            this.interactivePlaybook.dispose();
-            this.interactivePlaybook = null;
-        }
-        
-        // Restore the AI companion bot to its original position
-        const aiCompanion = document.getElementById('aiCompanion');
-        if (aiCompanion) {
-            aiCompanion.style.display = 'flex';
-            aiCompanion.classList.remove('flying');
-            aiCompanion.querySelector('.bot-status').textContent = "Ready to help! 🤖";
         }
     }
     
-    initializeInteractivePlaybook() {
-        try {
-            console.log('Initializing interactive playbook...');
-            this.interactivePlaybook = new InteractivePlaybook();
-            console.log('Interactive playbook initialized successfully');
-        } catch (error) {
-            console.error('Error initializing interactive playbook:', error);
-        }
-    }
+
 
     destroy() {}
 }
