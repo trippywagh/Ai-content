@@ -387,6 +387,11 @@ class NameIntroScreen {
             
             // Start transition when audio ends
             customAudio.addEventListener('ended', () => {
+                // Hide the text box when audio ends
+                const botStatus = document.querySelector('.ai-companion.introducing .bot-status');
+                if (botStatus) {
+                    botStatus.style.display = 'none';
+                }
                 this.startBotTransition();
             });
             
@@ -432,6 +437,12 @@ class NameIntroScreen {
         const overlay = document.getElementById('botOverlay');
         if (!bot || !overlay) return;
         
+        // Hide the text box when transition starts
+        const botStatus = document.querySelector('.ai-companion.introducing .bot-status');
+        if (botStatus) {
+            botStatus.style.display = 'none';
+        }
+        
         // Remove the overlay when bot starts moving
         overlay.classList.remove('active');
         
@@ -447,6 +458,12 @@ class NameIntroScreen {
                 right: 1
             },
             onComplete: () => {
+                // Show the text box again when transition ends
+                const introBotStatus = document.querySelector('.ai-companion.introducing .bot-status');
+                if (introBotStatus) {
+                    introBotStatus.style.display = 'block';
+                }
+                
                 // Final cleanup
                 bot.classList.remove('introducing');
                 const botStatus = bot.querySelector('.bot-status');
