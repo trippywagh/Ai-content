@@ -47,7 +47,7 @@ const SCREEN_SEQUENCE = {
     6: { 
         id: 6, 
         show: true, 
-        nextScreen: 9, // Goes to Quiz
+        nextScreen: 'summary', // Goes to Concept Summary
         title: "Instant Check"
     },
     
@@ -65,6 +65,14 @@ const SCREEN_SEQUENCE = {
         show: true, 
         nextScreen: 6, // Goes to Screen 6
         title: "Beaker Volume Mystery"
+    },
+    
+    // Concept Summary Screen (new)
+    'summary': { 
+        id: 'summary', 
+        show: true, 
+        nextScreen: 9, // Goes to Quiz
+        title: "Concept Summary"
     },
     
     // Quiz screens continue as before

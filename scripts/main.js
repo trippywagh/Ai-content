@@ -1087,6 +1087,10 @@ class MathAdventureApp {
                     this.screenInstances[screenNumber] = new BeakerSimScreen();
                 }
                 break;
+            case 'summary':
+                // Concept Summary Screen - load dynamically
+                this.loadSummaryScreen();
+                return; // Exit early since we're handling this specially
             case 9:
                 // Quiz Introduction Screen - no special initialization needed
                 break;
@@ -1175,8 +1179,15 @@ class MathAdventureApp {
     nextScreen() {
         // Use config to get the next visible screen
         const nextScreen = window.getNextScreen ? window.getNextScreen(this.currentScreen) : this.currentScreen + 1;
-        if (nextScreen && nextScreen <= this.totalScreens) {
-            this.loadScreenDirectly(nextScreen);
+        
+        if (nextScreen) {
+            // Handle string screen IDs (like 'summary')
+            if (typeof nextScreen === 'string') {
+                this.loadScreenDirectly(nextScreen);
+            } else if (nextScreen <= this.totalScreens) {
+                // Handle numeric screen IDs
+                this.loadScreenDirectly(nextScreen);
+            }
         }
     }
 
@@ -1193,6 +1204,132 @@ class MathAdventureApp {
     addScreen(screenNumber, screenData) {
         this.totalScreens = Math.max(this.totalScreens, screenNumber);
         // This method can be used to dynamically add new screens
+    }
+
+    // Summary Screen Methods
+    loadSummaryScreen() {
+        console.log('loadSummaryScreen() called');
+        const container = document.querySelector('.container');
+        
+        if (!container) {
+            console.error('Container not found');
+            return;
+        }
+        
+        console.log('Fetching summary screen HTML...');
+        
+        // Fetch the summary screen HTML
+        fetch('screens/screen-summary.html')
+            .then(response => {
+                console.log('Fetch response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(html => {
+                console.log('HTML loaded, length:', html.length);
+                console.log('HTML preview:', html.substring(0, 200));
+                
+                container.innerHTML = html;
+                console.log('HTML inserted into container');
+                
+                // Load summary screen CSS
+                console.log('Loading summary CSS...');
+                this.loadSummaryCSS();
+                
+                // Load and initialize summary screen JavaScript
+                console.log('Loading summary JavaScript...');
+                this.loadSummaryJS();
+                
+                // Update current screen
+                this.currentScreen = 'summary';
+                console.log('Current screen updated to:', this.currentScreen);
+                
+                // Update navigation
+                this.updateNavigation();
+                
+                // Debug: Check if content is visible
+                setTimeout(() => {
+                    const summaryContent = document.querySelector('.summary-container');
+                    console.log('Summary content element:', summaryContent);
+                    if (summaryContent) {
+                        console.log('Summary content visible:', summaryContent.offsetWidth > 0 && summaryContent.offsetHeight > 0);
+                        console.log('Summary content dimensions:', summaryContent.offsetWidth, 'x', summaryContent.offsetHeight);
+                    }
+                }, 500);
+            })
+            .catch(error => {
+                console.error('Error loading summary screen:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    stack: error.stack
+                });
+                this.showErrorScreen();
+            });
+    }
+
+    loadSummaryCSS() {
+        console.log('loadSummaryCSS() called');
+        
+        // Remove existing summary CSS if any
+        const existingCSS = document.getElementById('summary-screen-css');
+        if (existingCSS) {
+            existingCSS.remove();
+        }
+        
+        // Add summary screen CSS
+        const link = document.createElement('link');
+        link.id = 'summary-screen-css';
+        link.rel = 'stylesheet';
+        link.href = 'styles/screen-summary.css';
+        
+        // Add error handling for CSS loading
+        link.onerror = () => {
+            console.error('Failed to load summary CSS:', link.href);
+        };
+        
+        link.onload = () => {
+            console.log('Summary CSS loaded successfully');
+        };
+        
+        document.head.appendChild(link);
+        console.log('Summary CSS link added to head');
+    }
+
+    loadSummaryJS() {
+        console.log('loadSummaryJS() called');
+        
+        // Remove existing summary JS if any
+        const existingJS = document.getElementById('summary-screen-js');
+        if (existingJS) {
+            existingJS.remove();
+        }
+        
+        // Add summary screen JavaScript
+        const script = document.createElement('script');
+        script.id = 'summary-screen-js';
+        script.src = 'scripts/screen-summary.js';
+        
+        // Add error handling for JS loading
+        script.onerror = () => {
+            console.error('Failed to load summary JavaScript:', script.src);
+        };
+        
+        // Initialize summary screen when script loads
+        script.onload = () => {
+            console.log('Summary JavaScript loaded successfully');
+            if (window.SummaryScreen) {
+                console.log('SummaryScreen class found, creating instance...');
+                window.summaryScreenInstance = new window.SummaryScreen();
+                console.log('SummaryScreen instance created');
+            } else {
+                console.error('SummaryScreen class not found in window object');
+            }
+        };
+        
+        document.head.appendChild(script);
+        console.log('Summary JavaScript script added to head');
     }
 }
 
