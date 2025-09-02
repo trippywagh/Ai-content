@@ -4,12 +4,12 @@ This is a placeholder file for the audio that will play during the bot transitio
 
 ## Instructions for User:
 1. Replace this file with your actual audio file
-2. The audio should contain the text: "Here is an interesting hands on simulation for you to try !!"
+2. The audio should contain the text: "Here is an hands on interesting simualtion for you to try on.. Go ahead and turn the tap ON !!"
 3. Keep the filename as: screen8-simulation-transition.mp3
 4. Ensure the audio file is in MP3 format
 
 ## Current Configuration:
-- Text: "Here is an interesting hands on simulation for you to try !!"
+- Text: "Here is an hands on interesting simualtion for you to try on.. Go ahead and turn the tap ON !!"
 - Bot Message: "Time for some hands-on learning! 🧪"
 - Duration: 4000ms (4 seconds)
 - File Path: audio/screen8-simulation-transition.mp3

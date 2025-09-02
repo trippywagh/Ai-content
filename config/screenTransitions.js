@@ -21,7 +21,7 @@ const screenTransitions = {
     // Screen 8: Show transition when simulation popup opens
     8: {
         audioFile: 'audio/screen8-simulation-transition.mp3',
-        text: 'Here is an interesting hands on simulation for you to try !!',
+        text: 'Here is an hands on interesting simualtion for you to try on.. Go ahead and turn the tap ON !!',
         botMessage: 'Time for some hands-on learning! 🧪',
         duration: 4000 // Estimated duration in ms for fallback timing
     }
