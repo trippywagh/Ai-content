@@ -378,7 +378,20 @@ h1 {
     background: rgba(255, 255, 255, 0.98);
     padding: 12px 20px;
     font-size: 1.1rem;
+    max-width: 400px;
+    white-space: normal;
+    text-align: center;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.ai-companion.focusing.correct-answer .bot-status {
+    background: rgba(59, 130, 246, 0.95);
+    color: white;
+}
+
+.ai-companion.focusing.wrong-answer .bot-status {
+    background: rgba(107, 114, 128, 0.95);
+    color: white;
 }
 
 

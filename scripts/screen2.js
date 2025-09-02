@@ -335,6 +335,15 @@ class DabbaQuestionScreen {
         // Show feedback
         this.showFeedback(message, type);
 
+        // Trigger bot reaction based on answer
+        if (isCorrect) {
+            // Correct answer - bot says positive message
+            this.triggerBotReaction('correct');
+        } else {
+            // Wrong answer - bot says encouraging message
+            this.triggerBotReaction('incorrect');
+        }
+
         // If correct, show the answer and stop auto-rotation
         if (isCorrect) {
             // Stop auto-rotation and let user explore the 3D can
@@ -361,19 +370,63 @@ class DabbaQuestionScreen {
         }
     }
 
+    triggerBotReaction(answerType) {
+        // Get the AI companion bot element
+        const aiCompanion = document.getElementById('aiCompanion');
+        const botStatus = aiCompanion.querySelector('.bot-status');
+        
+        // Set the message based on answer type
+        const message = answerType === 'correct' 
+            ? 'That\'s correct, you can check the video explanation on the next screen'
+            : 'That\'s wrong, Don\'t worry, I will teach you completely.... check the video explanation on the next screen';
+        
+        // Step 1: Bot pops up (25% larger) and shows text
+        aiCompanion.classList.add('focusing');
+        aiCompanion.classList.add(answerType === 'correct' ? 'correct-answer' : 'wrong-answer');
+        botStatus.textContent = message;
+        
+        // Step 2: Play audio
+        const audio = new Audio(answerType === 'correct' 
+            ? 'audio/screen2-correct-answer.mp3'
+            : 'audio/screen2-wrong-answer.mp3');
+        
+        audio.play().catch(() => {
+            // TTS fallback
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(message);
+                speechSynthesis.speak(utterance);
+            }
+        });
+        
+        // Step 3: Wait for audio to finish, then 1 second delay, then bot pops back down
+        audio.onended = () => {
+            // Audio finished, wait 1 second, then hide text and bot returns
+            setTimeout(() => {
+                botStatus.textContent = ""; // Hide text first
+                setTimeout(() => {
+                    aiCompanion.classList.remove('focusing', 'correct-answer', 'wrong-answer'); // Then bot returns to original state
+                    botStatus.textContent = "Ready to help!";
+                }, 500); // Small delay between text disappearing and bot returning
+            }, 1000); // 1 second delay after audio ends
+        };
+        
+        // Fallback timeout in case audio doesn't trigger onended
+        setTimeout(() => {
+            if (aiCompanion.classList.contains('focusing')) {
+                botStatus.textContent = ""; // Hide text first
+                setTimeout(() => {
+                    aiCompanion.classList.remove('focusing', 'correct-answer', 'wrong-answer'); // Then bot returns to original state
+                    botStatus.textContent = "Ready to help!";
+                }, 500); // Small delay between text disappearing and bot returning
+            }
+        }, 5000); // 5 second fallback timeout
+    }
+
     showFeedback(message, type) {
         this.feedback.textContent = message;
         this.feedback.className = `feedback ${type} show`;
 
-        // Ensure feedback is visible on small screens
-        try {
-            this.feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } catch (e) {
-            // Older browsers fallback
-            const rect = this.feedback.getBoundingClientRect();
-            window.scrollTo({ top: window.scrollY + rect.top - 80, behavior: 'smooth' });
-        }
-
+        // No scrolling - feedback stays in place
         setTimeout(() => {
             this.feedback.classList.remove('show');
         }, 5000);
