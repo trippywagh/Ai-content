@@ -13,6 +13,9 @@ class MathAdventureApp {
         // Create particles container
         this.createParticlesContainer();
         
+        // Initialize navigation panel
+        this.initNavigationPanel();
+        
         // Load the first screen directly (no fetch needed for local files)
         this.loadScreenDirectly(1);
         
@@ -1163,6 +1166,9 @@ class MathAdventureApp {
         // Update active state
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
         if (indicator) indicator.classList.add('active');
+        
+        // Update left navigation panel
+        this.updateNavigationState(this.currentScreen);
     }
 
     previousScreen() {
@@ -1330,6 +1336,165 @@ class MathAdventureApp {
         
         document.head.appendChild(script);
         console.log('Summary JavaScript script added to head');
+    }
+
+    // ===== NAVIGATION PANEL METHODS =====
+
+    initNavigationPanel() {
+        console.log('Initializing navigation panel...');
+        this.populateNavigationList();
+        this.updateNavigationState(1); // Start with screen 1
+        this.setupNavigationClickHandlers();
+        this.setupToggleButton();
+    }
+
+    populateNavigationList() {
+        const navList = document.getElementById('navList');
+        if (!navList) {
+            console.error('Navigation list not found');
+            return;
+        }
+
+        navList.innerHTML = ''; // Clear existing items
+
+        // Get visible screens in order
+        const visibleScreens = this.getVisibleScreensInOrder();
+        
+        visibleScreens.forEach((screen, index) => {
+            const navItem = document.createElement('div');
+            navItem.className = 'nav-item';
+            navItem.dataset.screen = screen.id;
+            navItem.dataset.type = this.getScreenType(screen.id);
+            navItem.textContent = screen.title;
+            
+            // Add click handler
+            navItem.addEventListener('click', () => {
+                this.navigateToScreen(screen.id);
+            });
+            
+            navList.appendChild(navItem);
+        });
+
+        console.log(`Navigation populated with ${visibleScreens.length} screens`);
+    }
+
+    getVisibleScreensInOrder() {
+        const screens = [];
+        const sequence = window.SCREEN_SEQUENCE || {};
+        
+        // Start from screen 1 and follow the sequence
+        let currentScreen = 1;
+        const visited = new Set();
+        
+        while (currentScreen && !visited.has(currentScreen)) {
+            visited.add(currentScreen);
+            const screen = sequence[currentScreen];
+            
+            if (screen && screen.show) {
+                screens.push(screen);
+            }
+            
+            currentScreen = screen?.nextScreen;
+        }
+        
+        return screens;
+    }
+
+    getScreenType(screenId) {
+        // Determine screen type based on screen ID
+        if (screenId === 'summary') return 'summary';
+        if (screenId >= 9 && screenId <= 15) return 'quiz';
+        if (screenId === 2 || screenId === 6 || screenId === 8) return 'interactive';
+        return 'video';
+    }
+
+    updateNavigationState(currentScreen) {
+        const navItems = document.querySelectorAll('.nav-item');
+        const visibleScreens = this.getVisibleScreensInOrder();
+        const currentIndex = visibleScreens.findIndex(screen => screen.id == currentScreen);
+        
+        navItems.forEach((item, index) => {
+            // Remove all state classes
+            item.classList.remove('completed', 'current', 'upcoming', 'locked');
+            
+            if (index < currentIndex) {
+                // Completed screens
+                item.classList.add('completed');
+            } else if (index === currentIndex) {
+                // Current screen
+                item.classList.add('current');
+            } else {
+                // Upcoming screens
+                item.classList.add('upcoming');
+            }
+        });
+
+        // Update progress bar
+        this.updateProgressBar(currentIndex, visibleScreens.length);
+    }
+
+    updateProgressBar(currentIndex, totalScreens) {
+        const progressFill = document.getElementById('progressFill');
+        if (progressFill) {
+            const progress = ((currentIndex + 1) / totalScreens) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+    }
+
+    setupNavigationClickHandlers() {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const screenId = e.currentTarget.dataset.screen;
+                this.navigateToScreen(screenId);
+            });
+        });
+    }
+
+    navigateToScreen(screenId) {
+        const visibleScreens = this.getVisibleScreensInOrder();
+        const targetIndex = visibleScreens.findIndex(screen => screen.id == screenId);
+        const currentIndex = visibleScreens.findIndex(screen => screen.id == this.currentScreen);
+        
+        // Only allow navigation to completed screens or current screen
+        if (targetIndex <= currentIndex) {
+            console.log(`Navigating to screen ${screenId}`);
+            this.loadScreenDirectly(screenId);
+        } else {
+            console.log(`Cannot navigate to screen ${screenId} - not yet unlocked`);
+        }
+    }
+
+    setupToggleButton() {
+        const toggleBtn = document.getElementById('navToggleBtn');
+        const navPanel = document.getElementById('navigationPanel');
+        
+        if (!toggleBtn || !navPanel) {
+            console.error('Toggle button or navigation panel not found');
+            return;
+        }
+
+        // Check if panel is collapsed from localStorage
+        const isCollapsed = localStorage.getItem('navPanelCollapsed') === 'true';
+        if (isCollapsed) {
+            navPanel.classList.add('collapsed');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            const isCurrentlyCollapsed = navPanel.classList.contains('collapsed');
+            
+            if (isCurrentlyCollapsed) {
+                // Expand panel
+                navPanel.classList.remove('collapsed');
+                localStorage.setItem('navPanelCollapsed', 'false');
+                console.log('Navigation panel expanded');
+            } else {
+                // Collapse panel
+                navPanel.classList.add('collapsed');
+                localStorage.setItem('navPanelCollapsed', 'true');
+                console.log('Navigation panel collapsed');
+            }
+        });
     }
 }
 
