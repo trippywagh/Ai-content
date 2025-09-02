@@ -96,8 +96,11 @@ class CylinderConceptScreen {
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 30px;">
                 <!-- Option 1 -->
                 <div style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #f59e0b, #d97706); border-radius: 10px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);">
-                        📦
+                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #f59e0b, #d97706); border-radius: 10px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3); position: relative; overflow: hidden;">
+                        <img id="option1Image" src="" alt="Option 1" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <div id="option1Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1);">
+                            📦
+                        </div>
                     </div>
                     <p style="margin: 0 0 15px 0; color: #1e293b; font-weight: 600;">Option 1</p>
                     <div style="display: flex; gap: 10px; justify-content: center;">
@@ -108,8 +111,11 @@ class CylinderConceptScreen {
 
                 <!-- Option 2 -->
                 <div style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #3b82f6, #1d4ed8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);">
-                        🥤
+                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #3b82f6, #1d4ed8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3); position: relative; overflow: hidden;">
+                        <img id="option2Image" src="" alt="Option 2" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <div id="option2Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1);">
+                            🥤
+                        </div>
                     </div>
                     <p style="margin: 0 0 15px 0; color: #1e293b; font-weight: 600;">Option 2</p>
                     <div style="display: flex; gap: 10px; justify-content: center;">
@@ -120,8 +126,11 @@ class CylinderConceptScreen {
 
                 <!-- Option 3 -->
                 <div style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #8b5cf6, #7c3aed); border-radius: 5px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);">
-                        📱
+                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #8b5cf6, #7c3aed); border-radius: 5px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3); position: relative; overflow: hidden;">
+                        <img id="option3Image" src="" alt="Option 3" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <div id="option3Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1);">
+                            📱
+                        </div>
                     </div>
                     <p style="margin: 0 0 15px 0; color: #1e293b; font-weight: 600;">Option 3</p>
                     <div style="display: flex; gap: 10px; justify-content: center;">
@@ -143,6 +152,9 @@ class CylinderConceptScreen {
 
         // Add event listeners
         this.addPopupEventListeners(popupOverlay);
+        
+        // Load images if available
+        this.loadOptionImages(popupOverlay);
     }
 
     addPopupEventListeners(popupOverlay) {
@@ -284,6 +296,57 @@ class CylinderConceptScreen {
             btn.style.color = btn.textContent === 'Yes' ? '#10b981' : '#ef4444';
             btn.style.transform = 'scale(1)';
         });
+    }
+
+    loadOptionImages(popupOverlay) {
+        // Image paths - you can update these with your actual image paths
+        const imagePaths = {
+            option1: 'images/option1-3d-model.jpg', // Replace with your image path
+            option2: 'images/option2-3d-model.jpg', // Replace with your image path
+            option3: 'images/option3-3d-model.jpg'  // Replace with your image path
+        };
+
+        // Load Option 1 image
+        const option1Img = popupOverlay.querySelector('#option1Image');
+        const option1Placeholder = popupOverlay.querySelector('#option1Placeholder');
+        if (option1Img && imagePaths.option1) {
+            option1Img.src = imagePaths.option1;
+            option1Img.onload = () => {
+                option1Img.style.display = 'block';
+                option1Placeholder.style.display = 'none';
+            };
+            option1Img.onerror = () => {
+                console.log('Option 1 image not found, using placeholder');
+            };
+        }
+
+        // Load Option 2 image
+        const option2Img = popupOverlay.querySelector('#option2Image');
+        const option2Placeholder = popupOverlay.querySelector('#option2Placeholder');
+        if (option2Img && imagePaths.option2) {
+            option2Img.src = imagePaths.option2;
+            option2Img.onload = () => {
+                option2Img.style.display = 'block';
+                option2Placeholder.style.display = 'none';
+            };
+            option2Img.onerror = () => {
+                console.log('Option 2 image not found, using placeholder');
+            };
+        }
+
+        // Load Option 3 image
+        const option3Img = popupOverlay.querySelector('#option3Image');
+        const option3Placeholder = popupOverlay.querySelector('#option3Placeholder');
+        if (option3Img && imagePaths.option3) {
+            option3Img.src = imagePaths.option3;
+            option3Img.onload = () => {
+                option3Img.style.display = 'block';
+                option3Placeholder.style.display = 'none';
+            };
+            option3Img.onerror = () => {
+                console.log('Option 3 image not found, using placeholder');
+            };
+        }
     }
 
     closePopup(popupOverlay) {
