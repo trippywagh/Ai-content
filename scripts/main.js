@@ -2,7 +2,7 @@
 
 class MathAdventureApp {
     constructor() {
-        this.currentScreen = 1;
+        this.currentScreen = 'homepage'; // Start with homepage
         // Use config to determine total screens dynamically
         this.totalScreens = window.getTotalVisibleScreens ? window.getTotalVisibleScreens() : 15;
         this.screenInstances = {};
@@ -16,8 +16,8 @@ class MathAdventureApp {
         // Initialize navigation panel
         this.initNavigationPanel();
         
-        // Load the first screen directly (no fetch needed for local files)
-        this.loadScreenDirectly(1);
+        // Load the homepage first
+        this.loadScreenDirectly('homepage');
         
         // Setup navigation
         this.setupNavigation();
@@ -54,6 +54,13 @@ class MathAdventureApp {
             const loadingScreen = document.getElementById('loadingScreen');
             if (loadingScreen) {
                 loadingScreen.style.display = 'none';
+            }
+            
+            // Update body class for homepage
+            if (screenNumber === 'homepage') {
+                document.body.classList.add('homepage');
+            } else {
+                document.body.classList.remove('homepage');
             }
             
             // Load screen HTML directly based on screen number
@@ -118,6 +125,169 @@ class MathAdventureApp {
 
     getScreenHTML(screenNumber) {
         switch (screenNumber) {
+            case 'homepage':
+                return `
+                <div class="screen active" id="homepage">
+                    <div class="homepage-container">
+                        <!-- Header Section -->
+                        <div class="homepage-header">
+                            <h1 class="main-title">🎯 Math Adventure Hub</h1>
+                            <p class="subtitle">Explore the amazing world of 3D shapes and measurements!</p>
+                            <div class="welcome-animation">
+                                <div class="floating-shapes">
+                                    <div class="shape shape-1">📦</div>
+                                    <div class="shape shape-2">🥤</div>
+                                    <div class="shape shape-3">🏀</div>
+                                    <div class="shape shape-4">🔺</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Learning Progress -->
+                        <div class="progress-section">
+                            <h2>📚 Your Learning Journey</h2>
+                            <div class="overall-progress">
+                                <div class="progress-stats">
+                                    <div class="stat">
+                                        <span class="stat-number">5</span>
+                                        <span class="stat-label">Completed</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-number">13</span>
+                                        <span class="stat-label">Total Concepts</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-number">38%</span>
+                                        <span class="stat-label">Progress</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: 38%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Concept Cards Grid -->
+                        <div class="concepts-grid">
+                            <!-- Concept 1: What are solids, surface area, and volume (COMPLETED) -->
+                            <div class="concept-card completed available" data-concept="solids-basics">
+                                <div class="card-icon">✅</div>
+                                <h3>What are solids, surface area, and volume</h3>
+                                <p>Learn the fundamentals of 3D shapes and measurements</p>
+                                <div class="card-status completed-status">Completed!</div>
+                                <div class="start-button">Revisit</div>
+                            </div>
+
+                            <!-- Concept 2: Units, capacity vs volume (COMPLETED) -->
+                            <div class="concept-card completed available" data-concept="units-capacity">
+                                <div class="card-icon">✅</div>
+                                <h3>Units, capacity vs volume</h3>
+                                <p>Understand the difference between capacity and volume</p>
+                                <div class="card-status completed-status">Completed!</div>
+                                <div class="start-button">Revisit</div>
+                            </div>
+
+                            <!-- Concept 3: Cuboid basics (COMPLETED) -->
+                            <div class="concept-card completed available" data-concept="cuboid-basics">
+                                <div class="card-icon">✅</div>
+                                <h3>Cuboid basics</h3>
+                                <p>Master the rectangular box and its properties</p>
+                                <div class="card-status completed-status">Completed!</div>
+                                <div class="start-button">Revisit</div>
+                            </div>
+
+                            <!-- Concept 4: Cube as a special cuboid (COMPLETED) -->
+                            <div class="concept-card completed available" data-concept="cube-special">
+                                <div class="card-icon">✅</div>
+                                <h3>Cube as a special cuboid</h3>
+                                <p>Discover why cubes are special rectangular boxes</p>
+                                <div class="card-status completed-status">Completed!</div>
+                                <div class="start-button">Revisit</div>
+                            </div>
+
+                            <!-- Concept 5: "Uniform cross-section" rule (COMPLETED) -->
+                            <div class="concept-card completed available" data-concept="uniform-cross-section">
+                                <div class="card-icon">✅</div>
+                                <h3>"Uniform cross-section" rule</h3>
+                                <p>Learn about shapes with consistent cross-sections</p>
+                                <div class="card-status completed-status">Completed!</div>
+                                <div class="start-button">Revisit</div>
+                            </div>
+
+                            <!-- Concept 6: Right circular cylinder (AVAILABLE TO START) -->
+                            <div class="concept-card available" data-concept="right-circular-cylinder">
+                                <div class="card-icon">🎯</div>
+                                <h3>Right circular cylinder</h3>
+                                <p>Explore the amazing world of cylinders and their properties</p>
+                                <div class="card-status available-status">Ready to Learn</div>
+                                <div class="start-button">Start Learning</div>
+                            </div>
+
+                            <!-- Concept 7: Hollow cylinder -->
+                            <div class="concept-card locked" data-concept="hollow-cylinder">
+                                <div class="card-icon">🔒</div>
+                                <h3>Hollow cylinder</h3>
+                                <p>Understand cylinders with empty interiors</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+
+                            <!-- Concept 8: Right circular cone and slant height -->
+                            <div class="concept-card locked" data-concept="cone-slant">
+                                <div class="card-icon">🔒</div>
+                                <h3>Right circular cone and slant height</h3>
+                                <p>Master the cone shape and its special measurements</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+
+                            <!-- Concept 9: Sphere -->
+                            <div class="concept-card locked" data-concept="sphere">
+                                <div class="card-icon">🔒</div>
+                                <h3>Sphere</h3>
+                                <p>Discover the perfect round shape</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+
+                            <!-- Concept 10: Hemisphere and spherical shells -->
+                            <div class="concept-card locked" data-concept="hemisphere-shells">
+                                <div class="card-icon">🔒</div>
+                                <h3>Hemisphere and spherical shells</h3>
+                                <p>Explore half-spheres and hollow spheres</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+
+                            <!-- Concept 11: Composite solids -->
+                            <div class="concept-card locked" data-concept="composite-solids">
+                                <div class="card-icon">🔒</div>
+                                <h3>Composite solids</h3>
+                                <p>Combine different shapes to create complex objects</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+
+                            <!-- Concept 12: Pouring and conservation of volume -->
+                            <div class="concept-card locked" data-concept="pouring-conservation">
+                                <div class="card-icon">🔒</div>
+                                <h3>Pouring and conservation of volume</h3>
+                                <p>Learn how volume is conserved when pouring liquids</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+
+                            <!-- Concept 13: Rate of flow and cross-section -->
+                            <div class="concept-card locked" data-concept="rate-flow-cross-section">
+                                <div class="card-icon">🔒</div>
+                                <h3>Rate of flow and cross-section</h3>
+                                <p>Understand how shape affects liquid flow rates</p>
+                                <div class="card-status">Coming Soon</div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="homepage-footer">
+                            <p>🌟 Ready to become a math master? Choose a concept to begin your adventure!</p>
+                        </div>
+                    </div>
+                </div>`;
             case 1:
                 return `
                 <div class="screen active" id="screen1">
@@ -989,8 +1159,12 @@ class MathAdventureApp {
         link.id = 'screen-css';
         link.rel = 'stylesheet';
         
+        // Homepage uses homepage.css
+        if (screenNumber === 'homepage') {
+            link.href = `styles/homepage.css?v=${Date.now()}`;
+        }
         // Quiz screens use quiz.css
-        if (screenNumber >= 9 && screenNumber <= 15) {
+        else if (screenNumber >= 9 && screenNumber <= 15) {
             link.href = `styles/quiz.css?v=${Date.now()}`;
         } else {
             link.href = `styles/screen${screenNumber}.css?v=${Date.now()}`;
@@ -1010,8 +1184,12 @@ class MathAdventureApp {
         const script = document.createElement('script');
         script.id = 'screen-script';
         
+        // Homepage uses homepage.js
+        if (screenNumber === 'homepage') {
+            script.src = `scripts/homepage.js?v=${Date.now()}`;
+        }
         // Quiz screens use quiz.js
-        if (screenNumber >= 9 && screenNumber <= 15) {
+        else if (screenNumber >= 9 && screenNumber <= 15) {
             script.src = `scripts/quiz.js?v=${Date.now()}`;
         } else {
             script.src = `scripts/screen${screenNumber}.js?v=${Date.now()}`;
@@ -1050,6 +1228,11 @@ class MathAdventureApp {
         
         // Initialize new screen based on screen number
         switch (screenNumber) {
+            case 'homepage':
+                if (typeof HomepageScreen !== 'undefined') {
+                    this.screenInstances[screenNumber] = new HomepageScreen();
+                }
+                break;
             case 1:
                 if (typeof NameIntroScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new NameIntroScreen();
@@ -1167,8 +1350,12 @@ class MathAdventureApp {
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
         if (indicator) indicator.classList.add('active');
         
-        // Update left navigation panel
-        this.updateNavigationState(this.currentScreen);
+        // Update left navigation panel (only if not on homepage)
+        if (this.currentScreen !== 'homepage') {
+            this.updateNavigationState(this.currentScreen);
+            // Ensure panel is open when first landing on screen 1
+            this.ensureNavigationPanelOpen();
+        }
     }
 
     previousScreen() {
@@ -1343,9 +1530,9 @@ class MathAdventureApp {
     initNavigationPanel() {
         console.log('Initializing navigation panel...');
         this.populateNavigationList();
-        this.updateNavigationState(1); // Start with screen 1
         this.setupNavigationClickHandlers();
         this.setupToggleButton();
+        // Don't update navigation state here - it will be updated when screen 1 loads
     }
 
     populateNavigationList() {
@@ -1402,6 +1589,7 @@ class MathAdventureApp {
 
     getScreenType(screenId) {
         // Determine screen type based on screen ID
+        if (screenId === 'homepage') return 'homepage';
         if (screenId === 'summary') return 'summary';
         if (screenId >= 9 && screenId <= 15) return 'quiz';
         if (screenId === 2 || screenId === 6 || screenId === 8) return 'interactive';
@@ -1495,6 +1683,17 @@ class MathAdventureApp {
                 console.log('Navigation panel collapsed');
             }
         });
+    }
+
+    // Method to ensure navigation panel is open when landing on screen 1 from homepage
+    ensureNavigationPanelOpen() {
+        const navPanel = document.getElementById('navigationPanel');
+        if (navPanel && this.currentScreen === 1) {
+            // Always open the panel when coming from homepage to screen 1
+            navPanel.classList.remove('collapsed');
+            localStorage.setItem('navPanelCollapsed', 'false');
+            console.log('Navigation panel opened when starting learning from homepage');
+        }
     }
 }
 

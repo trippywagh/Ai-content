@@ -3,7 +3,15 @@
 // without affecting any design, logic, or HTML
 
 const SCREEN_SEQUENCE = {
-    // Screen 1: Name Introduction (always first)
+    // Homepage: Concept Selection Hub
+    'homepage': { 
+        id: 'homepage', 
+        show: true, 
+        nextScreen: 1,
+        title: "Math Adventure Hub"
+    },
+    
+    // Screen 1: Name Introduction
     1: { 
         id: 1, 
         show: true, 
