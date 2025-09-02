@@ -327,11 +327,11 @@ class BotTransitionOverlay {
                 position: this.originalBotState.position,
                 bottom: this.originalBotState.bottom,
                 right: this.originalBotState.right,
-                transform: this.originalBotState.transform || 'none',
-                zIndex: this.originalBotState.zIndex,
                 top: 'auto',
                 left: 'auto',
                 scale: 1, // Reset scale to 1
+                transform: 'none', // Clear current transform
+                zIndex: this.originalBotState.zIndex,
                 ease: "power2.inOut",
                 onComplete: () => {
                     // Restore original status text

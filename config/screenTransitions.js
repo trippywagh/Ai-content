@@ -8,11 +8,19 @@ const screenTransitions = {
         text: 'Why don\'t you look at this intriguing problem first before we deep dive into the concept',
         botMessage: 'Ready for a fun challenge? 🤔',
         duration: 4000 // Estimated duration in ms for fallback timing
+    },
+    
+    // Screen 4: Show transition when screen loads
+    4: {
+        audioFile: 'audio/screen3-to-4-transition.mp3',
+        text: 'Come, now let\'s learn the area and volume concept in depth',
+        botMessage: 'Let\'s dive deep into the concepts! 📚',
+        duration: 4000 // Estimated duration in ms for fallback timing
     }
     
     // Future transitions can be added here:
     // 3: { ... },
-    // 4: { ... },
+    // 5: { ... },
     // etc.
 };
 

@@ -1253,6 +1253,8 @@ class MathAdventureApp {
             case 4:
                 if (typeof CylinderConceptScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new CylinderConceptScreen();
+                    // Trigger transition for Screen 4
+                    this.triggerScreenTransition(4);
                 }
                 break;
             case 5:

@@ -1,0 +1,17 @@
+# Placeholder for Screen 3 to Screen 4 Transition Audio
+
+This is a placeholder file for the audio that will play during the bot transition from Screen 3 to Screen 4.
+
+## Instructions for User:
+1. Replace this file with your actual audio file
+2. The audio should contain the text: "Come, now let's learn the area and volume concept in depth"
+3. Keep the filename as: screen3-to-4-transition.mp3
+4. Ensure the audio file is in MP3 format
+
+## Current Configuration:
+- Text: "Come, now let's learn the area and volume concept in depth"
+- Bot Message: "Let's dive deep into the concepts! 📚"
+- Duration: 4000ms (4 seconds)
+- File Path: audio/screen3-to-4-transition.mp3
+
+The system will automatically use TTS (Text-to-Speech) as a fallback if the audio file is not available or fails to load.
