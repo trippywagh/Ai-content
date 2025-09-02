@@ -111,7 +111,7 @@ class CylinderConceptScreen {
 
                 <!-- Option 2 -->
                 <div style="text-align: center;">
-                    <div style="width: 180px; height: 180px; background: white; border: 2px solid #e2e8f0; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.1)'">
+                    <div style="width: 180px; height: 180px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.1)'">
                         <div id="option2Image" style="width: 100%; height: 100%; position: relative;"></div>
                         <div id="option2Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); color: #64748b;">
                             🥤
@@ -331,17 +331,22 @@ class CylinderConceptScreen {
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
-        // Add lighting
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        // Add improved lighting for better visibility
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Increased intensity and white color
         scene.add(ambientLight);
         
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2); // Increased intensity
         directionalLight.position.set(5, 5, 5);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
         
-        // Set camera position
-        camera.position.z = 3;
+        // Add additional fill light for better illumination
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+        fillLight.position.set(-5, 0, 5);
+        scene.add(fillLight);
+        
+        // Set camera position with 20% zoom (closer to model)
+        camera.position.z = 2.4; // 20% closer than default (3 * 0.8 = 2.4)
         
         // Add orbit controls for mouse interaction
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
