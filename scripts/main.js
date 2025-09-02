@@ -1241,6 +1241,8 @@ class MathAdventureApp {
             case 2:
                 if (typeof DabbaQuestionScreen !== 'undefined') {
                     this.screenInstances[screenNumber] = new DabbaQuestionScreen();
+                    // Trigger transition for Screen 2
+                    this.triggerScreenTransition(2);
                 }
                 break;
             case 3:
@@ -1370,18 +1372,72 @@ class MathAdventureApp {
     }
 
     nextScreen() {
+        console.log('nextScreen() called, currentScreen:', this.currentScreen);
+        
         // Use config to get the next visible screen
         const nextScreen = window.getNextScreen ? window.getNextScreen(this.currentScreen) : this.currentScreen + 1;
+        console.log('nextScreen:', nextScreen);
         
         if (nextScreen) {
-            // Handle string screen IDs (like 'summary')
-            if (typeof nextScreen === 'string') {
-                this.loadScreenDirectly(nextScreen);
-            } else if (nextScreen <= this.totalScreens) {
-                // Handle numeric screen IDs
-                this.loadScreenDirectly(nextScreen);
-            }
+            // Load screen directly - transitions will be handled by individual screens
+            this.loadScreenDirectly(nextScreen);
         }
+    }
+
+    loadScreenDirectly(screenNumber) {
+        console.log('loadScreenDirectly() called with screen:', screenNumber);
+        
+        if (screenNumber === 'summary') {
+            this.loadSummaryScreen();
+            return;
+        }
+        
+        if (screenNumber === 'homepage') {
+            this.loadHomepageScreen();
+            return;
+        }
+        
+        // Load regular numbered screens
+        this.hideCurrentScreen();
+        
+        // Load screen HTML
+        this.loadScreenHTML(screenNumber);
+        
+        // Load screen CSS
+        this.loadScreenCSS(screenNumber);
+        
+        // Load screen JavaScript
+        this.loadScreenJS(screenNumber);
+        
+        // Update current screen
+        this.currentScreen = screenNumber;
+        
+        // Update navigation
+        this.updateNavigation();
+        
+        // Show the new screen
+        this.showScreen(screenNumber);
+    }
+
+    loadHomepageScreen() {
+        const container = document.querySelector('.container');
+        if (!container) return;
+        
+        container.innerHTML = this.getScreenHTML('homepage');
+        
+        // Load homepage CSS and JS
+        this.loadScreenCSS('homepage');
+        this.loadScreenJS('homepage');
+        
+        this.currentScreen = 'homepage';
+        this.initializeScreen('homepage');
+    }
+
+    loadScreenHTML(screenNumber) {
+        const container = document.querySelector('.container');
+        if (!container) return;
+        
+        container.innerHTML = this.getScreenHTML(screenNumber);
     }
 
     showErrorScreen() {
@@ -1693,6 +1749,24 @@ class MathAdventureApp {
             navPanel.classList.remove('collapsed');
             localStorage.setItem('navPanelCollapsed', 'false');
             console.log('Navigation panel opened when starting learning from homepage');
+        }
+    }
+
+    // Trigger screen transition if configured
+    triggerScreenTransition(screenNumber) {
+        console.log('triggerScreenTransition called for screen:', screenNumber);
+        
+        const transitionConfig = window.getScreenTransitionConfig ? window.getScreenTransitionConfig(screenNumber) : null;
+        console.log('Transition config for screen', screenNumber, ':', transitionConfig);
+        
+        if (transitionConfig) {
+            console.log('Creating transition overlay for screen', screenNumber);
+            // Create transition overlay instance
+            const transitionOverlay = new BotTransitionOverlay();
+            // Show transition after a short delay to ensure screen is fully loaded
+            setTimeout(() => {
+                transitionOverlay.showTransition(transitionConfig);
+            }, 500);
         }
     }
 }

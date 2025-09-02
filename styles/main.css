@@ -410,6 +410,22 @@ h1 {
     display: none;
 }
 
+/* Speaking animation for transitions */
+.ai-companion.speaking {
+    animation: speakingPulse 1s ease-in-out infinite;
+}
+
+@keyframes speakingPulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.05);
+        filter: brightness(1.1);
+    }
+}
+
 /* ===== LEFT NAVIGATION PANEL ===== */
 
 .navigation-panel {
