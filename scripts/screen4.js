@@ -7,7 +7,9 @@ class CylinderConceptScreen {
         this.replayBtn = null;
         this.nextBtn = null;
         this.popupShown = false;
+        this.popup2Shown = false;
         this.pauseTime = 15; // Pause at 15 seconds
+        this.pauseTime2 = 79; // Pause at 79 seconds
         this.init();
     }
 
@@ -46,10 +48,18 @@ class CylinderConceptScreen {
     }
 
     checkForPopup() {
+        // Check for first popup (15 seconds)
         if (!this.popupShown && this.video.currentTime >= this.pauseTime) {
             this.popupShown = true;
             this.video.pause();
             this.showCylinderQuestionPopup();
+        }
+        
+        // Check for second popup (79 seconds)
+        if (!this.popup2Shown && this.video.currentTime >= this.pauseTime2) {
+            this.popup2Shown = true;
+            this.video.pause();
+            this.showSimulationPopup();
         }
     }
 
@@ -409,6 +419,85 @@ class CylinderConceptScreen {
         );
     }
 
+    showSimulationPopup() {
+        // Create popup overlay
+        const popupOverlay = document.createElement('div');
+        popupOverlay.id = 'simulationPopup';
+        popupOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        `;
+
+        // Create popup content
+        const popupContent = document.createElement('div');
+        popupContent.style.cssText = `
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: popupAppear 0.3s ease;
+        `;
+
+        popupContent.innerHTML = `
+            <div style="font-size: 4rem; margin-bottom: 20px;">🚀</div>
+            <h2 style="margin: 0 0 20px 0; font-size: 2rem; font-weight: 700;">Amazing Simulation Coming Soon!</h2>
+            <p style="margin: 0 0 30px 0; font-size: 1.1rem; line-height: 1.6; opacity: 0.9;">
+                Get ready for an incredible interactive simulation that will bring cylinder concepts to life! 
+                This exciting feature is currently in development and will be available soon.
+            </p>
+            <button id="continueSimulationBtn" style="
+                background: rgba(255, 255, 255, 0.2);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                color: white;
+                padding: 15px 30px;
+                border-radius: 25px;
+                font-size: 1.1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 10px;
+            " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.borderColor='rgba(255, 255, 255, 0.5)';" 
+               onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.borderColor='rgba(255, 255, 255, 0.3)';">
+                Continue Video
+            </button>
+        `;
+
+        popupOverlay.appendChild(popupContent);
+        document.body.appendChild(popupOverlay);
+
+        // Add animation keyframes
+        if (!document.getElementById('popupAnimation')) {
+            const style = document.createElement('style');
+            style.id = 'popupAnimation';
+            style.textContent = `
+                @keyframes popupAppear {
+                    0% { opacity: 0; transform: scale(0.8); }
+                    100% { opacity: 1; transform: scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Add event listener for continue button
+        const continueBtn = document.getElementById('continueSimulationBtn');
+        continueBtn.addEventListener('click', () => {
+            this.closePopup(popupOverlay);
+        });
+    }
+
     closePopup(popupOverlay) {
         popupOverlay.remove();
         // Resume video from where it was paused
@@ -418,6 +507,7 @@ class CylinderConceptScreen {
     play() { const p = this.video.play(); if (p && p.catch) p.catch(() => {}); }
     replay() { 
         this.popupShown = false; // Reset popup state on replay
+        this.popup2Shown = false; // Reset popup2 state on replay
         this.video.currentTime = 0; 
         this.play(); 
     }
