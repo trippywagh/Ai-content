@@ -16,6 +16,14 @@ const screenTransitions = {
         text: 'Come, now let\'s learn the area and volume concept in depth',
         botMessage: 'Let\'s dive deep into the concepts! 📚',
         duration: 4000 // Estimated duration in ms for fallback timing
+    },
+    
+    // Screen 8: Show transition when simulation popup opens
+    8: {
+        audioFile: 'audio/screen8-simulation-transition.mp3',
+        text: 'Here is an interesting hands on simulation for you to try !!',
+        botMessage: 'Time for some hands-on learning! 🧪',
+        duration: 4000 // Estimated duration in ms for fallback timing
     }
     
     // Future transitions can be added here:

@@ -119,6 +119,11 @@ class BeakerSimScreen {
         // Show second popup
         console.log('Showing simulation popup');
         this.simulationPopupOverlay.style.display = 'flex';
+        
+        // Trigger bot transition for Screen 8 simulation
+        if (window.app && window.app.triggerScreenTransition) {
+            window.app.triggerScreenTransition(8);
+        }
     }
 
     hideSimulationPopup() {

@@ -1,0 +1,18 @@
+# Placeholder for Screen 8 Simulation Transition Audio
+
+This is a placeholder file for the audio that will play during the bot transition when the simulation popup opens in Screen 8.
+
+## Instructions for User:
+1. Replace this file with your actual audio file
+2. The audio should contain the text: "Here is an interesting hands on simulation for you to try !!"
+3. Keep the filename as: screen8-simulation-transition.mp3
+4. Ensure the audio file is in MP3 format
+
+## Current Configuration:
+- Text: "Here is an interesting hands on simulation for you to try !!"
+- Bot Message: "Time for some hands-on learning! 🧪"
+- Duration: 4000ms (4 seconds)
+- File Path: audio/screen8-simulation-transition.mp3
+- Trigger: When simulation popup opens in Screen 8
+
+The system will automatically use TTS (Text-to-Speech) as a fallback if the audio file is not available or fails to load.
