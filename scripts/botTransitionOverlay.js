@@ -188,9 +188,9 @@ class BotTransitionOverlay {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) translateY(120px);
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            color: #ffffff;
+            transform: translate(-50%, -50%) translateY(160px);
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
             padding: 24px 32px;
             border-radius: 24px;
             font-size: 18px;
@@ -201,7 +201,7 @@ class BotTransitionOverlay {
             z-index: 10001;
             opacity: 0;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid #1e40af;
+            border: 2px solid #e2e8f0;
             box-shadow: 
                 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
                 0 10px 10px -5px rgba(0, 0, 0, 0.04),
@@ -215,7 +215,7 @@ class BotTransitionOverlay {
         
         // Add content without triangle arrows
         textCloud.innerHTML = `
-            <div style="font-size: 18px; color: #ffffff; font-weight: 600;">
+            <div style="font-size: 18px; color: #1e293b; font-weight: 600;">
                 ${text}
             </div>
         `;
@@ -226,7 +226,7 @@ class BotTransitionOverlay {
         // Fade in the text cloud
         setTimeout(() => {
             textCloud.style.opacity = '1';
-            textCloud.style.transform = 'translate(-50%, -50%) translateY(100px)';
+                                    textCloud.style.transform = 'translate(-50%, -50%) translateY(140px)';
         }, 100);
         
         console.log('Text cloud created and added to DOM');
