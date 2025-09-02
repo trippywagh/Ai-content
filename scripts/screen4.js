@@ -96,9 +96,9 @@ class CylinderConceptScreen {
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 30px;">
                 <!-- Option 1 -->
                 <div style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #f59e0b, #d97706); border-radius: 10px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3); position: relative; overflow: hidden;">
-                        <img id="option1Image" src="" alt="Option 1" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                        <div id="option1Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1);">
+                    <div style="width: 180px; height: 180px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.1)'">
+                        <div id="option1Image" style="width: 100%; height: 100%; position: relative;"></div>
+                        <div id="option1Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); color: #64748b;">
                             📦
                         </div>
                     </div>
@@ -111,9 +111,9 @@ class CylinderConceptScreen {
 
                 <!-- Option 2 -->
                 <div style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #3b82f6, #1d4ed8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3); position: relative; overflow: hidden;">
-                        <img id="option2Image" src="" alt="Option 2" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                        <div id="option2Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1);">
+                    <div style="width: 180px; height: 180px; background: white; border: 2px solid #e2e8f0; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.1)'">
+                        <div id="option2Image" style="width: 100%; height: 100%; position: relative;"></div>
+                        <div id="option2Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); color: #64748b;">
                             🥤
                         </div>
                     </div>
@@ -126,9 +126,9 @@ class CylinderConceptScreen {
 
                 <!-- Option 3 -->
                 <div style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(45deg, #8b5cf6, #7c3aed); border-radius: 5px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3); position: relative; overflow: hidden;">
-                        <img id="option3Image" src="" alt="Option 3" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                        <div id="option3Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1);">
+                    <div style="width: 180px; height: 180px; background: white; border: 2px solid #e2e8f0; border-radius: 5px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 8px 25px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.1)'">
+                        <div id="option3Image" style="width: 100%; height: 100%; position: relative;"></div>
+                        <div id="option3Placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); color: #64748b;">
                             📱
                         </div>
                     </div>
@@ -299,54 +299,109 @@ class CylinderConceptScreen {
     }
 
     loadOptionImages(popupOverlay) {
-        // Image paths - you can update these with your actual image paths
-        const imagePaths = {
-            option1: 'images/option1-3d-model.jpg', // Replace with your image path
-            option2: 'images/option2-3d-model.jpg', // Replace with your image path
-            option3: 'images/option3-3d-model.jpg'  // Replace with your image path
+        // GLB model paths - you can update these with your actual GLB file paths
+        const modelPaths = {
+            option1: 'models/option1-3d-model.glb', // Replace with your GLB path
+            option2: 'models/option2-3d-model.glb', // Replace with your GLB path
+            option3: 'models/option3-3d-model.glb'  // Replace with your GLB path
         };
 
-        // Load Option 1 image
-        const option1Img = popupOverlay.querySelector('#option1Image');
-        const option1Placeholder = popupOverlay.querySelector('#option1Placeholder');
-        if (option1Img && imagePaths.option1) {
-            option1Img.src = imagePaths.option1;
-            option1Img.onload = () => {
-                option1Img.style.display = 'block';
-                option1Placeholder.style.display = 'none';
-            };
-            option1Img.onerror = () => {
-                console.log('Option 1 image not found, using placeholder');
-            };
+        // Load 3D models for each option
+        this.load3DModel(popupOverlay, 'option1', modelPaths.option1);
+        this.load3DModel(popupOverlay, 'option2', modelPaths.option2);
+        this.load3DModel(popupOverlay, 'option3', modelPaths.option3);
+    }
+
+    load3DModel(popupOverlay, optionId, modelPath) {
+        const container = popupOverlay.querySelector(`#${optionId}Image`);
+        const placeholder = popupOverlay.querySelector(`#${optionId}Placeholder`);
+        
+        if (!container || !modelPath) {
+            console.log(`${optionId} container not found or no model path provided`);
+            return;
         }
 
-        // Load Option 2 image
-        const option2Img = popupOverlay.querySelector('#option2Image');
-        const option2Placeholder = popupOverlay.querySelector('#option2Placeholder');
-        if (option2Img && imagePaths.option2) {
-            option2Img.src = imagePaths.option2;
-            option2Img.onload = () => {
-                option2Img.style.display = 'block';
-                option2Placeholder.style.display = 'none';
-            };
-            option2Img.onerror = () => {
-                console.log('Option 2 image not found, using placeholder');
-            };
-        }
-
-        // Load Option 3 image
-        const option3Img = popupOverlay.querySelector('#option3Image');
-        const option3Placeholder = popupOverlay.querySelector('#option3Placeholder');
-        if (option3Img && imagePaths.option3) {
-            option3Img.src = imagePaths.option3;
-            option3Img.onload = () => {
-                option3Img.style.display = 'block';
-                option3Placeholder.style.display = 'none';
-            };
-            option3Img.onerror = () => {
-                console.log('Option 3 image not found, using placeholder');
-            };
-        }
+        // Create Three.js scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(180, 180); // Updated to match new container size
+        renderer.setClearColor(0x000000, 0);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
+        // Add lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+        
+        // Set camera position
+        camera.position.z = 3;
+        
+        // Add orbit controls for mouse interaction
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = false;
+        controls.enablePan = false;
+        controls.autoRotate = false;
+        
+        // Load GLB model
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+            modelPath,
+            (gltf) => {
+                const model = gltf.scene;
+                
+                // Scale and position the model
+                model.scale.setScalar(1);
+                model.position.set(0, 0, 0);
+                
+                // Enable shadows
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+                
+                scene.add(model);
+                
+                // Hide placeholder and show 3D model
+                placeholder.style.display = 'none';
+                container.appendChild(renderer.domElement);
+                
+                // Animation loop
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    
+                    // Update controls
+                    controls.update();
+                    
+                    // Only auto-rotate if not being interacted with
+                    if (model && !controls.enabled) {
+                        model.rotation.y += 0.01;
+                    }
+                    
+                    renderer.render(scene, camera);
+                };
+                animate();
+                
+                console.log(`${optionId} 3D model loaded successfully`);
+            },
+            (progress) => {
+                console.log(`${optionId} loading progress:`, (progress.loaded / progress.total * 100) + '%');
+            },
+            (error) => {
+                console.error(`Error loading ${optionId} 3D model:`, error);
+                console.log(`${optionId} 3D model not found, using placeholder`);
+            }
+        );
     }
 
     closePopup(popupOverlay) {
