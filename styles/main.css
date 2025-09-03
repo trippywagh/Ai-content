@@ -400,11 +400,13 @@ h1 {
 
 /* Bot beside popup - final position, stays here until popup closes */
 .ai-companion.beside-popup {
-    position: fixed;
-    top: 70px;
-    left: -300px;
-    transform: none;
-    z-index: 1003;
+    position: fixed !important;
+    top: 105px !important;
+    left: 350px !important;
+    bottom: auto !important;
+    right: auto !important;
+    transform: none !important;
+    z-index: 1004 !important;
     transition: all 1.2s ease-in-out;
     pointer-events: none; /* Prevent bot from blocking clicks */
 }
