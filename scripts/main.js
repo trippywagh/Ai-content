@@ -131,8 +131,8 @@ class MathAdventureApp {
                     <div class="homepage-container">
                         <!-- Header Section -->
                         <div class="homepage-header">
-                            <h1 class="main-title">🎯 Math Adventure Hub</h1>
-                            <p class="subtitle">Explore the amazing world of 3D shapes and measurements!</p>
+                            <h1 class="main-title">🎯 Surface Area & Volume Playbook</h1>
+                            <p class="subtitle">See the hidden math in every shape around you!</p>
                             <div class="welcome-animation">
                                 <div class="floating-shapes">
                                     <div class="shape shape-1">📦</div>

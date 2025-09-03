@@ -8,7 +8,7 @@ const SCREEN_SEQUENCE = {
         id: 'homepage', 
         show: true, 
         nextScreen: 1,
-        title: "Math Adventure Hub"
+        title: "Surface Area & Volume Playbook"
     },
     
     // Screen 1: Name Introduction

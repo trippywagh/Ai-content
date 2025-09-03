@@ -369,7 +369,7 @@ class DabbaQuestionScreen {
         // Set the message based on answer type
         const message = answerType === 'correct' 
             ? 'High five! 🙌 You spotted it! \nThe curved surface of the can stretches out into a rectangle, and the two round ends become circles.\n Let\'s unwrap its story in depth'
-            : 'That\'s not quite right, no worries at all! 👍 . \n That\'s exactly why we are here —- to learn how 3D shapes hide simple 2D shapes inside them. \n Let\'s unwrap its story in depth'
+            : 'That\'s not quite right, no worries at all!. \n That\'s exactly why we are here, to learn how 3D shapes hide simple 2D shapes inside them. \n Let\'s unwrap its story in depth'
         
         // Step 1: Bot pops up (25% larger) and shows text
         aiCompanion.classList.add('focusing');
@@ -385,6 +385,16 @@ class DabbaQuestionScreen {
             // TTS fallback
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(message);
+                utterance.onend = () => {
+                    // TTS finished, wait 1 second, then hide text and bot returns
+                    setTimeout(() => {
+                        botStatus.textContent = ""; // Hide text first
+                        setTimeout(() => {
+                            aiCompanion.classList.remove('focusing', 'correct-answer', 'wrong-answer'); // Then bot returns to original state
+                            botStatus.textContent = "Ready to help!";
+                        }, 500); // Small delay between text disappearing and bot returning
+                    }, 1000); // 1 second delay after TTS ends
+                };
                 speechSynthesis.speak(utterance);
             }
         });
@@ -400,17 +410,6 @@ class DabbaQuestionScreen {
                 }, 500); // Small delay between text disappearing and bot returning
             }, 1000); // 1 second delay after audio ends
         };
-        
-        // Fallback timeout in case audio doesn't trigger onended
-        setTimeout(() => {
-            if (aiCompanion.classList.contains('focusing')) {
-                botStatus.textContent = ""; // Hide text first
-                setTimeout(() => {
-                    aiCompanion.classList.remove('focusing', 'correct-answer', 'wrong-answer'); // Then bot returns to original state
-                    botStatus.textContent = "Ready to help!";
-                }, 500); // Small delay between text disappearing and bot returning
-            }
-        }, 5000); // 5 second fallback timeout
     }
 
     showFeedback(message, type) {
