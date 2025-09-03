@@ -5,7 +5,7 @@ const screenTransitions = {
     // Screen 2: Show transition when screen loads
     2: {
         audioFile: 'audio/screen1-to-2-transition.mp3',
-        text: 'Why don\'t you look at this intriguing problem first before we deep dive into the concept',
+        text: 'Ready! for your first puzzle? Look at the Coke Can. It\'s a cylinder in real. But imagine if we could unwrap it and lay it flat on the table… <br> What shape do you think the curved part becomes?',
         botMessage: 'Ready for a fun challenge? <img src="images/thinking-robot.png" alt="Thinking Robot" style="width: 25px; height: 25px; vertical-align: middle; margin-left: 5px;">',
         duration: 4000 // Estimated duration in ms for fallback timing
     },

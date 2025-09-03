@@ -349,7 +349,7 @@ class NameIntroScreen {
         const studentName = localStorage.getItem('studentName') || 'there';
         const botStatus = bot.querySelector('.bot-status');
         if (botStatus) {
-            botStatus.textContent = `Hey ${studentName}, I will be your personal companion throughout this learning journey! 🤖`;
+            botStatus.textContent = 'Hey Ram! I am Allie...I will be your math buddy and personal companion for this learning adventure.';
         }
         
         // Sure-shot animation sequence with exact positioning
