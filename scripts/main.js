@@ -1498,6 +1498,11 @@ class MathAdventureApp {
                 // Update navigation
                 this.updateNavigation();
                 
+                // Trigger summary-specific bot transition after screen is fully loaded
+                setTimeout(() => {
+                    this.triggerSummaryTransition();
+                }, 500);
+                
                 // Debug: Check if content is visible
                 setTimeout(() => {
                     const summaryContent = document.querySelector('.summary-container');
@@ -1788,6 +1793,24 @@ class MathAdventureApp {
             // Show transition after a short delay to ensure screen is fully loaded
             setTimeout(() => {
                 transitionOverlay.showTransition(transitionConfig);
+            }, 500);
+        }
+    }
+
+    // Trigger summary-specific transition
+    triggerSummaryTransition() {
+        console.log('triggerSummaryTransition called');
+        
+        const transitionConfig = window.getScreenTransitionConfig ? window.getScreenTransitionConfig('summary') : null;
+        console.log('Summary transition config:', transitionConfig);
+        
+        if (transitionConfig) {
+            console.log('Creating summary transition overlay');
+            // Create summary-specific transition overlay instance
+            const summaryTransition = new SummaryBotTransition();
+            // Show transition after a short delay to ensure screen is fully loaded
+            setTimeout(() => {
+                summaryTransition.showTransition(transitionConfig);
             }, 500);
         }
     }

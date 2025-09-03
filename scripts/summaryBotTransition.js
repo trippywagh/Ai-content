@@ -1,21 +1,21 @@
-// Bot Transition Overlay System
-// Shows bot transitions as overlays on top of loaded screens
+// Summary Screen Bot Transition System
+// Separate transition system specifically for Summary screen with adjustable coordinates
 
-class BotTransitionOverlay {
+class SummaryBotTransition {
     constructor() {
         this.isTransitioning = false;
         this.audio = null;
         this.speechSynthesis = window.speechSynthesis;
     }
 
-    // Show transition overlay on current screen
+    // Show transition overlay on Summary screen
     async showTransition(config) {
         if (this.isTransitioning) {
-            console.log('Transition already in progress, skipping...');
+            console.log('Summary transition already in progress, skipping...');
             return;
         }
 
-        console.log('BotTransitionOverlay.showTransition called with config:', config);
+        console.log('SummaryBotTransition.showTransition called with config:', config);
         this.isTransitioning = true;
 
         try {
@@ -32,7 +32,7 @@ class BotTransitionOverlay {
             console.log('Step 3: Showing text cloud and starting audio...');
             await this.showTextCloudAndAudio(config);
             
-            // Step 4: Hide text cloud immediately after audio starts (only bot image visible during pulsating)
+            // Step 4: Hide text cloud immediately after audio starts
             console.log('Step 4: Hiding text cloud, keeping only bot image...');
             await this.hideTextCloud();
             
@@ -49,10 +49,10 @@ class BotTransitionOverlay {
             this.hideOverlay();
             
             this.isTransitioning = false;
-            console.log('Transition completed!');
+            console.log('Summary transition completed!');
             
         } catch (error) {
-            console.error('Error during transition:', error);
+            console.error('Error during summary transition:', error);
             this.cleanup();
             this.isTransitioning = false;
         }
@@ -64,7 +64,7 @@ class BotTransitionOverlay {
         this.removeOverlay();
         
         const overlay = document.createElement('div');
-        overlay.id = 'botTransitionOverlay';
+        overlay.id = 'summaryBotTransitionOverlay';
         overlay.style.cssText = `
             position: fixed;
             top: 0;
@@ -80,13 +80,13 @@ class BotTransitionOverlay {
         document.body.appendChild(overlay);
         this.overlay = overlay;
         
-        console.log('Overlay created and added to DOM');
+        console.log('Summary overlay created and added to DOM');
     }
 
-    // Step 2: Move bot smoothly to center
+    // Step 2: Move bot smoothly to center with adjustable coordinates
     async moveBotToCenter(config) {
         return new Promise((resolve) => {
-            console.log('moveBotToCenter called');
+            console.log('Summary moveBotToCenter called');
             
             const bot = document.getElementById('aiCompanion');
             const botStatus = document.querySelector('.bot-status');
@@ -97,7 +97,7 @@ class BotTransitionOverlay {
                 return;
             }
 
-            // Store original position and state (get computed styles to get actual values)
+            // Store original position and state
             const computedStyle = window.getComputedStyle(bot);
             this.originalBotState = {
                 position: computedStyle.position,
@@ -114,30 +114,56 @@ class BotTransitionOverlay {
             // Hide the status text during transition
             botStatus.style.display = 'none';
 
-            // Use GSAP for smooth transition to center with 30% scale increase
+            // ===== ADJUSTABLE COORDINATES FOR SUMMARY SCREEN ONLY =====
+            const SUMMARY_TRANSITION_CONFIG = {
+                // Center position (adjust these to fine-tune center position)
+                centerTop: '50%',        // Try: '45%', '55%', etc.
+                centerLeft: '50%',       // Try: '45%', '55%', etc.
+                
+                // Offset from center (adjust these to fine-tune centering)
+                centerXOffset: -50,      // Try: -45, -55, etc.
+                centerYOffset: 10,      // Try: -45, -55, etc.
+                
+                // Scale when centered
+                centerScale: 1.3,        // Try: 1.2, 1.4, etc.
+                
+                // Animation duration
+                duration: 1.5,           // Try: 1.0, 2.0, etc.
+                
+                // Easing (try: "linear", "power1.inOut", "bounce.out", etc.)
+                ease: "power2.inOut"
+            };
+            // ===== END ADJUSTABLE COORDINATES =====
+
+            // Use GSAP for smooth diagonal transition to center
             gsap.to(bot, {
-                duration: 1.5,
+                duration: SUMMARY_TRANSITION_CONFIG.duration,
                 position: 'fixed',
                 bottom: 'auto',
                 right: 'auto',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%) scale(1.3)',
+                top: SUMMARY_TRANSITION_CONFIG.centerTop,
+                left: SUMMARY_TRANSITION_CONFIG.centerLeft,
+                xPercent: SUMMARY_TRANSITION_CONFIG.centerXOffset,
+                yPercent: SUMMARY_TRANSITION_CONFIG.centerYOffset,
+                scale: SUMMARY_TRANSITION_CONFIG.centerScale,
                 zIndex: 10000,
-                ease: "power2.inOut",
+                ease: SUMMARY_TRANSITION_CONFIG.ease,
                 onComplete: () => {
                     // Remove the speaking class to prevent CSS animation conflicts
                     bot.classList.remove('speaking');
                     
                     // Force maintain the scale immediately
                     gsap.set(bot, { 
-                        transform: 'translate(-50%, -50%) scale(1.3)',
+                        xPercent: SUMMARY_TRANSITION_CONFIG.centerXOffset,
+                        yPercent: SUMMARY_TRANSITION_CONFIG.centerYOffset,
+                        scale: SUMMARY_TRANSITION_CONFIG.centerScale,
                         clearProps: "none"
                     });
                     
-                    // Create our own pulsing animation using GSAP that maintains the 30% scale
+                    // Create our own pulsing animation using GSAP that maintains the scale
+                    const pulseScale = SUMMARY_TRANSITION_CONFIG.centerScale + 0.1; // Pulse slightly bigger
                     this.speakingAnimation = gsap.to(bot, {
-                        scale: 1.4, // Pulse between 1.3 and 1.4 (30% to 40% bigger)
+                        scale: pulseScale,
                         duration: 0.6,
                         ease: "power2.inOut",
                         yoyo: true,
@@ -147,10 +173,12 @@ class BotTransitionOverlay {
                     
                     // Set up a continuous check to maintain scale during speaking
                     this.scaleMaintenanceInterval = setInterval(() => {
-                        const currentTransform = bot.style.transform;
-                        if (!currentTransform.includes('scale(1.3)') && !currentTransform.includes('scale(1.4)')) {
+                        const currentScale = gsap.getProperty(bot, "scale");
+                        if (currentScale < SUMMARY_TRANSITION_CONFIG.centerScale || currentScale > pulseScale) {
                             gsap.set(bot, { 
-                                transform: 'translate(-50%, -50%) scale(1.3)',
+                                xPercent: SUMMARY_TRANSITION_CONFIG.centerXOffset,
+                                yPercent: SUMMARY_TRANSITION_CONFIG.centerYOffset,
+                                scale: SUMMARY_TRANSITION_CONFIG.centerScale,
                                 clearProps: "none"
                             });
                         }
@@ -165,7 +193,7 @@ class BotTransitionOverlay {
     // Step 3: Show text cloud and start audio
     async showTextCloudAndAudio(config) {
         return new Promise((resolve) => {
-            console.log('showTextCloudAndAudio called');
+            console.log('Summary showTextCloudAndAudio called');
             
             // Create text cloud
             this.createTextCloud(config.text);
@@ -177,18 +205,18 @@ class BotTransitionOverlay {
 
     // Create text cloud that displays what bot is saying
     createTextCloud(text) {
-        console.log('Creating text cloud with text:', text);
+        console.log('Creating summary text cloud with text:', text);
         
         // Remove existing text cloud
         this.removeTextCloud();
         
         const textCloud = document.createElement('div');
-        textCloud.id = 'botTextCloud';
+        textCloud.id = 'summaryBotTextCloud';
         textCloud.style.cssText = `
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) translateY(160px);
+            transform: translate(-50%, -50%) translateY(250px);
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
             color: #1e293b;
             padding: 24px 32px;
@@ -226,43 +254,43 @@ class BotTransitionOverlay {
         // Fade in the text cloud
         setTimeout(() => {
             textCloud.style.opacity = '1';
-                                    textCloud.style.transform = 'translate(-50%, -50%) translateY(140px)';
+            textCloud.style.transform = 'translate(-50%, -50%) translateY(230px)';
         }, 100);
         
-        console.log('Text cloud created and added to DOM');
+        console.log('Summary text cloud created and added to DOM');
     }
 
     // Use TTS as fallback
     playAudioWithFallback(config, onComplete) {
-        console.log('playAudioWithFallback called with config:', config);
+        console.log('Summary playAudioWithFallback called with config:', config);
         
         // Try to play audio file first
         if (config.audioFile) {
             const audio = new Audio(config.audioFile);
             
             audio.onloadeddata = () => {
-                console.log('Audio file loaded successfully, playing...');
+                console.log('Summary audio file loaded successfully, playing...');
                 audio.play().catch(error => {
-                    console.log('Audio playback failed, using TTS fallback:', error);
+                    console.log('Summary audio playback failed, using TTS fallback:', error);
                     this.useTTSFallback(config.text, onComplete);
                 });
             };
             
             audio.onerror = () => {
-                console.log('Audio file not found, using TTS fallback');
+                console.log('Summary audio file not found, using TTS fallback');
                 this.useTTSFallback(config.text, onComplete);
             };
             
-            // Set up audio completion handler (same as TTS)
+            // Set up audio completion handler
             audio.onended = () => {
-                console.log('Audio file completed');
+                console.log('Summary audio file completed');
                 onComplete();
             };
             
             // Set a timeout to use TTS if audio doesn't load within 2 seconds
             setTimeout(() => {
                 if (audio.readyState < 2) { // Not loaded yet
-                    console.log('Audio loading timeout, using TTS fallback');
+                    console.log('Summary audio loading timeout, using TTS fallback');
                     this.useTTSFallback(config.text, onComplete);
                 }
             }, 2000);
@@ -273,7 +301,7 @@ class BotTransitionOverlay {
     }
 
     useTTSFallback(text, onComplete) {
-        console.log('useTTSFallback called with text:', text);
+        console.log('Summary useTTSFallback called with text:', text);
         
         if (!this.speechSynthesis) {
             console.warn('Speech synthesis not available');
@@ -293,23 +321,23 @@ class BotTransitionOverlay {
 
         // Set up event listeners
         utterance.onend = () => {
-            console.log('TTS completed');
+            console.log('Summary TTS completed');
             onComplete();
         };
 
         utterance.onerror = (error) => {
-            console.warn('TTS error:', error);
+            console.warn('Summary TTS error:', error);
             // Still call onComplete to continue the flow
             onComplete();
         };
 
         // Speak the text
-        console.log('Starting TTS speech...');
+        console.log('Starting Summary TTS speech...');
         this.speechSynthesis.speak(utterance);
         
         // Fallback timeout in case TTS doesn't work
         setTimeout(() => {
-            console.log('TTS timeout fallback');
+            console.log('Summary TTS timeout fallback');
             onComplete();
         }, 5000);
     }
@@ -317,7 +345,7 @@ class BotTransitionOverlay {
     // Step 5: Hide text cloud
     async hideTextCloud() {
         return new Promise((resolve) => {
-            console.log('hideTextCloud called');
+            console.log('Summary hideTextCloud called');
             
             if (this.textCloud) {
                 this.textCloud.style.opacity = '0';
@@ -336,7 +364,7 @@ class BotTransitionOverlay {
     // Step 6: Move bot back to original position
     async moveBotBackToOriginal() {
         return new Promise((resolve) => {
-            console.log('moveBotBackToOriginal called');
+            console.log('Summary moveBotBackToOriginal called');
             
             const bot = document.getElementById('aiCompanion');
             const botStatus = document.querySelector('.bot-status');
@@ -360,7 +388,7 @@ class BotTransitionOverlay {
 
             console.log('Restoring bot to original state:', this.originalBotState);
 
-            // Use GSAP for smooth return transition
+            // Use GSAP for smooth diagonal return transition
             gsap.to(bot, {
                 duration: 1.5,
                 position: this.originalBotState.position,
@@ -386,13 +414,13 @@ class BotTransitionOverlay {
 
     // Step 7: Hide overlay
     hideOverlay() {
-        console.log('hideOverlay called');
+        console.log('Summary hideOverlay called');
         this.removeOverlay();
     }
 
     // Remove text cloud
     removeTextCloud() {
-        const textCloud = document.getElementById('botTextCloud');
+        const textCloud = document.getElementById('summaryBotTextCloud');
         if (textCloud) {
             textCloud.remove();
         }
@@ -401,7 +429,7 @@ class BotTransitionOverlay {
 
     // Remove overlay
     removeOverlay() {
-        const overlay = document.getElementById('botTransitionOverlay');
+        const overlay = document.getElementById('summaryBotTransitionOverlay');
         if (overlay) {
             overlay.remove();
         }
@@ -415,7 +443,7 @@ class BotTransitionOverlay {
 
     // Cleanup method for error handling
     cleanup() {
-        console.log('Cleaning up transition...');
+        console.log('Cleaning up summary transition...');
         this.removeTextCloud();
         this.removeOverlay();
         
@@ -456,7 +484,7 @@ class BotTransitionOverlay {
 
 // Export for use in screen scripts
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = BotTransitionOverlay;
+    module.exports = SummaryBotTransition;
 } else {
-    window.BotTransitionOverlay = BotTransitionOverlay;
+    window.SummaryBotTransition = SummaryBotTransition;
 }

@@ -24,6 +24,14 @@ const screenTransitions = {
         text: 'Here is an hands on interesting simualtion for you to try on.. Go ahead and turn the tap ON !!',
         botMessage: 'Time for some hands-on learning! 🧪',
         duration: 4000 // Estimated duration in ms for fallback timing
+    },
+    
+    // Summary Screen: Show transition when summary screen loads
+    'summary': {
+        audioFile: 'audio/summary-transition.mp3',
+        text: 'Looks like both questions tripped you up. No worries, it is totally normal to have a few bumps! I recommend going through a quick refresher to brush up on the key ideas. Once you do, you will be ready to tackle the questions with confidence!',
+        botMessage: 'Time to review what we learned! 📚',
+        duration: 3000 // Estimated duration in ms for fallback timing
     }
     
     // Future transitions can be added here:
