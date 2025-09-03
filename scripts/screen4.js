@@ -429,73 +429,438 @@ class CylinderConceptScreen {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow-y: auto;
+            padding: 20px;
         `;
 
-        // Create popup content
+        // Create popup content with simulation
         const popupContent = document.createElement('div');
         popupContent.style.cssText = `
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
             padding: 40px;
-            text-align: center;
-            color: white;
-            max-width: 500px;
-            width: 90%;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            animation: popupAppear 0.3s ease;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
         `;
 
+        // Add the complete simulation HTML
         popupContent.innerHTML = `
-            <div style="font-size: 4rem; margin-bottom: 20px;">🚀</div>
-            <h2 style="margin: 0 0 20px 0; font-size: 2rem; font-weight: 700;">Amazing Simulation Coming Soon!</h2>
-            <p style="margin: 0 0 30px 0; font-size: 1.1rem; line-height: 1.6; opacity: 0.9;">
-                Get ready for an incredible interactive simulation that will bring cylinder concepts to life! 
-                This exciting feature is currently in development and will be available soon.
-            </p>
-            <button id="continueSimulationBtn" style="
-                background: rgba(255, 255, 255, 0.2);
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                color: white;
-                padding: 15px 30px;
-                border-radius: 25px;
-                font-size: 1.1rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                margin-top: 10px;
-            " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.borderColor='rgba(255, 255, 255, 0.5)';" 
-               onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.borderColor='rgba(255, 255, 255, 0.3)';">
-                Continue Video
-            </button>
+            <h1 style="color: #4a90e2; font-size: 2.2em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">🎯 Cloth Coverage Simulation</h1>
+            
+            <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 20px; border-radius: 15px; margin-bottom: 30px; border-left: 5px solid #4a90e2;">
+                <div style="font-size: 1.2em; color: #2d3436; margin-bottom: 15px;">
+                    <strong>Problem:</strong> Imagine this to be a Qutub Minar.
+                </div>
+                <div style="margin: 20px 0; display: flex; justify-content: center;">
+                    <div style="position: relative; width: 120px; height: 200px; border: 3px solid #4a90e2; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 20px;">
+                        <div style="position: relative; width: 100%; height: 100%;">
+                            <div style="position: absolute; height: 100%; width: 0; left: -25px; top: 0; border-left: none; border-right: 2px solid #e17055; background: #e17055;">
+                                <div style="position: absolute; left: -3px; width: 8px; height: 2px; background: #e17055; top: 0;"></div>
+                                <div style="position: absolute; left: -3px; width: 8px; height: 2px; background: #e17055; bottom: 0;"></div>
+                                <div style="position: absolute; left: -35px; top: 50%; transform: translateY(-50%); background: #e17055; color: white; padding: 2px 5px; border-radius: 5px; font-size: 0.8em; white-space: nowrap;">h = 72 m</div>
+                            </div>
+                            <div style="position: absolute; width: 50%; height: 0; bottom: -25px; left: 0; border-top: none; border-bottom: 2px solid #e17055; background: #e17055;">
+                                <div style="position: absolute; top: -3px; height: 8px; width: 2px; background: #e17055; left: 0;"></div>
+                                <div style="position: absolute; top: -3px; height: 8px; width: 2px; background: #e17055; right: 0;"></div>
+                                <div style="position: absolute; left: 50%; bottom: -35px; transform: translateX(-50%); background: #e17055; color: white; padding: 2px 5px; border-radius: 5px; font-size: 0.8em; white-space: nowrap;">r = 7 m</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 100%; height: 8px; background: #ddd; border-radius: 4px; margin: 20px 0; overflow: hidden;">
+                <div id="progressFill" style="height: 100%; background: linear-gradient(90deg, #00b894, #00cec9); border-radius: 4px; transition: width 0.5s ease; width: 33.33%;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #4a90e2; transform: scale(1.2);" id="step1Dot"></div>
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #ddd;" id="step2Dot"></div>
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #ddd;" id="step3Dot"></div>
+            </div>
+
+            <!-- Step 1: Select Parts -->
+            <div id="step1" style="display: block; margin: 30px 0;">
+                <h2 style="color: #e17055; margin-bottom: 20px; font-size: 1.5em; font-weight: bold;">Step 1: Which parts need cloth?</h2>
+                <div style="margin: 20px auto; max-width: 200px; height: 300px; display: flex; justify-content: center; align-items: center; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); overflow: hidden;">
+                    <img src="images/qutub-minar.png" alt="Qutub Minar" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </div>
+                <p style="margin: 20px 0; color: #2d3436; font-size: 1.1em;">
+                    Select all the sides of the Qutub Minar that need to be covered with cloth:
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div class="part-option" data-part="curved" style="background: #fff; border: 3px solid #ddd; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🔄</div>
+                        <div style="font-weight: bold; font-size: 1.1em;">Curved Surface</div>
+                    </div>
+                    <div class="part-option" data-part="top" style="background: #fff; border: 3px solid #ddd; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">⭕</div>
+                        <div style="font-weight: bold; font-size: 1.1em;">Top Circular Base</div>
+                    </div>
+                    <div class="part-option" data-part="bottom" style="background: #fff; border: 3px solid #ddd; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">⭕</div>
+                        <div style="font-weight: bold; font-size: 1.1em;">Bottom Circular Base</div>
+                    </div>
+                </div>
+                <div id="step1Feedback" style="margin: 20px 0; padding: 15px; border-radius: 10px; font-weight: bold; display: none;"></div>
+                <button id="checkStep1" style="padding: 15px 25px; border: none; border-radius: 25px; font-size: 1.1em; font-family: inherit; cursor: pointer; transition: all 0.3s ease; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 10px; background: linear-gradient(45deg, #00b894, #00cec9); color: white;" disabled>Check Selection</button>
+            </div>
+
+            <!-- Step 2: Enter Formulas -->
+            <div id="step2" style="display: none; margin: 30px 0;">
+                <h2 style="color: #e17055; margin-bottom: 20px; font-size: 1.5em; font-weight: bold;">Step 2: Fill in the formulas</h2>
+                <p style="margin: 20px 0; color: #2d3436; font-size: 1.1em;">
+                    Now calculate the area for each part that needs cloth. Fill in the values:
+                </p>
+                <div style="background: #fff; border: 2px solid #4a90e2; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                    <div style="margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                        <div style="font-weight: bold; color: #4a90e2; min-width: 120px;">Curved Surface Area:</div>
+                        <span>2πrh = 2 × (22/7) ×</span>
+                        <input type="number" id="csaRadius" placeholder="r" style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                        <span>×</span>
+                        <input type="number" id="csaHeight" placeholder="h" style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                        <span>=</span>
+                        <input type="number" id="csaResult" placeholder="Result" style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                    </div>
+                    <div style="margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                        <div style="font-weight: bold; color: #4a90e2; min-width: 120px;">Top Base Area:</div>
+                        <span>πr² = (22/7) ×</span>
+                        <input type="number" id="topRadius" placeholder="r" style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                        <span>² =</span>
+                        <input type="number" id="topResult" placeholder="Result" style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                    </div>
+                    <div style="margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                        <div style="font-weight: bold; color: #4a90e2; min-width: 120px;">Total Cloth Area:</div>
+                        <input type="number" id="csaFinal" placeholder="CSA" readonly style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                        <span>+</span>
+                        <input type="number" id="topFinal" placeholder="Top Area" readonly style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                        <span>=</span>
+                        <input type="number" id="totalResult" placeholder="Total" style="padding: 8px 12px; border: 2px solid #ddd; border-radius: 5px; font-size: 1.1em; text-align: center; width: 80px;">
+                    </div>
+                </div>
+                <div id="step2Feedback" style="margin: 20px 0; padding: 15px; border-radius: 10px; font-weight: bold; display: none;"></div>
+                <button id="checkStep2" style="padding: 15px 25px; border: none; border-radius: 25px; font-size: 1.1em; font-family: inherit; cursor: pointer; transition: all 0.3s ease; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 10px; background: linear-gradient(45deg, #00b894, #00cec9); color: white;" disabled>Check Calculation</button>
+            </div>
+
+            <!-- Step 3: Final Answer -->
+            <div id="step3" style="display: none; margin: 30px 0;">
+                <h2 style="color: #e17055; margin-bottom: 20px; font-size: 1.5em; font-weight: bold;">Step 3: Final Answer</h2>
+                <p style="margin: 20px 0; color: #2d3436; font-size: 1.1em;">
+                    Enter the total area of cloth required (rounded to nearest whole number):
+                </p>
+                <div style="font-size: 1.3em; margin: 20px 0;">
+                    Total Cloth Area = <input type="number" id="finalAnswer" placeholder="Enter answer" style="font-size: 1.2em; padding: 10px; border: 2px solid #4a90e2; border-radius: 5px; text-align: center; width: 150px;"> m²
+                </div>
+                <div id="step3Feedback" style="margin: 20px 0; padding: 15px; border-radius: 10px; font-weight: bold; display: none;"></div>
+                <button id="checkFinal" style="padding: 15px 25px; border: none; border-radius: 25px; font-size: 1.1em; font-family: inherit; cursor: pointer; transition: all 0.3s ease; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 10px; background: linear-gradient(45deg, #00b894, #00cec9); color: white;" disabled>Submit Answer</button>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button id="resetSimulation" style="padding: 15px 25px; border: none; border-radius: 25px; font-size: 1.1em; font-family: inherit; cursor: pointer; transition: all 0.3s ease; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 10px; background: linear-gradient(45deg, #fdcb6e, #e17055); color: white;">🔄 Reset Simulation</button>
+            </div>
         `;
 
         popupOverlay.appendChild(popupContent);
         document.body.appendChild(popupOverlay);
 
-        // Add animation keyframes
-        if (!document.getElementById('popupAnimation')) {
-            const style = document.createElement('style');
-            style.id = 'popupAnimation';
-            style.textContent = `
-                @keyframes popupAppear {
-                    0% { opacity: 0; transform: scale(0.8); }
-                    100% { opacity: 1; transform: scale(1); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
+        // Initialize the simulation
+        this.initializeSimulation();
+    }
 
-        // Add event listener for continue button
-        const continueBtn = document.getElementById('continueSimulationBtn');
-        continueBtn.addEventListener('click', () => {
-            this.closePopup(popupOverlay);
+    initializeSimulation() {
+        this.currentStep = 1;
+        this.selectedParts = [];
+        this.correctAnswers = {
+            parts: ['curved', 'top'], // Curved surface and top base need cloth
+            csa: 3168, // 2 × (22/7) × 7 × 72 = 3168
+            topArea: 154, // (22/7) × 7² = 154
+            total: 3322 // 3168 + 154 = 3322
+        };
+
+        // Step 1: Part selection
+        this.setupStep1();
+        
+        // Step 2: Formula calculation
+        this.setupStep2();
+        
+        // Step 3: Final answer
+        this.setupStep3();
+        
+        // Reset button
+        this.setupResetButton();
+    }
+
+    setupStep1() {
+        const partOptions = document.querySelectorAll('.part-option');
+        const checkBtn = document.getElementById('checkStep1');
+        
+        partOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const part = option.dataset.part;
+                if (this.selectedParts.includes(part)) {
+                    this.selectedParts = this.selectedParts.filter(p => p !== part);
+                    option.style.background = '#fff';
+                    option.style.borderColor = '#ddd';
+                } else {
+                    this.selectedParts.push(part);
+                    option.style.background = '#e3f2fd';
+                    option.style.borderColor = '#2196f3';
+                }
+                
+                // Enable check button if at least one part is selected
+                checkBtn.disabled = this.selectedParts.length === 0;
+            });
         });
+
+        checkBtn.addEventListener('click', () => {
+            this.checkStep1();
+        });
+    }
+
+    checkStep1() {
+        const feedback = document.getElementById('step1Feedback');
+        const correctParts = this.correctAnswers.parts;
+        const isCorrect = correctParts.every(part => this.selectedParts.includes(part)) && 
+                         this.selectedParts.length === correctParts.length;
+
+        if (isCorrect) {
+            feedback.innerHTML = '✅ Correct! You selected the right parts that need cloth.';
+            feedback.style.background = '#d4edda';
+            feedback.style.color = '#155724';
+            feedback.style.border = '1px solid #c3e6cb';
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                this.showStep2();
+            }, 1500);
+        } else {
+            feedback.innerHTML = '❌ Not quite right. Remember: we need cloth for the curved surface and the top base (since the bottom is on the ground).';
+            feedback.style.background = '#f8d7da';
+            feedback.style.color = '#721c24';
+            feedback.style.border = '1px solid #f5c6cb';
+            feedback.style.display = 'block';
+        }
+    }
+
+    showStep2() {
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+        document.getElementById('step2Dot').style.background = '#4a90e2';
+        document.getElementById('step2Dot').style.transform = 'scale(1.2)';
+        document.getElementById('progressFill').style.width = '66.66%';
+    }
+
+    setupStep2() {
+        const checkBtn = document.getElementById('checkStep2');
+        const inputs = ['csaRadius', 'csaHeight', 'topRadius'];
+        
+        inputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            input.addEventListener('input', () => {
+                this.updateStep2Button();
+                this.autoCalculate();
+            });
+        });
+
+        checkBtn.addEventListener('click', () => {
+            this.checkStep2();
+        });
+    }
+
+    updateStep2Button() {
+        const checkBtn = document.getElementById('checkStep2');
+        const requiredInputs = ['csaRadius', 'csaHeight', 'topRadius'];
+        const allFilled = requiredInputs.every(id => {
+            const input = document.getElementById(id);
+            return input.value.trim() !== '';
+        });
+        checkBtn.disabled = !allFilled;
+    }
+
+    autoCalculate() {
+        const csaRadius = parseFloat(document.getElementById('csaRadius').value) || 0;
+        const csaHeight = parseFloat(document.getElementById('csaHeight').value) || 0;
+        const topRadius = parseFloat(document.getElementById('topRadius').value) || 0;
+        
+        if (csaRadius > 0 && csaHeight > 0) {
+            const csaResult = 2 * (22/7) * csaRadius * csaHeight;
+            document.getElementById('csaResult').value = Math.round(csaResult);
+            document.getElementById('csaFinal').value = Math.round(csaResult);
+        }
+        
+        if (topRadius > 0) {
+            const topResult = (22/7) * topRadius * topRadius;
+            document.getElementById('topResult').value = Math.round(topResult);
+            document.getElementById('topFinal').value = Math.round(topResult);
+        }
+        
+        // Auto-calculate total
+        const csaFinal = parseFloat(document.getElementById('csaFinal').value) || 0;
+        const topFinal = parseFloat(document.getElementById('topFinal').value) || 0;
+        if (csaFinal > 0 && topFinal > 0) {
+            document.getElementById('totalResult').value = Math.round(csaFinal + topFinal);
+        }
+    }
+
+    checkStep2() {
+        const feedback = document.getElementById('step2Feedback');
+        const csaResult = parseFloat(document.getElementById('csaResult').value);
+        const topResult = parseFloat(document.getElementById('topResult').value);
+        const totalResult = parseFloat(document.getElementById('totalResult').value);
+        
+        const csaCorrect = Math.abs(csaResult - this.correctAnswers.csa) <= 5;
+        const topCorrect = Math.abs(topResult - this.correctAnswers.topArea) <= 5;
+        const totalCorrect = Math.abs(totalResult - this.correctAnswers.total) <= 5;
+        
+        if (csaCorrect && topCorrect && totalCorrect) {
+            feedback.innerHTML = '✅ Excellent! Your calculations are correct.';
+            feedback.style.background = '#d4edda';
+            feedback.style.color = '#155724';
+            feedback.style.border = '1px solid #c3e6cb';
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                this.showStep3();
+            }, 1500);
+        } else {
+            let message = '❌ Some calculations need adjustment:';
+            if (!csaCorrect) message += '<br>• Curved Surface Area should be around 3168 m²';
+            if (!topCorrect) message += '<br>• Top Base Area should be around 154 m²';
+            if (!totalCorrect) message += '<br>• Total should be around 3322 m²';
+            
+            feedback.innerHTML = message;
+            feedback.style.background = '#f8d7da';
+            feedback.style.color = '#721c24';
+            feedback.style.border = '1px solid #f5c6cb';
+            feedback.style.display = 'block';
+        }
+    }
+
+    showStep3() {
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'block';
+        document.getElementById('step3Dot').style.background = '#4a90e2';
+        document.getElementById('step3Dot').style.transform = 'scale(1.2)';
+        document.getElementById('progressFill').style.width = '100%';
+    }
+
+    setupStep3() {
+        const finalInput = document.getElementById('finalAnswer');
+        const checkBtn = document.getElementById('checkFinal');
+        
+        finalInput.addEventListener('input', () => {
+            checkBtn.disabled = finalInput.value.trim() === '';
+        });
+
+        checkBtn.addEventListener('click', () => {
+            this.checkStep3();
+        });
+    }
+
+    checkStep3() {
+        const feedback = document.getElementById('step3Feedback');
+        const userAnswer = parseFloat(document.getElementById('finalAnswer').value);
+        const correctAnswer = this.correctAnswers.total;
+        
+        if (Math.abs(userAnswer - correctAnswer) <= 5) {
+            feedback.innerHTML = '🎉 Congratulations! You have successfully completed the cylinder cloth simulation!';
+            feedback.style.background = '#d4edda';
+            feedback.style.color = '#155724';
+            feedback.style.border = '1px solid #c3e6cb';
+            feedback.style.display = 'block';
+            
+            // Add continue video button
+            setTimeout(() => {
+                feedback.innerHTML += `
+                    <div style="margin: 20px 0;">
+                        <button id="continueVideoBtn" style="padding: 15px 25px; border: none; border-radius: 25px; font-size: 1.1em; font-family: inherit; cursor: pointer; transition: all 0.3s ease; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 10px; background: linear-gradient(45deg, #00b894, #00cec9); color: white;">Continue Video</button>
+                    </div>
+                `;
+                
+                document.getElementById('continueVideoBtn').addEventListener('click', () => {
+                    this.closeSimulationPopup();
+                });
+            }, 2000);
+        } else {
+            feedback.innerHTML = `❌ Close! The correct answer is ${correctAnswer} m². Try again!`;
+            feedback.style.background = '#f8d7da';
+            feedback.style.color = '#721c24';
+            feedback.style.border = '1px solid #f5c6cb';
+            feedback.style.display = 'block';
+        }
+    }
+
+    setupResetButton() {
+        const resetBtn = document.getElementById('resetSimulation');
+        resetBtn.addEventListener('click', () => {
+            this.resetSimulation();
+        });
+    }
+
+    resetSimulation() {
+        // Reset all variables
+        this.currentStep = 1;
+        this.selectedParts = [];
+        
+        // Reset UI
+        document.getElementById('step1').style.display = 'block';
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'none';
+        
+        // Reset progress
+        document.getElementById('progressFill').style.width = '33.33%';
+        document.getElementById('step1Dot').style.background = '#4a90e2';
+        document.getElementById('step1Dot').style.transform = 'scale(1.2)';
+        document.getElementById('step2Dot').style.background = '#ddd';
+        document.getElementById('step2Dot').style.transform = 'scale(1)';
+        document.getElementById('step3Dot').style.background = '#ddd';
+        document.getElementById('step3Dot').style.transform = 'scale(1)';
+        
+        // Reset part selections
+        document.querySelectorAll('.part-option').forEach(option => {
+            option.style.background = '#fff';
+            option.style.borderColor = '#ddd';
+        });
+        
+        // Reset inputs
+        document.getElementById('csaRadius').value = '';
+        document.getElementById('csaHeight').value = '';
+        document.getElementById('csaResult').value = '';
+        document.getElementById('topRadius').value = '';
+        document.getElementById('topResult').value = '';
+        document.getElementById('csaFinal').value = '';
+        document.getElementById('topFinal').value = '';
+        document.getElementById('totalResult').value = '';
+        document.getElementById('finalAnswer').value = '';
+        
+        // Reset feedback
+        document.getElementById('step1Feedback').style.display = 'none';
+        document.getElementById('step2Feedback').style.display = 'none';
+        document.getElementById('step3Feedback').style.display = 'none';
+        
+        // Reset buttons
+        document.getElementById('checkStep1').disabled = true;
+        document.getElementById('checkStep2').disabled = true;
+        document.getElementById('checkFinal').disabled = true;
+    }
+
+    closeSimulationPopup() {
+        const popup = document.getElementById('simulationPopup');
+        if (popup) {
+            popup.remove();
+        }
+        // Resume video from where it was paused
+        this.video.play();
     }
 
     closePopup(popupOverlay) {

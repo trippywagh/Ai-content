@@ -13,7 +13,7 @@ const screenTransitions = {
     // Screen 4: Show transition when screen loads
     4: {
         audioFile: 'audio/screen3-to-4-transition.mp3',
-        text: 'Come, now let\'s learn the area and volume concept in depth',
+        text: 'Alright!!! Let\'s dive deeper and really understand the world of cylinders.',
         botMessage: 'Let\'s dive deep into the concepts! 📚',
         duration: 4000 // Estimated duration in ms for fallback timing
     },
