@@ -6,7 +6,7 @@ const screenTransitions = {
     2: {
         audioFile: 'audio/screen1-to-2-transition.mp3',
         text: 'Why don\'t you look at this intriguing problem first before we deep dive into the concept',
-        botMessage: 'Ready for a fun challenge? 🤔',
+        botMessage: 'Ready for a fun challenge? <img src="images/thinking-robot.png" alt="Thinking Robot" style="width: 25px; height: 25px; vertical-align: middle; margin-left: 5px;">',
         duration: 4000 // Estimated duration in ms for fallback timing
     },
     

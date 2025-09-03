@@ -97,7 +97,7 @@ class CylinderConceptScreen {
 
         popupContent.innerHTML = `
             <h2 style="margin: 0 0 30px 0; color: #1e293b; font-size: 2rem; font-weight: 700;">
-                🤔 Quick Check!
+                <img src="images/thinking-robot.png" alt="Thinking Robot" style="width: 35px; height: 35px; vertical-align: middle; margin-right: 10px;"> Quick Check!
             </h2>
             <p style="margin: 0 0 30px 0; color: #475569; font-size: 1.2rem; font-weight: 600;">
                 Which of these are right circular cylinders?

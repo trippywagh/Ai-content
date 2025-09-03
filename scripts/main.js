@@ -355,7 +355,7 @@ class MathAdventureApp {
                     </div>
                     
                     <div class="question">
-                        <h2>🤔 Intriguing Question!</h2>
+                        <h2><img src="images/thinking-robot.png" alt="Thinking Robot" style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> Intriguing Question!</h2>
                         <p>If you cut the Coke can open from top to bottom and spread it out, what shape will it be?</p>
                     </div>
                     
@@ -704,7 +704,7 @@ class MathAdventureApp {
                         </div>
                         
                         <div class="selection-section">
-                            <h3>🤔 Which beaker holds more water?</h3>
+                            <h3><img src="images/thinking-robot.png" alt="Thinking Robot" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 8px;"> Which beaker holds more water?</h3>
                             <div class="selection-options">
                                                             <button class="selection-btn" id="selectA">Beaker A (Tall & Slim)</button>
                             <button class="selection-btn" id="selectB">Beaker B (Short & Wide)</button>
@@ -731,7 +731,7 @@ class MathAdventureApp {
                         <div class="popup-overlay" id="popupOverlay" style="display: none;">
                             <div class="popup-content">
                                 <div class="popup-header">
-                                    <h3>🤔 Let's Think About This!</h3>
+                                    <h3><img src="images/thinking-robot.png" alt="Thinking Robot" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 8px;"> Let's Think About This!</h3>
                                     <div class="audio-indicator" id="audioIndicator" style="display: none;">
                                         <span class="audio-icon">🔊</span>
                                         <span class="audio-text">Audio Playing...</span>
