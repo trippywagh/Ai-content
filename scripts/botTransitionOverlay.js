@@ -170,8 +170,8 @@ class BotTransitionOverlay {
             // Create text cloud
             this.createTextCloud(config.text);
             
-            // Start audio/TTS
-            this.useTTSFallback(config.text, resolve);
+            // Try to play audio file first, then fallback to TTS
+            this.playAudioWithFallback(config, resolve);
         });
     }
 
@@ -233,6 +233,45 @@ class BotTransitionOverlay {
     }
 
     // Use TTS as fallback
+    playAudioWithFallback(config, onComplete) {
+        console.log('playAudioWithFallback called with config:', config);
+        
+        // Try to play audio file first
+        if (config.audioFile) {
+            const audio = new Audio(config.audioFile);
+            
+            audio.onloadeddata = () => {
+                console.log('Audio file loaded successfully, playing...');
+                audio.play().catch(error => {
+                    console.log('Audio playback failed, using TTS fallback:', error);
+                    this.useTTSFallback(config.text, onComplete);
+                });
+            };
+            
+            audio.onerror = () => {
+                console.log('Audio file not found, using TTS fallback');
+                this.useTTSFallback(config.text, onComplete);
+            };
+            
+            // Set up audio completion handler (same as TTS)
+            audio.onended = () => {
+                console.log('Audio file completed');
+                onComplete();
+            };
+            
+            // Set a timeout to use TTS if audio doesn't load within 2 seconds
+            setTimeout(() => {
+                if (audio.readyState < 2) { // Not loaded yet
+                    console.log('Audio loading timeout, using TTS fallback');
+                    this.useTTSFallback(config.text, onComplete);
+                }
+            }, 2000);
+        } else {
+            // No audio file specified, use TTS directly
+            this.useTTSFallback(config.text, onComplete);
+        }
+    }
+
     useTTSFallback(text, onComplete) {
         console.log('useTTSFallback called with text:', text);
         
