@@ -17,7 +17,7 @@ class SolveTogetherPopup {
             <div class="solve-together-popup" id="solveTogetherPopup" style="display: none;">
                 <div class="popup-content">
                     <div class="popup-header">
-                        <h3>🤝 Let's Solve This Together!</h3>
+                        <h3>Let's Solve This Together!</h3>
                         <button class="popup-close-btn" id="solvePopupCloseBtn">×</button>
                     </div>
                     
