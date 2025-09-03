@@ -1359,6 +1359,8 @@ class MathAdventureApp {
             this.updateNavigationState(this.currentScreen);
             // Ensure panel is open when first landing on screen 1
             this.ensureNavigationPanelOpen();
+            // Show navigation panel when leaving homepage
+            this.showNavigationPanelOnOtherScreens();
         }
     }
 
@@ -1433,6 +1435,9 @@ class MathAdventureApp {
         
         this.currentScreen = 'homepage';
         this.initializeScreen('homepage');
+        
+        // Explicitly hide navigation panel on homepage
+        this.hideNavigationPanelOnHomepage();
     }
 
     loadScreenHTML(screenNumber) {
@@ -1751,6 +1756,28 @@ class MathAdventureApp {
             navPanel.classList.remove('collapsed');
             localStorage.setItem('navPanelCollapsed', 'false');
             console.log('Navigation panel opened when starting learning from homepage');
+        }
+    }
+
+    // Method to explicitly hide navigation panel on homepage
+    hideNavigationPanelOnHomepage() {
+        const navPanel = document.getElementById('navigationPanel');
+        if (navPanel) {
+            navPanel.style.display = 'none';
+            navPanel.style.visibility = 'hidden';
+            navPanel.style.opacity = '0';
+            console.log('Navigation panel hidden on homepage');
+        }
+    }
+
+    // Method to show navigation panel on other screens
+    showNavigationPanelOnOtherScreens() {
+        const navPanel = document.getElementById('navigationPanel');
+        if (navPanel) {
+            navPanel.style.display = '';
+            navPanel.style.visibility = '';
+            navPanel.style.opacity = '';
+            console.log('Navigation panel shown on other screens');
         }
     }
 

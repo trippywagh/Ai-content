@@ -459,7 +459,9 @@ h1 {
 
 /* Hide navigation panel on homepage */
 body.homepage .navigation-panel {
-    display: none;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 
 /* Collapsed state */

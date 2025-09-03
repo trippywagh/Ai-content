@@ -378,7 +378,7 @@ class DabbaQuestionScreen {
         // Set the message based on answer type
         const message = answerType === 'correct' 
             ? 'That\'s correct, you can check the video explanation on the next screen'
-            : 'That\'s wrong, Don\'t worry, I will teach you completely.... check the video explanation on the next screen';
+            : 'That\'s wrong, Don\'t worry, I will teach you completely. But first, check the video explanation on the next screen';
         
         // Step 1: Bot pops up (25% larger) and shows text
         aiCompanion.classList.add('focusing');
