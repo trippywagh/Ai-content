@@ -10,6 +10,7 @@ class DabbaQuestionScreen {
         this.model = null;
         this.controls = null;
         this.selectedOption = null;
+        this.recognition = null;
         this.init();
     }
 
@@ -255,34 +256,24 @@ class DabbaQuestionScreen {
     }
 
     addEventListeners() {
-        // Add click listeners to all options
-        const options = document.querySelectorAll('.option');
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                this.selectOption(option);
-            });
-        });
-
         // Add 3D can interaction hints
         this.add3DInteractionHints();
+        
+        // Setup voice recognition
+        this.setupVoiceRecognition();
+        
+        // Add voice answer button event listener
+        this.addVoiceAnswerButtonListener();
     }
 
-    selectOption(selectedOption) {
-        // Remove previous selection
-        const allOptions = document.querySelectorAll('.option');
-        allOptions.forEach(opt => {
-            opt.classList.remove('selected', 'correct', 'incorrect');
-        });
-
-        // Add selection class
-        selectedOption.classList.add('selected');
-        
-        // Get the answer
-        const answer = selectedOption.getAttribute('data-answer');
-        this.selectedOption = answer;
-        
-        // Check the answer
-        this.checkAnswer(answer);
+    // Voice answer button method
+    addVoiceAnswerButtonListener() {
+        const voiceButton = document.getElementById('voiceAnswerButton');
+        if (voiceButton) {
+            voiceButton.addEventListener('click', () => {
+                this.startVoiceRecognition();
+            });
+        }
     }
 
     add3DInteractionHints() {
@@ -454,8 +445,138 @@ class DabbaQuestionScreen {
             this.controls.dispose();
         }
         
+        // Stop voice recognition
+        this.stopVoiceRecognition();
+        
         // Remove event listeners
         window.removeEventListener('resize', () => this.onWindowResize());
+    }
+
+    // Voice Recognition Methods
+    setupVoiceRecognition() {
+        // Check if browser supports speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.recognition = new SpeechRecognition();
+            
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+            this.recognition.lang = 'en-US';
+            this.recognition.maxAlternatives = 1;
+            
+            this.recognition.onresult = (event) => {
+                const spokenText = event.results[0][0].transcript.toLowerCase();
+                console.log('Voice input:', spokenText);
+                this.processVoiceInput(spokenText);
+            };
+            
+            this.recognition.onerror = (event) => {
+                console.log('Speech recognition error:', event.error);
+                this.hideVoiceStatus();
+                this.removeRecordingState();
+                if (event.error === 'no-speech') {
+                    this.showVoiceFeedback('No speech detected. Please try again.');
+                } else if (event.error === 'not-allowed') {
+                    this.showVoiceFeedback('Microphone access denied. Please allow microphone access.');
+                } else {
+                    this.showVoiceFeedback('Speech recognition error. Please try again.');
+                }
+            };
+            
+            this.recognition.onend = () => {
+                this.hideVoiceStatus();
+                this.removeRecordingState();
+            };
+        } else {
+            // Hide voice button if not supported
+            const voiceButton = document.getElementById('voiceAnswerButton');
+            if (voiceButton) {
+                voiceButton.style.display = 'none';
+            }
+        }
+    }
+
+    // Recording state methods
+    addRecordingState() {
+        const voiceButton = document.getElementById('voiceAnswerButton');
+        if (voiceButton) {
+            voiceButton.classList.add('recording');
+        }
+    }
+
+    removeRecordingState() {
+        const voiceButton = document.getElementById('voiceAnswerButton');
+        if (voiceButton) {
+            voiceButton.classList.remove('recording');
+        }
+    }
+
+    startVoiceRecognition() {
+        if (!this.recognition) return;
+        
+        this.showVoiceStatus();
+        this.addRecordingState();
+        try {
+            this.recognition.start();
+        } catch (error) {
+            console.log('Error starting speech recognition:', error);
+            this.hideVoiceStatus();
+            this.removeRecordingState();
+            this.showVoiceFeedback('Could not start voice recognition. Please try again.');
+        }
+    }
+
+    stopVoiceRecognition() {
+        if (this.recognition) {
+            this.recognition.stop();
+        }
+        this.hideVoiceStatus();
+    }
+
+    processVoiceInput(spokenText) {
+        // Match spoken text to answer options
+        let answer = null;
+        
+        if (spokenText.includes('rectangle')) {
+            answer = 'rectangle';
+        } else if (spokenText.includes('square')) {
+            answer = 'square';
+        } else if (spokenText.includes('circle')) {
+            answer = 'circle';
+        } else if (spokenText.includes('something') || spokenText.includes('else') || spokenText.includes('other')) {
+            answer = 'something-else';
+        }
+        
+        if (answer) {
+            // Use existing checkAnswer method - same flow as clicking options
+            this.checkAnswer(answer);
+        } else {
+            this.showVoiceFeedback('Could not understand. Please say "rectangle", "square", "circle", or "something else".');
+        }
+    }
+
+    showVoiceStatus() {
+        const voiceStatus = document.getElementById('voiceStatus');
+        if (voiceStatus) {
+            voiceStatus.style.display = 'flex';
+        }
+    }
+
+    hideVoiceStatus() {
+        const voiceStatus = document.getElementById('voiceStatus');
+        if (voiceStatus) {
+            voiceStatus.style.display = 'none';
+        }
+    }
+
+    showVoiceFeedback(message) {
+        // Show feedback in the existing feedback element
+        this.feedback.textContent = message;
+        this.feedback.className = 'feedback incorrect show';
+        
+        setTimeout(() => {
+            this.feedback.classList.remove('show');
+        }, 3000);
     }
 }
 

@@ -359,22 +359,15 @@ class MathAdventureApp {
                         <p>If you cut the Coke can open from top to bottom and spread it out, what shape will it be?</p>
                     </div>
                     
-                    <div class="options-section">
-                        <div class="option" data-answer="square">
-                            <div class="option-letter">A</div>
-                            <div class="option-text">A square</div>
+                    <!-- Voice Answer Button -->
+                    <div class="voice-answer-section">
+                        <div class="voice-answer-button" id="voiceAnswerButton">
+                            <div class="microphone-icon">🎤</div>
+                            <div class="voice-text">Click to speak your answer</div>
                         </div>
-                        <div class="option" data-answer="rectangle">
-                            <div class="option-letter">B</div>
-                            <div class="option-text">A rectangle</div>
-                        </div>
-                        <div class="option" data-answer="circle">
-                            <div class="option-letter">C</div>
-                            <div class="option-text">A circle</div>
-                        </div>
-                        <div class="option" data-answer="something-else">
-                            <div class="option-letter">D</div>
-                            <div class="option-text">Something else</div>
+                        <div class="voice-status" id="voiceStatus" style="display: none;">
+                            <span class="microphone-icon">🎤</span>
+                            <span class="status-text">Listening...</span>
                         </div>
                     </div>
                     
