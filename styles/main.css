@@ -394,6 +394,11 @@ h1 {
     color: white;
 }
 
+.ai-companion.focusing.results-message .bot-status {
+    background: rgba(59, 130, 246, 0.95);
+    color: white;
+}
+
 
 
 

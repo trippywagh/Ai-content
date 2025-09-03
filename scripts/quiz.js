@@ -254,6 +254,7 @@ class QuizManager {
     }
 
     showResults() {
+        console.log('showResults called');
         const score = this.calculateScore();
         const scoreElement = document.getElementById('finalScore');
         const messageElement = document.getElementById('scoreMessage');
@@ -266,6 +267,12 @@ class QuizManager {
         if (resultsElement) resultsElement.innerHTML = this.generateQuestionResults();
         if (strengthsElement) strengthsElement.innerHTML = this.generateStrengths();
         if (improvementsElement) improvementsElement.innerHTML = this.generateImprovements();
+        
+        console.log('Results displayed, triggering bot popup in 1 second...');
+        // Trigger bot popup after results are displayed
+        setTimeout(() => {
+            this.triggerResultsBotPopup();
+        }, 1000);
     }
 
     calculateScore() {
@@ -458,6 +465,82 @@ class QuizManager {
     saveAnswersToStorage() {
         localStorage.setItem('quizAnswers', JSON.stringify(this.answers));
         console.log('Saved answers to storage:', this.answers);
+    }
+    
+    // Bot popup for results screen
+    triggerResultsBotPopup() {
+        console.log('triggerResultsBotPopup called');
+        
+        // Get the AI companion bot element
+        const aiCompanion = document.getElementById('aiCompanion');
+        console.log('AI Companion element:', aiCompanion);
+        
+        if (!aiCompanion) {
+            console.error('AI Companion bot not found!');
+            return;
+        }
+        
+        const botStatus = aiCompanion.querySelector('.bot-status');
+        console.log('Bot status element:', botStatus);
+        
+        if (!botStatus) {
+            console.error('Bot status element not found!');
+            return;
+        }
+        
+        // Get student name from localStorage
+        const studentName = localStorage.getItem('studentName') || 'there';
+        console.log('Student name:', studentName);
+        
+        // Set the message
+        const message = `Hey Ram! I see you're making great progress. Your answers show that you're getting a solid grip on the concepts, but there's still a little room to grow.\nWant to make those tricky concepts stick? Let's use some flashcards!`;
+        console.log('Bot message:', message);
+        
+        // Step 1: Bot pops up (25% larger) and shows text
+        aiCompanion.classList.add('focusing');
+        aiCompanion.classList.add('results-message');
+        botStatus.textContent = message;
+        console.log('Bot popup triggered');
+        
+        // Step 2: Play audio
+        const audio = new Audio('audio/results-bot-message.mp3');
+        
+        audio.play().catch(() => {
+            // TTS fallback if audio file fails
+            console.log('Audio file failed, using TTS fallback');
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(message);
+                utterance.onend = () => {
+                    console.log('TTS fallback finished');
+                    // TTS finished, wait 1 second, then hide text and bot returns
+                    setTimeout(() => {
+                        botStatus.textContent = ""; // Hide text first
+                        setTimeout(() => {
+                            aiCompanion.classList.remove('focusing', 'results-message'); // Then bot returns to original state
+                            botStatus.textContent = "Ready to help!";
+                            console.log('Bot returned to normal state (TTS fallback)');
+                        }, 500); // Small delay between text disappearing and bot returning
+                    }, 1000); // 1 second delay after TTS ends
+                };
+                speechSynthesis.speak(utterance);
+            }
+        });
+        
+        // Handle audio file playback
+        audio.onended = () => {
+            console.log('Audio file finished');
+            // Audio finished, wait 1 second, then hide text and bot returns
+            setTimeout(() => {
+                botStatus.textContent = ""; // Hide text first
+                setTimeout(() => {
+                    aiCompanion.classList.remove('focusing', 'results-message'); // Then bot returns to original state
+                    botStatus.textContent = "Ready to help!";
+                    console.log('Bot returned to normal state');
+                }, 500); // Small delay between text disappearing and bot returning
+            }, 1000); // 1 second delay after audio ends
+        };
+        
+        console.log('Audio playback started');
     }
 }
 
