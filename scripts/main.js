@@ -413,7 +413,6 @@ class MathAdventureApp {
                             <p>Tap to play the concept explainer</p>
                         </div>
                     </div>
-                    <div class="caption">Understand cylinders: curved surface unrolls to rectangle (2πr × h), plus two circles of radius r.</div>
                     <div class="controls-row">
                         <button class="small-btn" id="replayConceptBtn">Replay</button>
                         <button class="small-btn" id="nextAfterConcept" style="display:none;">Next ➜</button>
