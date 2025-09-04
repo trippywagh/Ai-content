@@ -273,6 +273,9 @@ class QuizManager {
         setTimeout(() => {
             this.triggerResultsBotPopup();
         }, 1000);
+        
+        // Add event listener for personalized flashcard button
+        this.setupFlashcardButton();
     }
 
     calculateScore() {
@@ -564,6 +567,79 @@ class QuizManager {
         };
         
         console.log('Audio playback started');
+    }
+
+    setupFlashcardButton() {
+        const flashcardBtn = document.getElementById('personalizedFlashcardBtn');
+        if (flashcardBtn) {
+            flashcardBtn.addEventListener('click', () => {
+                this.openFlashcardVideo();
+            });
+        }
+    }
+
+    openFlashcardVideo() {
+        // Create video popup modal
+        const modal = document.createElement('div');
+        modal.className = 'flashcard-video-modal';
+        modal.innerHTML = `
+            <div class="flashcard-video-content">
+                <div class="flashcard-video-header">
+                    <h3>📚 Personalized Flashcards</h3>
+                    <button class="flashcard-close-btn" id="flashcardCloseBtn">×</button>
+                </div>
+                <div class="flashcard-video-container">
+                    <video id="flashcardVideo" controls autoplay>
+                        <source src="videos/personalized-flashcards.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="flashcard-video-footer">
+                </div>
+            </div>
+        `;
+        
+        // Add modal to body
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        const closeBtn = document.getElementById('flashcardCloseBtn');
+        const video = document.getElementById('flashcardVideo');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeFlashcardVideo();
+            });
+        }
+        
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.closeFlashcardVideo();
+            }
+        });
+        
+        // Close on video end
+        if (video) {
+            video.addEventListener('ended', () => {
+                this.closeFlashcardVideo();
+            });
+        }
+        
+        // Show modal with animation
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
+    }
+
+    closeFlashcardVideo() {
+        const modal = document.querySelector('.flashcard-video-modal');
+        if (modal) {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.remove();
+            }, 300);
+        }
     }
 }
 
