@@ -417,6 +417,35 @@ class MathAdventureApp {
                         <button class="small-btn" id="replayConceptBtn">Replay</button>
                         <button class="small-btn" id="nextAfterConcept" style="display:none;">Next ➜</button>
                     </div>
+                    
+                    <!-- Screen 4 Chatbot Modal -->
+                    <div class="screen4-chatbot-modal" id="screen4ChatbotModal">
+                        <div class="screen4-chatbot-content">
+                            <div class="screen4-chatbot-header">
+                                <h3>AI Math Companion</h3>
+                                <button class="screen4-close-chatbot" id="screen4CloseChatbot">×</button>
+                            </div>
+                            
+                            <div class="screen4-chat-messages" id="screen4ChatMessages">
+                                <div class="message bot">
+                                    <div class="message-avatar">AI</div>
+                                    <div class="message-content">
+                                        <div class="message-label">AI Math Companion</div>
+                                        Hi! I'm Allie, your AI Math Companion. How can I help you with cylinders today?
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="screen4-voice-input-section">
+                                <button class="screen4-voice-button" id="screen4VoiceButton">
+                                    🎤 Start Speaking
+                                </button>
+                                <div class="screen4-voice-status" id="screen4VoiceStatus" style="display: none;">
+                                    Listening... Speak now!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>`;
             case 5:
                 return `

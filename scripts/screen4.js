@@ -21,6 +21,7 @@ class CylinderConceptScreen {
 
         this.setVideoSource();
         this.wireEvents();
+        this.initChatbot();
     }
 
     setVideoSource() {
@@ -885,7 +886,253 @@ class CylinderConceptScreen {
         }
     }
 
-    destroy() {}
+    destroy() {
+        // Remove chatbot event listeners when leaving screen
+        this.removeChatbotEvents();
+    }
+
+    // Screen 4 Chatbot Methods
+    initChatbot() {
+        this.chatbotModal = document.getElementById('screen4ChatbotModal');
+        this.closeChatbot = document.getElementById('screen4CloseChatbot');
+        this.voiceButton = document.getElementById('screen4VoiceButton');
+        this.voiceStatus = document.getElementById('screen4VoiceStatus');
+        this.chatMessages = document.getElementById('screen4ChatMessages');
+        this.isRecording = false;
+        
+        this.setupChatbotEvents();
+    }
+
+    setupChatbotEvents() {
+        // Bot click to open chatbot
+        const aiCompanion = document.getElementById('aiCompanion');
+        if (aiCompanion) {
+            aiCompanion.addEventListener('click', () => this.openChatbot());
+        }
+        
+        // Close chatbot
+        if (this.closeChatbot) {
+            this.closeChatbot.addEventListener('click', () => this.closeChatbotModal());
+        }
+        
+        // Voice button
+        if (this.voiceButton) {
+            this.voiceButton.addEventListener('click', () => this.toggleVoiceRecording());
+        }
+        
+        // Close on modal background click
+        if (this.chatbotModal) {
+            this.chatbotModal.addEventListener('click', (e) => {
+                if (e.target === this.chatbotModal) {
+                    this.closeChatbotModal();
+                }
+            });
+        }
+    }
+
+    removeChatbotEvents() {
+        // Remove event listeners to prevent conflicts
+        const aiCompanion = document.getElementById('aiCompanion');
+        if (aiCompanion) {
+            aiCompanion.removeEventListener('click', () => this.openChatbot());
+        }
+    }
+
+    openChatbot() {
+        if (this.chatbotModal) {
+            this.chatbotModal.classList.add('active');
+            // Update bot status
+            const botStatus = document.querySelector('.bot-status');
+            if (botStatus) {
+                botStatus.textContent = 'Chatting... 💬';
+            }
+        }
+    }
+
+    closeChatbotModal() {
+        if (this.chatbotModal) {
+            this.chatbotModal.classList.remove('active');
+            // Reset bot status
+            const botStatus = document.querySelector('.bot-status');
+            if (botStatus) {
+                botStatus.textContent = 'Ready to help! 🤖';
+            }
+        }
+    }
+
+    toggleVoiceRecording() {
+        if (this.isRecording) {
+            this.stopRecording();
+        } else {
+            this.startRecording();
+        }
+    }
+
+    startRecording() {
+        this.isRecording = true;
+        if (this.voiceButton) {
+            this.voiceButton.classList.add('recording');
+            this.voiceButton.innerHTML = '🛑 Stop Recording';
+        }
+        if (this.voiceStatus) {
+            this.voiceStatus.style.display = 'block';
+            this.voiceStatus.textContent = 'Listening... Take your time to speak!';
+        }
+        
+        // Wait for user to finish speaking (5 seconds)
+        setTimeout(() => {
+            this.stopRecording();
+        }, 5000);
+    }
+
+    stopRecording() {
+        this.isRecording = false;
+        if (this.voiceButton) {
+            this.voiceButton.classList.remove('recording');
+            this.voiceButton.innerHTML = '🎤 Start Speaking';
+        }
+        if (this.voiceStatus) {
+            this.voiceStatus.style.display = 'none';
+        }
+        
+        // Add user message
+        this.addMessage('user', 'Hi Allie, can you provide more examples for right circular cylinder used in everyday life');
+        
+        // Add thinking message
+        this.addThinkingMessage();
+        
+        // Add bot response after 3 second delay
+        setTimeout(() => {
+            this.removeThinkingMessage();
+            this.addMessageLineByLine('bot', 'Soda cans and drink bottles: Most cans and many plastic or glass bottles are shaped as right circular cylinders.\n\nBatteries: Standard AA, AAA, C, and D batteries are cylindrical.\n\nPipes and tubes: Plumbing pipes, cardboard tubes (like those inside paper towels or toilet paper rolls), and PVC pipes are all examples of cylinders.\n\nFood containers: Canned goods, oatmeal canisters, and Pringles cans are classic examples.\n\nCandles: Many pillar candles are shaped as right circular cylinders.\n\nStorage containers: Some canisters for kitchen storage, like for flour or sugar, are cylindrical.\n\nPencils and pens: The main body of most standard pencils and pens is a long, thin cylinder.');
+        }, 3000);
+    }
+
+    addThinkingMessage() {
+        if (!this.chatMessages) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot thinking-message-container';
+        messageDiv.id = 'screen4ThinkingMessage';
+        
+        // Create avatar
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'message-avatar';
+        avatarDiv.textContent = 'AI';
+        
+        // Create thinking content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'message-label';
+        labelDiv.textContent = 'AI Math Companion';
+        
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'screen4-thinking-message';
+        thinkingDiv.innerHTML = 'Thinking<span class="screen4-thinking-dots"><span class="screen4-thinking-dot"></span><span class="screen4-thinking-dot"></span><span class="screen4-thinking-dot"></span></span>';
+        
+        contentDiv.appendChild(labelDiv);
+        contentDiv.appendChild(thinkingDiv);
+        
+        messageDiv.appendChild(avatarDiv);
+        messageDiv.appendChild(contentDiv);
+        this.chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+    }
+
+    removeThinkingMessage() {
+        const thinkingMessage = document.getElementById('screen4ThinkingMessage');
+        if (thinkingMessage) {
+            thinkingMessage.remove();
+        }
+    }
+
+    addMessage(sender, content) {
+        if (!this.chatMessages) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        // Create avatar
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'message-avatar';
+        avatarDiv.textContent = sender === 'user' ? 'You' : 'AI';
+        
+        // Create content with label
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'message-label';
+        labelDiv.textContent = sender === 'user' ? 'You' : 'AI Math Companion';
+        
+        const textDiv = document.createElement('div');
+        textDiv.innerHTML = content.replace(/\n/g, '<br>');
+        
+        contentDiv.appendChild(labelDiv);
+        contentDiv.appendChild(textDiv);
+        
+        messageDiv.appendChild(avatarDiv);
+        messageDiv.appendChild(contentDiv);
+        this.chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+    }
+
+    addMessageLineByLine(sender, content) {
+        if (!this.chatMessages) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        // Create avatar
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'message-avatar';
+        avatarDiv.textContent = sender === 'user' ? 'You' : 'AI';
+        
+        // Create content with label
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'message-label';
+        labelDiv.textContent = sender === 'user' ? 'You' : 'AI Math Companion';
+        
+        const textDiv = document.createElement('div');
+        textDiv.innerHTML = ''; // Start empty
+        
+        contentDiv.appendChild(labelDiv);
+        contentDiv.appendChild(textDiv);
+        
+        messageDiv.appendChild(avatarDiv);
+        messageDiv.appendChild(contentDiv);
+        this.chatMessages.appendChild(messageDiv);
+        
+        // Split content into lines and show one by one
+        const lines = content.split('\n\n');
+        let currentLineIndex = 0;
+        
+        const showNextLine = () => {
+            if (currentLineIndex < lines.length) {
+                const currentContent = lines.slice(0, currentLineIndex + 1).join('<br><br>');
+                textDiv.innerHTML = currentContent;
+                
+                // Scroll to bottom
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+                
+                currentLineIndex++;
+                // Show next line after 1.5 seconds
+                setTimeout(showNextLine, 1500);
+            }
+        };
+        
+        // Start showing lines after a short delay
+        setTimeout(showNextLine, 500);
+    }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
