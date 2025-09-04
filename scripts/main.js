@@ -1107,6 +1107,7 @@ class MathAdventureApp {
                                     <span id="finalScore">0</span>
                                     <span class="score-label">/5</span>
                                 </div>
+                                <button class="btn btn-flashcard" id="personalizedFlashcardBtn">Personalized Flashcard</button>
                                 <h3 id="scoreMessage">Loading...</h3>
                             </div>
                             
@@ -1128,7 +1129,6 @@ class MathAdventureApp {
                         
                         <div class="results-actions">
                             <button class="btn btn-primary" id="reviewAnswersBtn">Review Answers</button>
-                            <button class="btn btn-secondary" id="retakeQuizBtn">Retake Quiz</button>
                             <button class="btn btn-success" id="continueLearningBtn">Continue Learning</button>
                         </div>
                     </div>

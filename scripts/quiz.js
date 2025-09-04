@@ -361,6 +361,14 @@ class QuizManager {
     }
 
     generateStrengths() {
+        const conceptNames = {
+            1: "Volume Calculations",
+            2: "Volume Comparisons", 
+            3: "Surface Area Components",
+            4: "Curved Surface Area",
+            5: "Total Surface Area"
+        };
+        
         const strengths = [];
         for (let i = 1; i <= this.totalQuestions; i++) {
             let isCorrect = false;
@@ -374,20 +382,31 @@ class QuizManager {
             }
             
             if (isCorrect) {
-                strengths.push(this.questionTexts[i]);
+                strengths.push(conceptNames[i]);
             }
         }
         
-        if (strengths.length === 0) {
+        // Remove duplicates
+        const uniqueStrengths = [...new Set(strengths)];
+        
+        if (uniqueStrengths.length === 0) {
             return '<p style="color: #e0e0e0; font-style: italic;">Keep practicing to discover your strengths!</p>';
         }
         
-        return strengths.map(strength => 
-            `<div style="color: #4CAF50; margin-bottom: 8px;">✓ ${strength}</div>`
+        return uniqueStrengths.map(strength => 
+            `<div style="color: #000000; margin-bottom: 8px;">${strength}</div>`
         ).join('');
     }
 
     generateImprovements() {
+        const conceptNames = {
+            1: "Volume Calculations",
+            2: "Volume Comparisons", 
+            3: "Surface Area Components",
+            4: "Curved Surface Area",
+            5: "Total Surface Area"
+        };
+        
         const improvements = [];
         for (let i = 1; i <= this.totalQuestions; i++) {
             let isCorrect = false;
@@ -401,7 +420,7 @@ class QuizManager {
             }
             
             if (!isCorrect) {
-                improvements.push(this.questionTexts[i]);
+                improvements.push(conceptNames[i]);
             }
         }
         
@@ -409,8 +428,12 @@ class QuizManager {
             return '<p style="color: #4CAF50; font-style: italic;">Perfect! No areas need improvement!</p>';
         }
         
-        return improvements.map(improvement => 
-            `<div style="color: #ff9800; margin-bottom: 8px;">📚 ${improvement}</div>`
+        // Remove duplicates and limit to 2-3 items maximum
+        const uniqueImprovements = [...new Set(improvements)];
+        const limitedImprovements = uniqueImprovements.slice(0, 3);
+        
+        return limitedImprovements.map(improvement => 
+            `<div style="color: #D84315; margin-bottom: 8px;">${improvement}</div>`
         ).join('');
     }
 

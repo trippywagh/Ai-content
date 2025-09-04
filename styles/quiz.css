@@ -384,8 +384,14 @@
 }
 
 .score-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin-bottom: 40px;
+    gap: 30px;
+    flex-wrap: wrap;
 }
 
 .score-circle {
@@ -494,6 +500,28 @@
     background: #1976d2;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn-flashcard {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+}
+
+.btn-flashcard:hover {
+    background: linear-gradient(135deg, #8e24aa, #5e35b1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
 
 /* Responsive Design */
