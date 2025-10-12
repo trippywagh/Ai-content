@@ -10,9 +10,6 @@ class MathAdventureApp {
     }
 
     init() {
-        // Create particles container
-        this.createParticlesContainer();
-        
         // Initialize navigation panel
         this.initNavigationPanel();
         
@@ -21,32 +18,8 @@ class MathAdventureApp {
         
         // Setup navigation
         this.setupNavigation();
-        
-        // Create floating particles
-        this.createParticles();
     }
 
-    createParticlesContainer() {
-        const particlesDiv = document.createElement('div');
-        particlesDiv.id = 'particles';
-        particlesDiv.className = 'particles';
-        document.body.appendChild(particlesDiv);
-    }
-
-    createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        if (!particlesContainer) return;
-        
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 3 + 's';
-            particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            particlesContainer.appendChild(particle);
-        }
-    }
 
     loadScreenDirectly(screenNumber) {
         try {
