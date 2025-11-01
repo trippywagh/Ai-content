@@ -6,6 +6,7 @@ class DabbaExplainerScreen {
         this.overlay = null;
         this.replayBtn = null;
         this.nextBtn = null;
+        this.hasAutoPlayed = false; // Track if video has auto-played
         this.init();
     }
 
@@ -17,6 +18,7 @@ class DabbaExplainerScreen {
 
         this.setVideoSource();
         this.wireEvents();
+        this.autoPlayVideo(); // Auto-play when screen loads
     }
 
     setVideoSource() {
@@ -51,6 +53,24 @@ class DabbaExplainerScreen {
             console.error('Explainer video error', e, this.video?.error);
             alert('Could not load explainer video. Check videos/dabba-explainer.mp4');
         });
+    }
+
+    autoPlayVideo() {
+        // Wait for video to be ready, then auto-play once
+        const tryAutoPlay = () => {
+            if (!this.hasAutoPlayed && this.video && this.video.readyState >= 2) {
+                this.hasAutoPlayed = true;
+                this.play();
+            }
+        };
+
+        // Try to play when video can play
+        this.video.addEventListener('canplay', tryAutoPlay, { once: true });
+        
+        // Fallback: if video is already ready
+        if (this.video.readyState >= 2) {
+            tryAutoPlay();
+        }
     }
 
     play() {

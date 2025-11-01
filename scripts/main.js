@@ -357,7 +357,7 @@ class MathAdventureApp {
                 <div class="screen active" id="screen3">
                     <h1>🎥 Let’s Understand The Coke Can Mystery!</h1>
                     <div class="video-container">
-                        <video id="explainerVideo" controls preload="auto">
+                        <video id="explainerVideo" controls preload="auto" autoplay>
                             <source src="" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
