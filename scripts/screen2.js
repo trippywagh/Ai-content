@@ -369,7 +369,7 @@ class DabbaQuestionScreen {
         // Set the message based on answer type
         const message = answerType === 'correct' 
             ? 'High five! 🙌 You spotted it! \nThe curved surface of the can stretches out into a rectangle, and the two round ends become circles.\n Let\'s unwrap its story in depth'
-            : 'That\'s not quite right, no worries at all!. \n That\'s exactly why we are here, to learn how 3D shapes hide simple 2D shapes inside them. \n Let\'s unwrap its story in depth'
+            : 'Close, but not right! That\'s the fun of it; 3D shapes love hiding simple 2D shapes inside. Let\'s unwrap their secret!' //That\'s not quite right, no worries at all!. \n That\'s exactly why we are here, to learn how 3D shapes hide simple 2D shapes inside them. \n Let\'s unwrap its story in depth'
         
         // Step 1: Bot pops up (25% larger) and shows text
         aiCompanion.classList.add('focusing');

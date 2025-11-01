@@ -349,9 +349,9 @@ class NameIntroScreen {
         const studentName = localStorage.getItem('studentName') || 'there';
         const botStatus = bot.querySelector('.bot-status');
         if (botStatus) {
-            botStatus.textContent = 'Hey Ram! I am Allie...I will be your math buddy and personal companion for this learning adventure.';
+            botStatus.textContent = 'Hey Ram! Mai Ramanujan hu. I will be your math buddy and personal companion for this learning adventure.';
         }
-        
+        //'Hey Ram! I am Allie...I will be your math buddy and personal companion for this learning adventure.'
         // Sure-shot animation sequence with exact positioning
         // Step 1: Position at center and appear
         gsap.set(bot, {
