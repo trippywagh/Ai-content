@@ -8,7 +8,7 @@ class CylinderConceptScreen {
         this.nextBtn = null;
         this.popupShown = false;
         this.popup2Shown = false;
-        this.pauseTime = 15; // Pause at 15 seconds
+        this.pauseTime = 15.70; // Pause at 15 seconds
         this.pauseTime2 = 79; // Pause at 79 seconds
         this.init();
     }
